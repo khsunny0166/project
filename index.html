@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>준호쌤 프로젝트</title>
+<style>
+:root{
+  --accent:#ff3b30;
+  --bg-dark:#111;
+  --bg-dark2:#222;
+  --bg-dark3:#333;
+  --text:#fff;
+  --gap:8px;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; padding:18px;
+  font-family:'Segoe UI',sans-serif;
+  color:var(--text);
+  background: url('https://i.postimg.cc/SKGmnC0B/1761749047105-1.jpg') no-repeat center center fixed;
+  background-size:cover;
+}
+body::before{
+  content:"";
+  position:fixed; top:0; left:0; width:100%; height:100%;
+  backdrop-filter:blur(6px);
+  z-index:-1;
+}
+#intro{position:fixed; top:0; left:0; width:100%; height:100%; background:#000; display:flex; justify-content:center; align-items:center; z-index:2000; transition:opacity .45s;}
+#intro img{ width:100%; height:100%; object-fit:cover; cursor:pointer; }
+header{ text-align:center; margin-bottom:14px; display:flex; justify-content:center; align-items:center; gap:10px; z-index:10; position:relative; }
+header img.logo{ height:56px; }
+header h1{ font-size:2.4rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
+.tabs{display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:12px;}
+.tab{ background:var(--bg-dark3); color:var(--text); border:none; padding:6px 18px; border-radius:20px; cursor:pointer; font-weight:700; font-size:1.1rem; transition:all .14s;}
+.tab:hover{transform:translateY(-2px);}
+.tab.active{background:var(--accent); color:#fff; box-shadow:0 6px 18px rgba(0,0,0,.45);}
+.subtabs{display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:10px 0;}
+.subtab{ background:var(--bg-dark2); color:var(--text); border:none; padding:6px 14px; border-radius:14px; cursor:pointer; font-weight:700; font-size:1rem; transition:all .12s;}
+.subtab:hover{transform:translateY(-2px);}
+.subtab.active{background:#ff7b75; font-weight:800;}
+#content{max-width:980px; margin:0 auto; padding:10px; z-index:5;}
+.video-card, .info-card{
+  background:rgba(0,0,0,0.52); border-radius:12px; padding:10px; margin:8px 0; max-width:900px; font-weight:700;
+  display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;
+}
+.platforms{display:flex; justify-content:center; gap:14px; margin-top:6px;}
+.platform-btn{ display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:12px; border:none; cursor:pointer; font-weight:700; min-width:140px; justify-content:center; color:#fff;}
+.platform-btn img{height:18px; width:18px;}
+.platform-btn.youtube{ background:linear-gradient(90deg,#ff4b4b,#ff0000); }
+.platform-btn.insta{ background:linear-gradient(90deg,#feda75,#d62976); }
+.platform-btn.active{ box-shadow:0 8px 20px rgba(0,0,0,0.2);}
+.hidden{display:none !important;}
+.fade{transition:opacity .18s, transform .18s; opacity:1; transform:none;}
+.fade.hide{opacity:0; transform:translateY(6px); pointer-events:none;}
+@media (max-width:600px){ .subtab{ padding:6px 10px; font-size:0.95rem;} .platform-btn{ min-width:120px; padding:6px 10px; } header h1{ font-size:1.6rem; }}
+</style>
+</head>
+<body>
+<div id="intro">
+  <img src="https://i.postimg.cc/HLCMMV3h/059bc0660c3d47a18023c788b22e869f.gif" alt="인트로" onclick="hideIntro()">
+</div>
+<header>
+  <img class="logo" src="https://i.postimg.cc/QxWSC2MD/Screenshot-20251029-084633-Kakao-Talk.png" alt="준호쌤">
+  <h1>준호쌤 프로젝트</h1>
+</header>
+<div class="tabs" id="main-tabs">
+  <button class="tab" id="tab-videos">운동영상</button>
+  <button class="tab" id="tab-info">운동정보</button>
+</div>
+<div class="subtabs hidden fade" id="type-tabs"></div>
+<div class="subtabs hidden fade" id="part-tabs"></div>
+<div class="subtabs hidden fade" id="detail-tabs"></div>
+<div id="content" class="fade"></div>
+
+<script>
+function hideIntro(){
+  const intro=document.getElementById('intro');
+  intro.style.opacity='0';
+  setTimeout(()=>intro.style.display='none',450);
+}
+
+/* ===== 데이터 구조 ===== */
+const videoData = {
+  '프리웨이트': {
+    '가슴': {'윗가슴':['인클라인 벤치프레스','인클라인 덤벨프레스'],'중간가슴':['벤치프레스','덤벨프레스'],'아랫가슴':['디클라인 벤치','디클라인 덤벨']},
+    '등': {'상부':['랫풀다운','풀업'],'중부':['바벨로우'],'하부':['데드리프트']},
+    '어깨': {'전면':['프론트 레이즈'],'측면':['사이드 레터럴'],'후면':['리버스 플라이']},
+    '하체': {'앞 허벅지':['스쿼트','레그프레스'],'뒷 허벅지':['루마니안 데드리프트'],'엉덩이':['힙 쓰러스트']},
+    '팔': {'이두':['바벨컬','덤벨컬'],'삼두':['트라이셉스 푸시다운']}
+  },
+  '머신': {
+    '가슴': {'윗가슴':['인클라인 체스트프레스'],'중간가슴':['체스트플라이 머신'],'아랫가슴':['디클라인 체스트프레스']},
+    '등': {'상부':['랫풀다운 머신'],'중부':['시티드로우 머신'],'하부':['로우 머신','와이드풀다운']},
+    '어깨': {'전면':['숄더프레스 머신'],'측면':['사이드 레터럴 머신'],'후면':['리어 델트 머신']},
+    '하체': {'앞 허벅지':['레그프레스','레그익스텐션'],'뒷 허벅지':['레그컬'],'엉덩이':['글루트 머신']},
+    '팔': {'이두':['이두컬 머신'],'삼두':['트라이셉스 머신']}
+  }
+};
+
+/* ===== 동작별 링크 ===== */
+const videoLinks = {
+  '바벨컬': {프리웨이트:{youtube:'https://youtube.com/shorts/eESmXJtH1vU?si=MIpLJhnd_VcC_nd2', insta:'링크36'}},
+  '와이드풀다운': {머신:{youtube:'https://youtube.com/shorts/0Bb4efiiXEQ?si=tQQmTTeH6ayCUasX', insta:'링크999'}}
+};
+
+/* ===== 상태 ===== */
+let currentType='', currentPart='', currentDetail='';
+const typeTabs=document.getElementById('type-tabs');
+const partTabs=document.getElementById('part-tabs');
+const detailTabs=document.getElementById('detail-tabs');
+const content=document.getElementById('content');
+
+/* ===== 렌더 ===== */
+function renderTypeTabs(){
+  typeTabs.innerHTML='';
+  for(const t of Object.keys(videoData)){
+    const btn=document.createElement('button');
+    btn.className='subtab'; btn.textContent=t;
+    btn.onclick=()=>{
+      currentType=t; currentPart=''; currentDetail=''; renderPartTabs();
+      Array.from(typeTabs.children).forEach(x=>x.classList.remove('active')); btn.classList.add('active');
+      detailTabs.classList.add('hidden'); content.innerHTML='';
+    };
+    typeTabs.appendChild(btn);
+  }
+  typeTabs.classList.remove('hidden');
+  partTabs.classList.add('hidden');
+  detailTabs.classList.add('hidden');
+  content.innerHTML='';
+}
+
+function renderPartTabs(){
+  partTabs.innerHTML='';
+  if(!currentType) return;
+  for(const p of Object.keys(videoData[currentType])){
+    const btn=document.createElement('button');
+    btn.className='subtab'; btn.textContent=p;
+    btn.onclick=()=>{
+      currentPart=p; currentDetail=''; renderDetailTabs();
+      Array.from(partTabs.children).forEach(x=>x.classList.remove('active')); btn.classList.add('active');
+      content.innerHTML='';
+    };
+    partTabs.appendChild(btn);
+  }
+  partTabs.classList.remove('hidden');
+  detailTabs.classList.add('hidden');
+  content.innerHTML='';
+}
+
+function renderDetailTabs(){
+  detailTabs.innerHTML='';
+  if(!currentPart) return;
+  for(const d of Object.keys(videoData[currentType][currentPart])){
+    const btn=document.createElement('button');
+    btn.className='subtab'; btn.textContent=d;
+    btn.onclick=()=>{
+      currentDetail=d; renderMoves();
+      Array.from(detailTabs.children).forEach(x=>x.classList.remove('active')); btn.classList.add('active');
+    };
+    detailTabs.appendChild(btn);
+  }
+  detailTabs.classList.remove('hidden');
+  content.innerHTML='';
+}
+
+function renderMoves(){
+  content.innerHTML='';
+  if(!currentType || !currentPart || !currentDetail) return;
+  const moves=videoData[currentType][currentPart][currentDetail];
+  moves.forEach(move=>{
+    const card=document.createElement('div'); card.className='video-card';
+    const title=document.createElement('div'); title.textContent=move; title.style.fontWeight='800'; card.appendChild(title);
+    const btns=document.createElement('div'); btns.className='platforms';
+    ['youtube','insta'].forEach(p=>{
+      const b=document.createElement('button'); b.className='platform-btn '+p;
+      if(videoLinks[move] && videoLinks[move][currentType] && videoLinks[move][currentType][p]) b.onclick=()=>window.open(videoLinks[move][currentType][p]);
+      b.innerHTML='<img src="'+(p=='youtube'
+        ?'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg'
+        :'https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg')+'"> '+(p=='insta'?'Instagram':'YouTube');
+      btns.appendChild(b);
+    });
+    card.appendChild(btns);
+    content.appendChild(card);
+  });
+}
+
+/* ===== 메인 탭 ===== */
+document.getElementById('tab-videos').onclick=()=>{
+  currentType=''; currentPart=''; currentDetail='';
+  renderTypeTabs();
+};
+
+document.getElementById('tab-info').onclick=()=>{
+  typeTabs.classList.add('hidden');
+  partTabs.classList.add('hidden');
+  detailTabs.classList.add('hidden');
+  content.innerHTML='';
+  renderInfo();
+};
+
+/* ===== 운동정보 ===== */
+function renderInfo(){
+  const infoItems=[
+    {text:'카톡 상담하기', url:'http://pf.kakao.com/_xomZzn'},
+    {text:'시드니짐 바로가기', url:'https://m.place.naver.com/place/1227932046/home?entry=pll'},
+    {text:'시드니짐 인스타그램', url:'https://www.instagram.com/sydneygym_isu/profilecard/?igsh=MWtyazF6YzhpcGo4bQ%3D%3D'},
+    {text:'시드니짐 블로그', url:'https://m.blog.naver.com/sydneygym1'}
+  ];
+  infoItems.forEach(item=>{
+    const d=document.createElement('div');
+    d.className='info-card';
+    d.textContent=item.text;
+    d.onclick=()=>window.open(item.url);
+    content.appendChild(d);
+  });
+}
+
+typeTabs.classList.add('hidden');
+partTabs.classList.add('hidden');
+detailTabs.classList.add('hidden');
+content.innerHTML='';
+</script>
+</body>
+</html>
