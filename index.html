@@ -1,226 +1,583 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>준호쌤 프로젝트</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>준호쌤 운동강의 (간단버전)</title>
+
+<!-- =======================
+     🌟 폰트
+======================= -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800&display=swap" rel="stylesheet">
+
 <style>
+/* =======================
+   🌟 전역 색상 변수
+======================= */
 :root{
-  --accent:#ff3b30;
-  --bg-dark:#111;
-  --bg-dark2:#222;
-  --bg-dark3:#333;
-  --text:#fff;
-  --gap:8px;
+  --accent:#A9A9A9;      /* 강조 색 (active 버튼) */
+  --bg-dark:#111;        /* 기본 어두운 배경 */
+  --bg-dark2:#222;       /* 하위 배경 어두운색 */
+  --bg-dark3:#333;       /* 서브 버튼 배경 */
+  --text:#fff;           /* 기본 텍스트 색상 */
 }
-*{box-sizing:border-box;}
+
+/* =======================
+   🌟 전역 기본 스타일
+======================= */
+*{ box-sizing:border-box; }
+
 body{
-  margin:0; padding:18px;
-  font-family:'Segoe UI',sans-serif;
+  margin:0; 
+  padding:18px;
+  font-family: 'Noto Sans KR', sans-serif;
   color:var(--text);
-  background: url('https://i.postimg.cc/SKGmnC0B/1761749047105-1.jpg') no-repeat center center fixed;
+  background: url('https://i.postimg.cc/05SyJtvH/3.png') no-repeat center center fixed;
   background-size:cover;
 }
+
 body::before{
   content:"";
-  position:fixed; top:0; left:0; width:100%; height:100%;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
   backdrop-filter:blur(6px);
   z-index:-1;
 }
-#intro{position:fixed; top:0; left:0; width:100%; height:100%; background:#000; display:flex; justify-content:center; align-items:center; z-index:2000; transition:opacity .45s;}
-#intro img{ width:100%; height:100%; object-fit:cover; cursor:pointer; }
-header{ text-align:center; margin-bottom:14px; display:flex; justify-content:center; align-items:center; gap:10px; z-index:10; position:relative; }
-header img.logo{ height:56px; }
-header h1{ font-size:2.4rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
-.tabs{display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin-bottom:12px;}
-.tab{ background:var(--bg-dark3); color:var(--text); border:none; padding:6px 18px; border-radius:20px; cursor:pointer; font-weight:700; font-size:1.1rem; transition:all .14s;}
-.tab:hover{transform:translateY(-2px);}
-.tab.active{background:var(--accent); color:#fff; box-shadow:0 6px 18px rgba(0,0,0,.45);}
-.subtabs{display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin:10px 0;}
-.subtab{ background:var(--bg-dark2); color:var(--text); border:none; padding:6px 14px; border-radius:14px; cursor:pointer; font-weight:700; font-size:1rem; transition:all .12s;}
-.subtab:hover{transform:translateY(-2px);}
-.subtab.active{background:#ff7b75; font-weight:800;}
-#content{max-width:980px; margin:0 auto; padding:10px; z-index:5;}
-.video-card, .info-card{
-  background:rgba(0,0,0,0.52); border-radius:12px; padding:10px; margin:8px 0; max-width:900px; font-weight:700;
-  display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;
+
+
+/* =======================
+   🌟 블러 오버레이 기본 숨기기
+======================= */
+.blur-overlay {
+  position: fixed; 
+  top: 0; 
+  left: 0; 
+  width: 100%; 
+  height: 100%; 
+  backdrop-filter: blur(6px);  /* 배경 블러 처리 */
+  background: rgba(0, 0, 0, 0.2);  /* 반투명 어두운 배경 */
+  z-index: 1000;
+  opacity: 0;  /* 기본 상태에서는 숨겨짐 */
+  pointer-events: none;  /* 클릭 불가능 */
+  transition: opacity 0.25s ease;
 }
-.platforms{display:flex; justify-content:center; gap:14px; margin-top:6px;}
-.platform-btn{ display:inline-flex; align-items:center; gap:8px; padding:6px 12px; border-radius:12px; border:none; cursor:pointer; font-weight:700; min-width:140px; justify-content:center; color:#fff;}
-.platform-btn img{height:18px; width:18px;}
-.platform-btn.youtube{ background:linear-gradient(90deg,#ff4b4b,#ff0000); }
-.platform-btn.insta{ background:linear-gradient(90deg,#feda75,#d62976); }
-.platform-btn.active{ box-shadow:0 8px 20px rgba(0,0,0,0.2);}
-.hidden{display:none !important;}
-.fade{transition:opacity .18s, transform .18s; opacity:1; transform:none;}
-.fade.hide{opacity:0; transform:translateY(6px); pointer-events:none;}
-@media (max-width:600px){ .subtab{ padding:6px 10px; font-size:0.95rem;} .platform-btn{ min-width:120px; padding:6px 10px; } header h1{ font-size:1.6rem; }}
+
+/* =======================
+   🌟 인트로 화면
+======================= */
+#intro{
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:#000;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:2000;
+  transition:opacity .45s;
+}
+
+#intro img{
+  width:100%; height:100%;
+  object-fit:cover;
+  cursor:pointer;
+}
+
+/* =======================
+   🌟 헤더
+======================= */
+header{
+  text-align:center;
+  margin-bottom:14px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  z-index:10;
+  position:relative;
+}
+
+header img.logo{
+  height:56px;
+}
+
+header h1{
+  font-size:2.2rem;
+  margin:0;
+  text-shadow:2px 2px 6px rgba(0,0,0,.6);
+}
+
+/* =======================
+   🌟 메인 탭
+======================= */
+.tabs{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:12px;
+}
+
+.tab{
+  background:var(--bg-dark3);
+  color:var(--text);
+  border:none;
+  padding:5px 18px;
+  border-radius:20px;
+  cursor:pointer;
+  font-weight:700;
+  font-size:1.1rem;
+  transition:all .14s;
+}
+
+.tab:hover{
+  transform:translateY(-2px);
+}
+
+.tab.active{
+  background:var(--accent);
+  color:#fff;
+  box-shadow:0 6px 18px rgba(0,0,0,.45);
+}
+
+/* =======================
+   🌟 하위 탭 (유형/부위)
+======================= */
+.subtabs{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin:10px 0;
+}
+
+.subtab{
+  background:var(--bg-dark2);
+  color:var(--text);
+  border:none;
+  padding:6px 14px;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:700;
+  font-size:1rem;
+  transition:all .12s;
+}
+
+.subtab:hover{
+  transform:translateY(-2px);
+}
+
+.subtab.active{
+  background:#A9A9A9;
+  font-weight:800;
+}
+
+/* =======================
+   🌟 콘텐츠 영역
+======================= */
+#content{
+  max-width:980px;
+  margin:0 auto;
+  padding:10px;
+  z-index:5;
+}
+
+/* =======================
+   🌟 카드 통일 스타일
+======================= */
+.video-card,
+.info-card{
+  background:rgba(128, 128, 128, 0.5);
+  border-radius:12px;
+  padding:7px 14px;
+  margin:8px 0;
+  font-weight:700;
+  min-height:30px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+}
+
+.info-card{
+  justify-content:center;
+  cursor:pointer;
+}
+
+.hidden{
+  display:none !important;
+}
+
+.fade{
+  transition:opacity .18s, transform .18s;
+}
 </style>
 </head>
+
 <body>
+
+<!-- 블러 오버레이 -->
+<div class="blur-overlay" id="blurOverlay"></div>
+
+<!-- 인트로 화면 -->
 <div id="intro">
   <img src="https://i.postimg.cc/HLCMMV3h/059bc0660c3d47a18023c788b22e869f.gif" alt="인트로" onclick="hideIntro()">
 </div>
+
+<!-- 헤더 -->
 <header>
   <img class="logo" src="https://i.postimg.cc/QxWSC2MD/Screenshot-20251029-084633-Kakao-Talk.png" alt="준호쌤">
   <h1>준호쌤 프로젝트</h1>
 </header>
+
+<!-- 메인 탭 -->
 <div class="tabs" id="main-tabs">
   <button class="tab" id="tab-videos">운동영상</button>
   <button class="tab" id="tab-info">운동정보</button>
 </div>
+
+<!-- 하위 탭 -->
 <div class="subtabs hidden fade" id="type-tabs"></div>
 <div class="subtabs hidden fade" id="part-tabs"></div>
-<div class="subtabs hidden fade" id="detail-tabs"></div>
+
+<!-- 콘텐츠 영역 -->
 <div id="content" class="fade"></div>
 
 <script>
-function hideIntro(){
-  const intro=document.getElementById('intro');
-  intro.style.opacity='0';
-  setTimeout(()=>intro.style.display='none',450);
+/* =======================
+   🌟 인트로 숨기기
+======================= */
+function hideIntro(){ 
+  const intro=document.getElementById('intro'); 
+  intro.style.opacity='0'; 
+  setTimeout(()=>intro.style.display='none',450); 
 }
 
-/* ===== 데이터 구조 ===== */
+/* =======================
+   🌟 운동 데이터
+======================= */
 const videoData = {
   '프리웨이트': {
-    '가슴': {'윗가슴':['인클라인 벤치프레스','인클라인 덤벨프레스'],'중간가슴':['벤치프레스','덤벨프레스'],'아랫가슴':['디클라인 벤치','디클라인 덤벨']},
-    '등': {'상부':['랫풀다운','풀업'],'중부':['바벨로우'],'하부':['데드리프트']},
-    '어깨': {'전면':['프론트 레이즈'],'측면':['사이드 레터럴'],'후면':['리버스 플라이']},
-    '하체': {'앞 허벅지':['스쿼트','레그프레스'],'뒷 허벅지':['루마니안 데드리프트'],'엉덩이':['힙 쓰러스트']},
-    '팔': {'이두':['바벨컬','덤벨컬'],'삼두':['트라이셉스 푸시다운']}
+    '가슴':['벤치프레스','인클라인 덤벨프레스','체스트 플라이'],
+    '등':['랫풀다운','풀업','바벨로우','데드리프트'],
+    '어깨':['프론트 레이즈','사이드 레터럴 레이즈','리버스 플라이'],
+    '하체':['스쿼트','레그프레스','루마니안 데드리프트','힙 쓰러스트'],
+    '팔':['바벨컬','덤벨컬','트라이셉스 푸시다운']
   },
   '머신': {
-    '가슴': {'윗가슴':['인클라인 체스트프레스'],'중간가슴':['체스트플라이 머신'],'아랫가슴':['디클라인 체스트프레스']},
-    '등': {'상부':['랫풀다운 머신'],'중부':['시티드로우 머신'],'하부':['로우 머신','와이드풀다운']},
-    '어깨': {'전면':['숄더프레스 머신'],'측면':['사이드 레터럴 머신'],'후면':['리어 델트 머신']},
-    '하체': {'앞 허벅지':['레그프레스','레그익스텐션'],'뒷 허벅지':['레그컬'],'엉덩이':['글루트 머신']},
-    '팔': {'이두':['이두컬 머신'],'삼두':['트라이셉스 머신']}
+    '가슴':['인클라인 체스트프레스','체스트플라이 머신','디클라인 체스트프레스'],
+    '등':['랫풀다운 머신','시티드로우 머신','로우 머신','와이드풀다운'],
+    '어깨':['숄더프레스 머신','사이드 레터럴 머신','리어 델트 머신'],
+    '하체':['레그프레스','레그익스텐션','레그컬','글루트 머신'],
+    '팔':['이두컬 머신','트라이셉스 머신']
   }
 };
 
-/* ===== 동작별 링크 ===== */
+/* =======================
+   🌟 유튜브/인스타 링크 데이터 (모든 운동)
+======================= */
 const videoLinks = {
-  '바벨컬': {프리웨이트:{youtube:'https://youtube.com/shorts/eESmXJtH1vU?si=MIpLJhnd_VcC_nd2', insta:'링크36'}},
-  '와이드풀다운': {머신:{youtube:'https://youtube.com/shorts/0Bb4efiiXEQ?si=tQQmTTeH6ayCUasX', insta:'링크999'}}
+  /*  😎 프리웨이트 😎 */
+  // 가슴 
+  '벤치프레스': {youtube:['https://www.youtube.com/watch?v=Evjxm8MZ2bM'], insta:['']},
+  '인클라인 덤벨프레스': {youtube:['https://www.youtube.com/watch?v=8iPEnn-ltC8'], insta:['']},
+  '체스트 플라이': {youtube:['https://www.youtube.com/watch?v=eozdVDA78K0'], insta:['']},
+
+  // 등
+  '랫풀다운': {youtube:['https://www.youtube.com/watch?v=CAwf7n6Luuc'], insta:['']},
+  '풀업': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g'], insta:['']},
+  '바벨로우': {youtube:['https://www.youtube.com/watch?v=vT2GjY_Umpw'], insta:['']},
+  '데드리프트': {youtube:['https://www.youtube.com/watch?v=r4MzxtBKyNE'], insta:['']},
+
+  // 어깨
+  '프론트 레이즈': {youtube:['https://www.youtube.com/watch?v=-t7fuZ0KhDA'], insta:['']},
+  '사이드 레터럴 레이즈': {youtube:['https://www.youtube.com/watch?v=3VcKaXpzqRo'], insta:['']},
+  '리버스 플라이': {youtube:['https://www.youtube.com/watch?v=QOVaHwm-Q6U'], insta:['']},
+
+  // 하체
+  '스쿼트': {youtube:['https://www.youtube.com/watch?v=aclHkVaku9U'], insta:['']},
+  '레그프레스': {youtube:['https://www.youtube.com/watch?v=zvM10AW4r8U'], insta:['']},
+  '루마니안 데드리프트': {youtube:['https://www.youtube.com/watch?v=2SHsk9AzdjA'], insta:['']},
+  '힙 쓰러스트': {youtube:['https://www.youtube.com/watch?v=9vOcdRxzA1k'], insta:['']},
+
+  // 팔 
+  '바벨컬': {youtube:['https://www.youtube.com/watch?v=kwG2ipFRgfo'], insta:['']},
+  '덤벨컬': {youtube:['https://www.youtube.com/watch?v=av7-8igSXTs'], insta:['']},
+  '트라이셉스 푸시다운': {youtube:['https://www.youtube.com/watch?v=2-LAMcpzODU'], insta:['']},
+  
+  /*  😎 머신 😎 */
+  // 가슴 
+  '인클라인 체스트프레스': {youtube:['https://www.youtube.com/watch?v=8iPEnn-ltC8'], insta:['']},
+  '체스트플라이 머신': {youtube:['https://www.youtube.com/watch?v=eozdVDA78K0'], insta:['']},
+  '디클라인 체스트프레스': {youtube:['https://www.youtube.com/watch?v=SrqOu55lrYU'], insta:['']},
+
+  // 등
+  '랫풀다운 머신': {youtube:['https://www.youtube.com/watch?v=CAwf7n6Luuc'], insta:['']},
+  '시티드로우 머신': {youtube:['https://www.youtube.com/watch?v=GZbfZ033f74'], insta:['']},
+  '로우 머신': {youtube:['https://www.youtube.com/watch?v=vT2GjY_Umpw'], insta:['']},
+  '와이드풀다운': {youtube:['https://www.youtube.com/watch?v=0Bb4efiiXEQ'], insta:['']},
+
+  // 어깨
+  '숄더프레스 머신': {youtube:['https://www.youtube.com/watch?v=B-aVuyhvLHU'], insta:['']},
+  '사이드 레터럴 머신': {youtube:['https://www.youtube.com/watch?v=3VcKaXpzqRo'], insta:['']},
+  '리어 델트 머신': {youtube:['https://www.youtube.com/watch?v=QOVaHwm-Q6U'], insta:['']},
+
+  // 하체
+  '레그익스텐션': {youtube:['https://www.youtube.com/watch?v=yR9oYydGXkE'], insta:['']},
+  '레그컬': {youtube:['https://www.youtube.com/watch?v=ybKdTqLw7g4'], insta:['']},
+  '글루트 머신': {youtube:['https://www.youtube.com/watch?v=Gw6mnk8XHnk'], insta:['']},
+
+  // 팔
+  '이두컬 머신': {youtube:['https://www.youtube.com/watch?v=kwG2ipFRgfo'], insta:['']},
+  '트라이셉스 머신': {youtube:['https://www.youtube.com/watch?v=2-LAMcpzODU'], insta:['']}
 };
 
-/* ===== 상태 ===== */
-let currentType='', currentPart='', currentDetail='';
+
+let currentType='', currentPart='';
 const typeTabs=document.getElementById('type-tabs');
 const partTabs=document.getElementById('part-tabs');
-const detailTabs=document.getElementById('detail-tabs');
 const content=document.getElementById('content');
+const blurOverlay=document.getElementById('blurOverlay');
 
-/* ===== 렌더 ===== */
+/* =======================
+   🌟 유형 탭 렌더링
+======================= */
 function renderTypeTabs(){
   typeTabs.innerHTML='';
   for(const t of Object.keys(videoData)){
     const btn=document.createElement('button');
-    btn.className='subtab'; btn.textContent=t;
+    btn.className='subtab';
+    btn.textContent=t;
     btn.onclick=()=>{
-      currentType=t; currentPart=''; currentDetail=''; renderPartTabs();
-      Array.from(typeTabs.children).forEach(x=>x.classList.remove('active')); btn.classList.add('active');
-      detailTabs.classList.add('hidden'); content.innerHTML='';
+      currentType=t; 
+      currentPart='';
+      renderPartTabs();
+      Array.from(typeTabs.children).forEach(x=>x.classList.remove('active'));
+      btn.classList.add('active');
+      content.innerHTML='';
+      showBlur();
     };
     typeTabs.appendChild(btn);
   }
   typeTabs.classList.remove('hidden');
-  partTabs.classList.add('hidden');
-  detailTabs.classList.add('hidden');
-  content.innerHTML='';
 }
 
+/* =======================
+   🌟 부위 탭 렌더링
+======================= */
 function renderPartTabs(){
   partTabs.innerHTML='';
   if(!currentType) return;
   for(const p of Object.keys(videoData[currentType])){
     const btn=document.createElement('button');
-    btn.className='subtab'; btn.textContent=p;
+    btn.className='subtab';
+    btn.textContent=p;
     btn.onclick=()=>{
-      currentPart=p; currentDetail=''; renderDetailTabs();
-      Array.from(partTabs.children).forEach(x=>x.classList.remove('active')); btn.classList.add('active');
+      currentPart=p;
       content.innerHTML='';
+      Array.from(partTabs.children).forEach(x=>x.classList.remove('active'));
+      btn.classList.add('active');
+      renderMoves();
+      showBlur();
     };
     partTabs.appendChild(btn);
   }
   partTabs.classList.remove('hidden');
-  detailTabs.classList.add('hidden');
-  content.innerHTML='';
 }
 
-function renderDetailTabs(){
-  detailTabs.innerHTML='';
-  if(!currentPart) return;
-  for(const d of Object.keys(videoData[currentType][currentPart])){
-    const btn=document.createElement('button');
-    btn.className='subtab'; btn.textContent=d;
-    btn.onclick=()=>{
-      currentDetail=d; renderMoves();
-      Array.from(detailTabs.children).forEach(x=>x.classList.remove('active')); btn.classList.add('active');
-    };
-    detailTabs.appendChild(btn);
-  }
-  detailTabs.classList.remove('hidden');
-  content.innerHTML='';
-}
+
 
 function renderMoves(){
   content.innerHTML='';
-  if(!currentType || !currentPart || !currentDetail) return;
-  const moves=videoData[currentType][currentPart][currentDetail];
-  moves.forEach(move=>{
-    const card=document.createElement('div'); card.className='video-card';
-    const title=document.createElement('div'); title.textContent=move; title.style.fontWeight='800'; card.appendChild(title);
-    const btns=document.createElement('div'); btns.className='platforms';
-    ['youtube','insta'].forEach(p=>{
-      const b=document.createElement('button'); b.className='platform-btn '+p;
-      if(videoLinks[move] && videoLinks[move][currentType] && videoLinks[move][currentType][p]) b.onclick=()=>window.open(videoLinks[move][currentType][p]);
-      b.innerHTML='<img src="'+(p=='youtube'
-        ?'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg'
-        :'https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg')+'"> '+(p=='insta'?'Instagram':'YouTube');
-      btns.appendChild(b);
-    });
-    card.appendChild(btns);
-    content.appendChild(card);
-  });
+  const moves = videoData[currentType][currentPart];
+  
+  for(const move of moves){
+    const div = document.createElement('div');
+    div.className = 'video-card';
+    
+    const title = document.createElement('div');
+    title.textContent = move;
+    title.style.fontSize = '1rem';
+    title.style.fontWeight = '800';
+    
+    const iconBox = document.createElement('div');
+    iconBox.style.display='flex';
+    iconBox.style.alignItems='center';
+    iconBox.style.gap = '18px';
+
+    // 유튜브 버튼
+    const ytWrap = document.createElement('div');
+    ytWrap.style.display='flex';
+    ytWrap.style.alignItems='center';
+    ytWrap.style.gap='6px';
+    ytWrap.style.cursor='pointer';
+    ytWrap.onclick = () => {
+  const link = videoLinks[move]?.youtube?.[0];
+  if (!link) return;
+
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  if (isMobile) {
+    // 모바일이면 앱 스킴 먼저 시도
+    const appLink = link.replace('https://www.youtube.com/watch?v=', 'youtube://'); // 앱 스킴
+    const now = Date.now();
+
+    const timeout = setTimeout(() => {
+      window.open(link, '_blank'); // 앱 없으면 웹으로
+    }, 800);
+
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = appLink;
+    document.body.appendChild(iframe);
+
+    setTimeout(() => {
+      document.body.removeChild(iframe);
+      clearTimeout(timeout);
+    }, 1000);
+  } else {
+    // 모바일 아닌 경우 그냥 웹으로
+    window.open(link, '_blank');
+  }
+};
+    const yt = document.createElement('img');
+    yt.src='https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg';
+    yt.style.width='24px';
+    yt.style.height='24px';
+    const ytText = document.createElement('span');
+    ytText.textContent='YouTube';
+    ytText.style.fontSize='0.85rem';
+    ytText.style.fontWeight='700';
+    ytWrap.appendChild(yt);
+    ytWrap.appendChild(ytText);
+
+    // 인스타 버튼
+    const igWrap = document.createElement('div');
+    igWrap.style.display='flex';
+    igWrap.style.alignItems='center';
+    igWrap.style.gap='6px';
+    igWrap.style.cursor='pointer';
+    igWrap.onclick = () => {
+      const profile = 'sydneygym_isu';
+      window.open(`https://www.instagram.com/${profile}/`, '_blank');  // 웹 링크만 열기
+    };
+    const ig = document.createElement('img');
+    ig.src='https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg';
+    ig.style.width='24px';
+    ig.style.height='24px';
+    const igText = document.createElement('span');
+    igText.textContent='Instagram';
+    igText.style.fontSize='0.85rem';
+    igText.style.fontWeight='700';
+    igWrap.appendChild(ig);
+    igWrap.appendChild(igText);
+
+    iconBox.appendChild(ytWrap);
+    iconBox.appendChild(igWrap);
+
+    div.appendChild(title);
+    div.appendChild(iconBox);
+    content.appendChild(div);
+  }
+}
+/* ======================= 
+   🌟 메인 탭 클릭 시 블러 처리
+======================= */
+
+// 운동영상 탭 클릭
+document.getElementById('tab-videos').onclick = () => {
+  setActiveTab('tab-videos');  // 운동영상 탭 활성화
+  renderTypeTabs();  // 운동 유형 탭을 렌더링
+  partTabs.classList.add('hidden');  // 부위 탭 숨기기
+  content.innerHTML = '';  // 콘텐츠 초기화
+  renderVideoTabs();  // 프리웨이트 / 머신 선택 탭 렌더링
+  showBlur();  // 운동영상 탭 클릭 시 블러 활성화
+};
+
+// 운동정보 탭 클릭
+document.getElementById('tab-info').onclick = () => {
+  setActiveTab('tab-info');  // 운동정보 탭 활성화
+  typeTabs.classList.add('hidden');  // 운동 유형 탭 숨기기
+  partTabs.classList.add('hidden');  // 부위 탭 숨기기
+  content.innerHTML = '';  // 콘텐츠 초기화
+  renderInfo();  // 운동 정보 렌더링
+  showBlur();  // 운동정보 탭 클릭 시 블러 활성화
+};
+
+// 탭 활성화 함수
+function setActiveTab(tabId) {
+  // 모든 탭 비활성화
+  const tabs = document.querySelectorAll('.tab');  // .tab 클래스를 가진 모든 버튼들
+  tabs.forEach(tab => tab.classList.remove('active'));  // 비활성화
+  
+  // 클릭한 탭 활성화
+  document.getElementById(tabId).classList.add('active');  // 선택된 탭에 active 클래스 추가
 }
 
-/* ===== 메인 탭 ===== */
-document.getElementById('tab-videos').onclick=()=>{
-  currentType=''; currentPart=''; currentDetail='';
-  renderTypeTabs();
-};
-
-document.getElementById('tab-info').onclick=()=>{
-  typeTabs.classList.add('hidden');
-  partTabs.classList.add('hidden');
-  detailTabs.classList.add('hidden');
-  content.innerHTML='';
-  renderInfo();
-};
-
-/* ===== 운동정보 ===== */
+/* =======================
+   🌟 정보 탭 렌더링
+======================= */
 function renderInfo(){
-  const infoItems=[
-    {text:'카톡 상담하기', url:'http://pf.kakao.com/_xomZzn'},
-    {text:'시드니짐 바로가기', url:'https://m.place.naver.com/place/1227932046/home?entry=pll'},
-    {text:'시드니짐 인스타그램', url:'https://www.instagram.com/sydneygym_isu/profilecard/?igsh=MWtyazF6YzhpcGo4bQ%3D%3D'},
-    {text:'시드니짐 블로그', url:'https://m.blog.naver.com/sydneygym1'}
+  const infoItems = [
+    {
+      text: '박준호선생님 블로그',
+      url: 'https://www.jungho-park.com/',
+      icon: 'https://i.postimg.cc/hj2NGBJ9/Screenshot-20251116-221434-Samsung-Internet.jpg' // 블로그 아이콘
+    },
+    {
+      text: '박준호선생님 카카오톡', 
+      url: 'http://pf.kakao.com/_xomZzn',
+      icon: 'https://upload.wikimedia.org/wikipedia/commons/e/e3/KakaoTalk_logo.svg'
+    },
+    {
+      text: '박준호선생님 유튜브채널', 
+      url: 'https://m.place.naver.com/place/1227932046/home?entry=pll',
+      icon: 'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg'
+    },
+    {
+      text: '박준호선생님 인스타그램', 
+      url: 'https://www.instagram.com/sydneygym_isu/profilecard/?igsh=MWtyazF6YzhpcGo4bQ%3D%3D',
+      icon: 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg'
+    }
   ];
-  infoItems.forEach(item=>{
-    const d=document.createElement('div');
-    d.className='info-card';
-    d.textContent=item.text;
-    d.onclick=()=>window.open(item.url);
+
+  content.innerHTML = ''; // 콘텐츠 초기화
+
+  infoItems.forEach(item => {
+    const d = document.createElement('div');
+    d.className = 'info-card';
+    d.style.display = 'flex';
+    d.style.alignItems = 'center';
+    d.style.gap = '10px';
+    d.style.cursor = 'pointer';
+    
+    const img = document.createElement('img');
+    img.src = item.icon;
+    img.style.width = '28px';      // 일정 크기로 고정
+    img.style.height = '28px';
+    img.style.objectFit = 'contain'; // 비율 유지
+    
+    const span = document.createElement('span');
+    span.textContent = item.text;
+    span.style.fontWeight = '700';
+    span.style.fontSize = '1rem';
+
+    d.appendChild(img);
+    d.appendChild(span);
+    d.onclick = () => window.open(item.url);
     content.appendChild(d);
-  });
+  });    
+}
+/* =======================
+   🌟 블러 표시 함수
+======================= */
+function showBlur(duration = 400) {
+  blurOverlay.classList.add('active');  // 블러 오버레이 활성화
+  setTimeout(() => blurOverlay.classList.remove('active'), duration);  // 일정 시간 후 비활성화
 }
 
-typeTabs.classList.add('hidden');
-partTabs.classList.add('hidden');
-detailTabs.classList.add('hidden');
-content.innerHTML='';
+
 </script>
 </body>
 </html>
