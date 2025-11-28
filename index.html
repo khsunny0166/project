@@ -15,22 +15,28 @@
   --bg-dark2:#222;
   --bg-dark3:#333;
   --text:#fff;  
+  /* 💡 JS에서 계산되어 들어갈 사용자 정의 높이 변수 */
+  --vh: 100vh;
 }  
 *{ box-sizing:border-box; }  
   
 /* 💡 1. HTML/BODY: 뷰포트 전체 높이를 차지하고 전체 스크롤을 방지하는 컨테이너 */
 html, body { 
-  height: 100vh; /* 👈 수정: 100% -> 100vh */
+  /* 👈 높이 고정 유지 */
+  height: var(--vh); 
   margin: 0;
   overflow: hidden; 
 }
 
 body {  
-  height: 100vh; /* 👈 추가 */
+  /* 👈 높이 고정 유지 */
+  height: var(--vh); 
   font-family: 'Noto Sans KR', sans-serif;  
   color:var(--text);  
   background-color: var(--bg-dark); 
   position: relative;
+  /* 🌟 핵심 수정: 기본 폰트 크기를 16px로 강제 고정 */
+  font-size: 16px; 
 }  
 
 /* 🖼️ 2. 배경 고정 영역 */
@@ -42,10 +48,11 @@ body {
   width: 100%; 
   background: url('https://i.postimg.cc/05SyJtvH/3.png') no-repeat center center / cover;  
   z-index: -2;  
-  height: 100vh; /* 👈 수정: 100% -> 100vh */
+  /* 👈 높이 고정 유지 */
+  height: var(--vh); 
 }  
 
-/* 📜 3. 스크롤 컨테이너 */
+/* 📜 3. 스크롤 컨테이너 (여기는 100% 유지) */
 #main-scroll-wrapper {
     position: absolute; 
     top: 0; 
@@ -71,7 +78,8 @@ header, .tabs, .subtabs, #content {
   left: 0;  
   bottom: 0; 
   width: 100%; 
-  height: 100vh; /* 👈 수정: 100% -> 100vh */
+  /* 👈 높이 고정 유지 */
+  height: var(--vh); 
   backdrop-filter: blur(2px);  
   background: rgba(0,0,0,0.2);  
   z-index: 0;  
@@ -84,7 +92,9 @@ header, .tabs, .subtabs, #content {
 #intro{  
   position:fixed;  
   top:0; left:0;  
-  width:100%; height:100vh; /* 👈 수정: 100% -> 100vh */
+  width:100%; 
+  /* 👈 높이 고정 유지 */
+  height:var(--vh); 
   background:#000;  
   display:flex;  
   justify-content:center;  
@@ -103,6 +113,7 @@ header{
   align-items:center;  
   gap:10px;  
 }  
+/* 폰트 사이즈는 이제 16px을 기준으로 rem으로 설정됩니다. */
 header img.logo{ height:56px; } 
 header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }  
   
@@ -121,6 +132,7 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
   border-radius:20px;  
   cursor:pointer;  
   font-weight:700;  
+  /* 17.6px (16px * 1.1) */
   font-size:1.1rem;  
   transition:all .14s;  
 }  
@@ -146,6 +158,7 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
   border-radius:14px;  
   cursor:pointer;  
   font-weight:700;  
+  /* 16px (16px * 1.0) */
   font-size:1rem;  
   transition:all .12s;  
   display:flex;  
@@ -287,6 +300,7 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
     grid-column: 2 / 3;
     padding: 0;
 }
+/* 16px * 0.9 = 14.4px */
 .move-description {
     font-size: 0.9rem; 
     line-height: 1.4;
@@ -310,6 +324,7 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
     font-weight: 700; 
     text-align: center; 
     padding: 10px;
+    /* 16px * 0.8 = 12.8px */
     font-size: 0.8rem; 
     color: #aaa;
     width: 100%;
@@ -328,6 +343,7 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 .target-muscle-box .target-label {
     font-weight: 700;
     color: #fff;
+    /* 16px * 0.9 = 14.4px */
     font-size: 0.9rem;
     margin: 0;
     display: block;
@@ -335,6 +351,7 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 
 .target-muscle-box .target-value {
     color: #ffd700;
+    /* 16px * 1.0 = 16px */
     font-size: 1rem;
     font-weight: 800;
     display: block; 
@@ -401,6 +418,21 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
   <div id="content" class="fade"></div>  
 </div> 
 <script>  
+// ===================================
+// 🌟 키보드 움직임 방지 (높이만 고정하는 최소 JS)
+// 폰트 크기 조절 로직은 완전히 제거됨.
+// ===================================
+function setViewportHeight() {
+    // 뷰포트의 실제 높이를 픽셀 단위로 계산
+    let vh = window.innerHeight * 0.01;
+    // CSS 변수 --vh에 이 값을 설정
+    document.documentElement.style.setProperty('--vh', `${vh * 100}px`);
+}
+
+// 윈도우 로드 및 리사이즈(키보드/주소창 변화) 시 높이 고정 함수 실행
+window.addEventListener('load', setViewportHeight);
+window.addEventListener('resize', setViewportHeight);
+
 // =======================
 // 🌟 전역 변수 및 초기화
 // =======================
@@ -412,12 +444,6 @@ const content=document.getElementById('content');
 const searchWrapper=document.getElementById('search-wrapper'); 
 const searchInput=document.getElementById('search-input'); 
 let moveNameToPart = {}; // 운동 이름 -> 부위 매핑 테이블
-
-/* =======================
-   🌟 뷰포트 높이 관리 함수 (제거됨: CSS-only 해결책으로 대체)
-   ======================= */
-// window.addEventListener('load', setViewportHeight); 등의 리스너 모두 제거됨
-
 
 /* =======================
    🌟 인트로 관련 함수
@@ -682,9 +708,9 @@ const exerciseInfo = {
 2. 복사근의 힘을 이용하여 몸통을 한쪽 방향으로 회전시킵니다.
 3. 허리가 아닌 옆구리 근육이 늘어나고 수축되는 것을 느끼며 천천히 반대 방향으로 반복합니다.`,
     },
-    '어시스트 행잉 레그레이즈': {
+    '행잉 레그레이즈': {
         target: '복직근 하부, 장요근',
-        imagePlaceholder: '어시스트 행잉 레그레이즈 동작 이미지', 
+        imagePlaceholder: '행잉 레그레이즈 동작 이미지', 
         description: `1. 머신의 팔꿈치 패드에 팔을 대고 등받이에 기대어 자세를 잡습니다.
 2. 복부의 힘으로 무릎을 가슴 쪽으로 들어 올립니다.
 3. 다리를 내릴 때 허리가 뒤로 과도하게 젖혀지지 않도록 복부에 긴장을 유지합니다.`,
@@ -1227,10 +1253,11 @@ function renderInfoContent(){
 
 
 // =======================
-// 🌟 초기 로드 시 설정 (디폴트 탭 선택 제거)
+// 🌟 초기 로드 시 설정
 // =======================
 document.addEventListener('DOMContentLoaded', () => {  
-    // setViewportHeight() 호출 제거됨. CSS만으로 높이 처리.
+    // DOM 로드 후 바로 높이 설정 실행
+    setViewportHeight();
 });  
 
 </script>  
