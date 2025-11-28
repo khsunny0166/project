@@ -3,7 +3,7 @@
 <head>  
 <meta charset="utf-8" />  
 <meta name="viewport" content="width=device-width,initial-scale=1" />  
-<title>준호쌤 운동강의</title>  
+<title>준호쌤 운동강의 (단계별 검색)</title>  
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800&display=swap" rel="stylesheet">  
 <style>  
 /* =======================
@@ -20,12 +20,13 @@
   
 /* 💡 1. HTML/BODY: 뷰포트 전체 높이를 차지하고 전체 스크롤을 방지하는 컨테이너 */
 html, body { 
-  height: 100%; 
+  height: 100vh; /* 👈 수정: 100% -> 100vh */
   margin: 0;
   overflow: hidden; 
 }
 
 body {  
+  height: 100vh; /* 👈 추가 */
   font-family: 'Noto Sans KR', sans-serif;  
   color:var(--text);  
   background-color: var(--bg-dark); 
@@ -41,7 +42,7 @@ body {
   width: 100%; 
   background: url('https://i.postimg.cc/05SyJtvH/3.png') no-repeat center center / cover;  
   z-index: -2;  
-  height: 100%; 
+  height: 100vh; /* 👈 수정: 100% -> 100vh */
 }  
 
 /* 📜 3. 스크롤 컨테이너 */
@@ -70,7 +71,7 @@ header, .tabs, .subtabs, #content {
   left: 0;  
   bottom: 0; 
   width: 100%; 
-  height: 100%; 
+  height: 100vh; /* 👈 수정: 100% -> 100vh */
   backdrop-filter: blur(2px);  
   background: rgba(0,0,0,0.2);  
   z-index: 0;  
@@ -83,7 +84,7 @@ header, .tabs, .subtabs, #content {
 #intro{  
   position:fixed;  
   top:0; left:0;  
-  width:100%; height:100%; 
+  width:100%; height:100vh; /* 👈 수정: 100% -> 100vh */
   background:#000;  
   display:flex;  
   justify-content:center;  
@@ -413,37 +414,10 @@ const searchInput=document.getElementById('search-input');
 let moveNameToPart = {}; // 운동 이름 -> 부위 매핑 테이블
 
 /* =======================
-   🌟 뷰포트 높이 관리 함수 (모바일 키보드 대응 핵심 로직)
+   🌟 뷰포트 높이 관리 함수 (제거됨: CSS-only 해결책으로 대체)
    ======================= */
-function setViewportHeight() {
-    document.documentElement.style.removeProperty('height');
-    document.body.style.removeProperty('height');
-    
-    const currentVh = window.innerHeight;
-    
-    if (initialViewportHeight === 0) {
-        initialViewportHeight = currentVh;
-    }
+// window.addEventListener('load', setViewportHeight); 등의 리스너 모두 제거됨
 
-    const currentVhPx = `${currentVh}px`;
-    document.documentElement.style.height = currentVhPx;
-    document.body.style.height = currentVhPx;
-    
-    const initialVhPx = `${initialViewportHeight}px`;
-
-    const bgFixed = document.querySelector('.bg-fixed');
-    if (bgFixed) bgFixed.style.height = initialVhPx; 
-    
-    const blurOverlay = document.getElementById('blurOverlay');
-    if (blurOverlay) blurOverlay.style.height = initialVhPx; 
-
-    const intro = document.getElementById('intro');
-    if (intro) intro.style.height = initialVhPx; 
-}
-
-window.addEventListener('load', setViewportHeight);
-window.addEventListener('resize', setViewportHeight);
-window.addEventListener('orientationchange', setViewportHeight);
 
 /* =======================
    🌟 인트로 관련 함수
@@ -567,7 +541,7 @@ const exerciseInfo = {
     },
     'v스쿼트': {
         target: '대퇴사두근, 둔근, 햄스트링',
-        imageUrl: 'https://i.postimg.cc/NGXCQPRY/Screenshot-20251125-143505-Kakao-Talk.jpg',
+        imageUrl: 'https://i.postimg.cc/NGXCQRYP/Screenshot-20251125-143505-Kakao-Talk.jpg',
         imagePlaceholder: 'V스쿼트 동작 이미지',
         description: `- 어깨패드 꺾이는부분에 어깨가 오게 두번째 흰줄에 발 맞춰 서주기
 - 무릎 벌리면서 앉아서 둔근 이완 후 둔근 수축시키면서 일어서주기`,
@@ -1256,7 +1230,7 @@ function renderInfoContent(){
 // 🌟 초기 로드 시 설정 (디폴트 탭 선택 제거)
 // =======================
 document.addEventListener('DOMContentLoaded', () => {  
-    setViewportHeight();
+    // setViewportHeight() 호출 제거됨. CSS만으로 높이 처리.
 });  
 
 </script>  
