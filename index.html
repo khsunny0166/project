@@ -19,7 +19,7 @@
   --vh: 100vh;
 }  
 
-/* 🌟🌟🌟 핵심 수정: 전체 스케일을 줄이기 위해 기본 크기를 14px로 설정 🌟🌟🌟 */
+/* 🌟🌟🌟 기본 크기를 14px로 설정 (전체 화면 비율 축소) 🌟🌟🌟 */
 html {
   font-size: 14px !important; 
 }
@@ -39,7 +39,6 @@ body {
   color:var(--text);  
   background-color: var(--bg-dark); 
   position: relative;
-  /* 본문 기본 폰트도 14px로 고정 */
   font-size: 14px !important; 
   line-height: 1.5;
 }  
@@ -66,7 +65,7 @@ body {
     width: 100%; 
     height: auto; 
     overflow-y: auto; 
-    padding: 15px; /* 패딩 약간 축소 */
+    padding: 15px; 
     z-index: 10; 
 }
   
@@ -130,11 +129,11 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
   background:var(--bg-dark3);  
   color:var(--text);  
   border:none;  
-  padding:5px 14px; /* 패딩 축소 */
+  padding:5px 14px; 
   border-radius:20px;  
   cursor:pointer;  
   font-weight:700;  
-  font-size:1rem; /* 1.1rem -> 1rem 축소 */
+  font-size:1rem; 
   transition:all .14s;  
 }  
 .tab:hover{ transform:translateY(-2px); }  
@@ -155,11 +154,11 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
   background:var(--bg-dark2);  
   color:var(--text);  
   border:none;  
-  padding:5px 12px; /* 패딩 축소 */
+  padding:5px 12px; 
   border-radius:14px;  
   cursor:pointer;  
   font-weight:700;  
-  font-size:0.95rem; /* 1rem -> 0.95rem 축소 */
+  font-size:0.95rem; 
   transition:all .12s;  
   display:flex;  
   align-items:center;  
@@ -192,7 +191,7 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 #search-wrapper.active {  
   opacity: 1;  
   pointer-events: auto;
-  height: 36px; /* 높이 약간 축소 */
+  height: 36px; 
   margin-top: 8px;
   margin-bottom: 4px;
 }  
@@ -227,12 +226,12 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
     overflow: hidden; 
 }
 
-/* 💡 Accordion Header - 높이 축소 */
+/* 💡 Accordion Header */
 .accordion-header {
     background: rgba(128, 128, 128, 0.5); 
     padding: 8px 15px; 
     font-weight: 700; 
-    min-height: 36px; /* 40px -> 36px 축소 */
+    min-height: 36px; 
     display: flex; 
     align-items: center; 
     justify-content: space-between; 
@@ -285,7 +284,7 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 
 .grid-left-visual-with-box img.move-image {
     width: 100%; 
-    height: 110px; /* 이미지 높이 축소 */
+    height: 110px; 
     border-radius: 6px; 
     object-fit: cover; 
 }
@@ -296,7 +295,7 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
     padding: 0;
 }
 .move-description {
-    font-size: 0.9rem; /* 12.6px */
+    font-size: 0.9rem; 
     line-height: 1.4;
     white-space: pre-wrap;
     padding: 0;
@@ -309,7 +308,7 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 
 .visual-placeholder {
     background: #444; 
-    min-height: 100px; /* 높이 축소 */
+    min-height: 100px; 
     border-radius: 6px; 
     display: flex; 
     justify-content: center; 
@@ -412,7 +411,7 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 </div> 
 <script>  
 // ===================================
-// 🌟 키보드 움직임 방지 (JS 부분)
+// 🌟 키보드 움직임 방지 및 복구 (JS)
 // ===================================
 
 function setViewportHeight() {
@@ -423,15 +422,22 @@ function setViewportHeight() {
 // 1. 윈도우 로드 시 높이 고정 함수 실행
 window.addEventListener('load', setViewportHeight);
 
-// 2. 🚨 window.resize 제거됨
+// 2. 🚨 window.resize는 사용하지 않음
 
-// 3. 화면 방향 전환 시에만 재계산
+// 3. 화면 방향 전환 시 재계산
 window.addEventListener('orientationchange', setViewportHeight); 
 
-// 4. 검색창 포커스 아웃(blur) 시 높이 재계산
+// 4. ✨ 수정됨: 검색창 포커스 아웃(blur) 시 0.3초 딜레이 후 높이 재계산
 const searchInput = document.getElementById('search-input');
 if (searchInput) {
-    searchInput.addEventListener('blur', setViewportHeight);
+    searchInput.addEventListener('blur', () => {
+        // 키보드가 완전히 내려갈 시간을 줌 (0.3초)
+        setTimeout(() => {
+            setViewportHeight();
+            // 스크롤 위치 초기화로 화면 짤림 방지
+            window.scrollTo(0, 0); 
+        }, 300);
+    });
 }
 
 
@@ -444,7 +450,7 @@ const typeTabs=document.getElementById('type-tabs');
 const partTabs=document.getElementById('part-tabs'); 
 const content=document.getElementById('content'); 
 const searchWrapper=document.getElementById('search-wrapper'); 
-let moveNameToPart = {}; // 운동 이름 -> 부위 매핑 테이블
+let moveNameToPart = {}; 
 
 /* =======================
    🌟 인트로 관련 함수
@@ -456,7 +462,7 @@ function hideIntro(){
 }  
   
 /* =======================
-   🌟 데이터 정의: 🏋️ 운동 데이터
+   🌟 데이터 정의
    ======================= */
 const videoData = {  
   '프리웨이트': { 
