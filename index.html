@@ -1,8 +1,10 @@
+
 <!DOCTYPE html>  
 <html lang="ko">  
 <head>  
 <meta charset="utf-8" />  
-<meta name="viewport" content="width=device-width,initial-scale=1" />  
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
 <title>준호쌤 운동강의 (단계별 검색)</title>  
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800&display=swap" rel="stylesheet">  
 <style>  
@@ -20,12 +22,9 @@
 }  
 *{ box-sizing:border-box; }  
   
-/* 💡 1. HTML/BODY: 뷰포트 전체 높이를 차지하고 전체 스크롤을 방지하는 컨테이너 */
-html, body { 
-  /* 👈 높이 고정 유지 */
-  height: var(--vh); 
-  margin: 0;
-  overflow: hidden; 
+html, body {
+  -webkit-text-size-adjust: 100% !important;
+  text-size-adjust: 100% !important;
 }
 
 body {  
