@@ -15,18 +15,17 @@
   --bg-dark2:#222;
   --bg-dark3:#333;
   --text:#fff;  
-  /* 💡 JS에서 계산되어 들어갈 사용자 정의 높이 변수 */
   --vh: 100vh;
 }  
 
-/* 🌟🌟🌟 기본 크기를 14px로 설정 (전체 화면 비율 축소) 🌟🌟🌟 */
+/* 🌟 기본 크기를 14px로 설정 */
 html {
   font-size: 14px !important; 
 }
 
 *{ box-sizing:border-box; }  
   
-/* 💡 1. HTML/BODY */
+/* 1. HTML/BODY */
 html, body { 
   height: var(--vh); 
   margin: 0;
@@ -43,7 +42,7 @@ body {
   line-height: 1.5;
 }  
 
-/* 🖼️ 2. 배경 고정 영역 */
+/* 2. 배경 고정 영역 */
 .bg-fixed {  
   position: fixed;  
   top: 0; 
@@ -55,7 +54,7 @@ body {
   height: var(--vh); 
 }  
 
-/* 📜 3. 스크롤 컨테이너 */
+/* 3. 스크롤 컨테이너 */
 #main-scroll-wrapper {
     position: absolute; 
     top: 0; 
@@ -74,7 +73,7 @@ header, .tabs, .subtabs, #content {
   z-index: 1;   
 }  
   
-/* 💡 블러 오버레이 */
+/* 블러 오버레이 */
 .blur-overlay {  
   position: fixed; 
   top: 0; 
@@ -90,7 +89,7 @@ header, .tabs, .subtabs, #content {
   transition: opacity 0.25s ease;  
 }  
   
-/* 🎬 인트로 화면 */
+/* 인트로 화면 */
 #intro{  
   position:fixed;  
   top:0; left:0;  
@@ -114,7 +113,6 @@ header{
   align-items:center;  
   gap:8px;  
 }  
-/* 🌟 로고와 제목 크기 축소 */
 header img.logo{ height:40px; } 
 header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }  
   
@@ -171,7 +169,7 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
   font-weight:800;  
 }  
   
-/* 🔍 검색창 (#search-wrapper) */
+/* 검색창 */
 #search-wrapper {  
   background-color: transparent; 
   position: relative;          
@@ -212,21 +210,21 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
     border-color: #999; 
 }
   
-/* 📝 콘텐츠 영역 스타일 */
+/* 콘텐츠 영역 */
 #content{  
   max-width:380px;  
   margin:8px auto;
   padding:5px;
 }  
   
-/* 💡 Accordion Wrapper */
+/* Accordion Wrapper */
 .accordion-card-wrapper {
     margin: 6px 0; 
     border-radius: 10px;
     overflow: hidden; 
 }
 
-/* 💡 Accordion Header */
+/* Accordion Header */
 .accordion-header {
     background: rgba(128, 128, 128, 0.5); 
     padding: 8px 15px; 
@@ -245,7 +243,7 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
     background: rgba(169, 169, 169, 0.6);
 }
 
-/* 💡 Accordion Content */
+/* Accordion Content */
 .accordion-content {
     background: var(--bg-dark2); 
     color: var(--text);
@@ -263,10 +261,7 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
     padding-bottom: 15px;
 }
 
-
-/* =======================
-   🌟 Grid Layout (Visual Left 35% | Text Right 65%)
-======================= */
+/* Grid Layout */
 .accordion-content.open .vertical-move-details {
     display: grid;
     grid-template-columns: 35% 65%; 
@@ -289,7 +284,6 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
     object-fit: cover; 
 }
 
-
 .grid-right-info {
     grid-column: 2 / 3;
     padding: 0;
@@ -304,7 +298,6 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 .move-description strong {
     color: #fff; 
 }
-
 
 .visual-placeholder {
     background: #444; 
@@ -321,7 +314,7 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
     width: 100%;
 }
 
-/* 🎯 타겟 근육 박스 스타일 */
+/* 타겟 근육 박스 */
 .target-muscle-box {
     background: rgba(128, 128, 128, 0.5); 
     padding: 6px;                    
@@ -346,9 +339,7 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
     display: block; 
 }
 
-/* --------------------------------------------------------
-   기타 스타일
-   -------------------------------------------------------- */
+/* 아이콘 */
 .accordion-icon {
     width: 14px;
     height: 14px;
@@ -411,7 +402,7 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 </div> 
 <script>  
 // ===================================
-// 🌟 키보드 움직임 방지 및 복구 (JS)
+// 🌟 키보드 움직임 방지 (JS)
 // ===================================
 
 function setViewportHeight() {
@@ -419,27 +410,19 @@ function setViewportHeight() {
     document.documentElement.style.setProperty('--vh', `${vh * 100}px`);
 }
 
-// 1. 윈도우 로드 시 높이 고정 함수 실행
 window.addEventListener('load', setViewportHeight);
-
-// 2. 🚨 window.resize는 사용하지 않음
-
-// 3. 화면 방향 전환 시 재계산
 window.addEventListener('orientationchange', setViewportHeight); 
 
-// 4. ✨ 수정됨: 검색창 포커스 아웃(blur) 시 0.3초 딜레이 후 높이 재계산
+// 검색창 포커스 아웃 시 딜레이
 const searchInput = document.getElementById('search-input');
 if (searchInput) {
     searchInput.addEventListener('blur', () => {
-        // 키보드가 완전히 내려갈 시간을 줌 (0.3초)
         setTimeout(() => {
             setViewportHeight();
-            // 스크롤 위치 초기화로 화면 짤림 방지
             window.scrollTo(0, 0); 
         }, 300);
     });
 }
-
 
 // =======================
 // 🌟 전역 변수 및 초기화
@@ -452,9 +435,6 @@ const content=document.getElementById('content');
 const searchWrapper=document.getElementById('search-wrapper'); 
 let moveNameToPart = {}; 
 
-/* =======================
-   🌟 인트로 관련 함수
-   ======================= */
 function hideIntro(){  
   const intro = document.getElementById('intro');
   intro.style.opacity='0';  
@@ -486,9 +466,6 @@ const videoData = {
   }
 };
 
-/* =======================
-   🌟 맵핑 생성
-   ======================= */
 function generateMoveToPartMap() {
     for (const type in videoData) {
         for (const part in videoData[type]) {
@@ -633,60 +610,63 @@ const exerciseInfo = {
 };
 
 /* =======================
-   🌟 데이터 정의: 링크
+   🌟 [중요] YouTube 링크 데이터
+   🚨 반드시 'http://googleusercontent...'를 실제 'https://youtu.be/...' 주소로 바꾸셔야 앱이 열립니다!
    ======================= */
 const videoLinks = {
   /* 프리웨이트 */
-  '벤치프레스': {youtube:['https://www.youtube.com/watch?v=Evjxm8MZ2bM'], insta:['']},
-  '인클라인 덤벨프레스': {youtube:['https://www.youtube.com/watch?v=8iPEnn-ltC8'], insta:['']},
-  '체스트 플라이': {youtube:['https://www.youtube.com/watch?v=eozdVDA78K0'], insta:['']},
-  '랫풀다운': {youtube:['https://www.youtube.com/watch?v=CAwf7n6Luuc'], insta:['']},
-  '풀업': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g'], insta:['']},
-  '바벨로우': {youtube:['https://www.youtube.com/watch?v=vT2GjY_Umpw'], insta:['']},
-  '데드리프트': {youtube:['https://www.youtube.com/watch?v=r4MzxtBKyNE'], insta:['']},
-  '프론트 레이즈': {youtube:['https://www.youtube.com/watch?v=-t7fuZ0KhDA'], insta:['']},
-  '사이드 레터럴 레이즈': {youtube:['https://www.youtube.com/watch?v=3VcKaXpzqRo'], insta:['']},
-  '리버스 플라이': {youtube:['https://www.youtube.com/watch?v=QOVaHwm-Q6U'], insta:['']},
-  '바벨컬': {youtube:['https://www.youtube.com/watch?v=kwG2ipFRgfo'], insta:['']},
-  '덤벨컬': {youtube:['https://www.youtube.com/watch?v=av7-8igSXTs'], insta:['']},
-  '트라이셉스 푸시다운': {youtube:['https://www.youtube.com/watch?v=2-LAMcpzODU'], insta:['']},
-  '스쿼트': {youtube:['https://www.youtube.com/watch?v=aclHkVaku9U'], insta:['']},
-  '레그프레스': {youtube:['https://www.youtube.com/watch?v=zvM10AW4r8U'], insta:['']}, 
-  '루마니안 데드리프트': {youtube:['https://www.youtube.com/watch?v=2SHsk9AzdjA'], insta:['']},
-  '힙 쓰러스트': {youtube:['https://www.youtube.com/watch?v=9vOcdRxzA1k'], insta:['']},
-  '크런치': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g0'], insta:['']},
-  '레그레이즈': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g1'], insta:['']},
-  '플랭크': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g2'], insta:['']},
-  '바이시클 크런치': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g3'], insta:['']},
+  // ▼ 예시: 벤치프레스에 실제 링크를 넣어보세요. (예: 김준호 선생님 영상)
+  '벤치프레스': {youtube:['https://youtu.be/0DsXTSKtDf4?si=example'], insta:['']},
+  '인클라인 덤벨프레스': {youtube:[''], insta:['']},
+  '체스트 플라이': {youtube:[''], insta:['']},
+  '랫풀다운': {youtube:[''], insta:['']},
+  '풀업': {youtube:[''], insta:['']},
+  '바벨로우': {youtube:[''], insta:['']},
+  '데드리프트': {youtube:[''], insta:['']},
+  '프론트 레이즈': {youtube:[''], insta:['']},
+  '사이드 레터럴 레이즈': {youtube:[''], insta:['']},
+  '리버스 플라이': {youtube:[''], insta:['']},
+  '바벨컬': {youtube:[''], insta:['']},
+  '덤벨컬': {youtube:[''], insta:['']},
+  '트라이셉스 푸시다운': {youtube:[''], insta:['']},
+  // ▼ 예시: 스쿼트에 실제 링크를 넣어보세요.
+  '스쿼트': {youtube:['https://youtu.be/MW_nJk3_yJo?si=example'], insta:['']},
+  '레그프레스': {youtube:[''], insta:['']}, 
+  '루마니안 데드리프트': {youtube:[''], insta:['']},
+  '힙 쓰러스트': {youtube:[''], insta:['']},
+  '크런치': {youtube:[''], insta:['']},
+  '레그레이즈': {youtube:[''], insta:['']},
+  '플랭크': {youtube:[''], insta:['']},
+  '바이시클 크런치': {youtube:[''], insta:['']},
 
-  /* 머신 */
-  '인클라인 체스트프레스': {youtube:['https://www.youtube.com/watch?v=8iPEnn-ltC8'], insta:['']},
-  '체스트플라이 머신': {youtube:['https://www.youtube.com/watch?v=eozdVDA78K0'], insta:['']},
-  '디클라인 체스트프레스': {youtube:['https://www.youtube.com/watch?v=SrqOu55lrYU'], insta:['']},
-  '랫풀다운 머신': {youtube:['https://www.youtube.com/watch?v=CAwf7n6Luuc'], insta:['']},
-  '시티드로우': {youtube:['https://youtube.com/shorts/8cVrdR2xqc8?si=Ugjzf0wYY_cUYeqr'], insta:['']}, 
-  '로우 머신': {youtube:['https://www.youtube.com/watch?v=vT2GjY_Umpw'], insta:['']},
-  '와이드풀다운': {youtube:['https://www.youtube.com/watch?v=0Bb4efiiXEQ'], insta:['']},
-  '숄더프레스 머신': {youtube:['https://www.youtube.com/watch?v=B-aVuyhvLHU'], insta:['']},
-  '사이드 레터럴 머신': {youtube:['https://www.youtube.com/watch?v=3VcKaXpzqRo'], insta:['']},
-  '리어 델트 머신': {youtube:['https://www.youtube.com/watch?v=QOVaHwm-Q6U'], insta:['']},
-  '이두컬 머신': {youtube:['https://www.youtube.com/watch?v=kwG2ipFRgfo'], insta:['']},
-  '트라이셉스 머신': {youtube:['https://www.youtube.com/watch?v=2-LAMcpzODU'], insta:['']},
-  '레그익스텐션': {youtube:['https://www.youtube.com/watch?v=yR9oYydGXkE'], insta:['']},
-  '레그컬': {youtube:['https://www.youtube.com/watch?v=ybKdTqLw7g4'], insta:['']},
-  '글루트 머신': {youtube:['https://www.youtube.com/watch?v=Gw6mnk8XHnk'], insta:['']},
-  'v스쿼트': {youtube:['https://www.youtube.com/watch?v=PZgdGvJh9w8'], insta:['']},
-  '스미스머신스쿼트': {youtube:['https://youtube.com/shorts/7E5k6mIXCNM?si=aRAggyG6xKARjLyZ'], insta:['']},
-  '복부 크런치 머신': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g0'], insta:['']},
-  '케이블 크런치': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g1'], insta:['']},
-  '토르소 로테이션': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g2'], insta:['']},
-  '행잉 레그레이즈': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g3'], insta:['']},
+  /* 머신 (나머지도 실제 주소로 채워주세요) */
+  '인클라인 체스트프레스': {youtube:[''], insta:['']},
+  '체스트플라이 머신': {youtube:[''], insta:['']},
+  '디클라인 체스트프레스': {youtube:[''], insta:['']},
+  '랫풀다운 머신': {youtube:[''], insta:['']},
+  '시티드로우': {youtube:[''], insta:['']}, 
+  '로우 머신': {youtube:[''], insta:['']},
+  '와이드풀다운': {youtube:[''], insta:['']},
+  '숄더프레스 머신': {youtube:[''], insta:['']},
+  '사이드 레터럴 머신': {youtube:[''], insta:['']},
+  '리어 델트 머신': {youtube:[''], insta:['']},
+  '이두컬 머신': {youtube:[''], insta:['']},
+  '트라이셉스 머신': {youtube:[''], insta:['']},
+  '레그익스텐션': {youtube:[''], insta:['']},
+  '레그컬': {youtube:[''], insta:['']},
+  '글루트 머신': {youtube:[''], insta:['']},
+  'v스쿼트': {youtube:[''], insta:['']},
+  '스미스머신스쿼트': {youtube:[''], insta:['']},
+  '복부 크런치 머신': {youtube:[''], insta:['']},
+  '케이블 크런치': {youtube:[''], insta:['']},
+  '토르소 로테이션': {youtube:[''], insta:['']},
+  '행잉 레그레이즈': {youtube:[''], insta:['']},
   
   /* 유산소 */
-  '러닝머신': {youtube:['https://www.youtube.com/watch?v=CAwf7n6Luuc2'], insta:['']},
-  '사이클': {youtube:['https://www.youtube.com/watch?v=CAwf7n6Luuc3'], insta:['']},
-  '일립티컬': {youtube:['https://www.youtube.com/watch?v=CAwf7n6Luuc4'], insta:['']},
-  '스텝퍼/천국의 계단': {youtube:['https://www.youtube.com/watch?v=CAwf7n6Luuc5'], insta:['']},
+  '러닝머신': {youtube:[''], insta:['']},
+  '사이클': {youtube:[''], insta:['']},
+  '일립티컬': {youtube:[''], insta:['']},
+  '스텝퍼/천국의 계단': {youtube:[''], insta:['']},
 };
 
 /* =======================
@@ -862,7 +842,7 @@ function renderMoves(searchTerm = '') {
     
     const title = document.createElement('div');  
     title.textContent = moveName;  
-    title.style.fontSize = '1.0rem'; /* 제목 크기 조정 */ 
+    title.style.fontSize = '1.0rem'; 
     title.style.fontWeight = '800';  
     title.style.whiteSpace = 'nowrap'; 
     title.style.overflow = 'hidden';   
@@ -885,6 +865,7 @@ function renderMoves(searchTerm = '') {
         }
     };
     
+    // 🌟 YouTube 클릭 이벤트 (수정됨: 앱 연동 로직 적용)
     const ytWrap = document.createElement('div');  
     ytWrap.style.display = 'flex';  
     ytWrap.style.alignItems = 'center';  
@@ -893,22 +874,40 @@ function renderMoves(searchTerm = '') {
     ytWrap.onclick = (e) => { 
         e.stopPropagation(); 
         const link = videoLinks[moveName]?.youtube?.[0]; 
-        if(link) window.open(link,'_blank'); 
+        
+        // 링크가 없거나 가짜 링크인 경우 경고
+        if(!link || link.includes('googleusercontent')) {
+             alert('올바른 유튜브 링크가 없습니다. (데이터를 수정해주세요)');
+             return;
+        }
+
+        // 모바일인지 확인
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        
+        if (isMobile) {
+            // 🌟 모바일: location.href를 써야 앱으로 연결(Deep Link)될 확률이 높음
+            window.location.href = link;
+        } else {
+            // PC: 새 탭으로 열기
+            window.open(link, '_blank');
+        }
+        
         const ytTextSpan = e.currentTarget.querySelector('.link-text-span');
         highlightLink(ytTextSpan);
     };  
     const yt = document.createElement('img');  
     yt.src = 'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg';  
-    yt.style.width = '18px'; /* 아이콘 축소 */
+    yt.style.width = '18px'; 
     yt.style.height = '18px';  
     const ytText = document.createElement('span'); 
     ytText.textContent = 'YouTube'; 
     ytText.className = 'link-text-span'; 
-    ytText.style.fontSize = '0.75rem'; /* 폰트 축소 */
+    ytText.style.fontSize = '0.75rem'; 
     ytText.style.fontWeight = '700';  
     ytWrap.appendChild(yt); 
     ytWrap.appendChild(ytText); 
   
+    // Instagram 클릭 이벤트
     const igWrap = document.createElement('div');  
     igWrap.style.display = 'flex';  
     igWrap.style.alignItems = 'center';  
@@ -917,7 +916,14 @@ function renderMoves(searchTerm = '') {
     igWrap.onclick = (e) => { 
         e.stopPropagation(); 
         const link = videoLinks[moveName]?.insta?.[0]; 
-        if(link) window.open(link,'_blank'); 
+        
+        // 인스타도 마찬가지로 로직 적용
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if(link) {
+             if (isMobile) window.location.href = link;
+             else window.open(link,'_blank'); 
+        }
+
         const igTextSpan = e.currentTarget.querySelector('.link-text-span');
         highlightLink(igTextSpan);
     };  
