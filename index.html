@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>  
 <html lang="ko">  
 <head>  
 <meta charset="utf-8" />  
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-
-<title>준호쌤 운동강의 (단계별 검색)</title>  
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />  
+<title>준호쌤 운동강의</title>  
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800&display=swap" rel="stylesheet">  
 <style>  
 /* =======================
@@ -20,22 +18,30 @@
   /* 💡 JS에서 계산되어 들어갈 사용자 정의 높이 변수 */
   --vh: 100vh;
 }  
+
+/* 🌟🌟🌟 핵심 수정: 전체 스케일을 줄이기 위해 기본 크기를 14px로 설정 🌟🌟🌟 */
+html {
+  font-size: 14px !important; 
+}
+
 *{ box-sizing:border-box; }  
   
-html, body {
-  -webkit-text-size-adjust: 100% !important;
-  text-size-adjust: 100% !important;
+/* 💡 1. HTML/BODY */
+html, body { 
+  height: var(--vh); 
+  margin: 0;
+  overflow: hidden; 
 }
 
 body {  
-  /* 👈 높이 고정 유지 */
   height: var(--vh); 
   font-family: 'Noto Sans KR', sans-serif;  
   color:var(--text);  
   background-color: var(--bg-dark); 
   position: relative;
-  /* 🌟 핵심 수정: 기본 폰트 크기를 16px로 강제 고정 */
-  font-size: 16px; 
+  /* 본문 기본 폰트도 14px로 고정 */
+  font-size: 14px !important; 
+  line-height: 1.5;
 }  
 
 /* 🖼️ 2. 배경 고정 영역 */
@@ -47,11 +53,10 @@ body {
   width: 100%; 
   background: url('https://i.postimg.cc/05SyJtvH/3.png') no-repeat center center / cover;  
   z-index: -2;  
-  /* 👈 높이 고정 유지 */
   height: var(--vh); 
 }  
 
-/* 📜 3. 스크롤 컨테이너 (여기는 100% 유지) */
+/* 📜 3. 스크롤 컨테이너 */
 #main-scroll-wrapper {
     position: absolute; 
     top: 0; 
@@ -61,7 +66,7 @@ body {
     width: 100%; 
     height: auto; 
     overflow-y: auto; 
-    padding: 18px; 
+    padding: 15px; /* 패딩 약간 축소 */
     z-index: 10; 
 }
   
@@ -77,7 +82,6 @@ header, .tabs, .subtabs, #content {
   left: 0;  
   bottom: 0; 
   width: 100%; 
-  /* 👈 높이 고정 유지 */
   height: var(--vh); 
   backdrop-filter: blur(2px);  
   background: rgba(0,0,0,0.2);  
@@ -92,7 +96,6 @@ header, .tabs, .subtabs, #content {
   position:fixed;  
   top:0; left:0;  
   width:100%; 
-  /* 👈 높이 고정 유지 */
   height:var(--vh); 
   background:#000;  
   display:flex;  
@@ -106,33 +109,32 @@ header, .tabs, .subtabs, #content {
 /* 탭 메뉴 스타일 */
 header{  
   text-align:center;  
-  margin-bottom:14px;  
+  margin-bottom:10px;  
   display:flex;  
   justify-content:center;  
   align-items:center;  
-  gap:10px;  
+  gap:8px;  
 }  
-/* 폰트 사이즈는 이제 16px을 기준으로 rem으로 설정됩니다. */
-header img.logo{ height:56px; } 
-header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }  
+/* 🌟 로고와 제목 크기 축소 */
+header img.logo{ height:40px; } 
+header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }  
   
 .tabs{  
   display:flex;  
   justify-content:center;  
-  gap:10px;  
+  gap:8px;  
   flex-wrap:wrap;  
-  margin-bottom:12px;  
+  margin-bottom:10px;  
 }  
 .tab{  
   background:var(--bg-dark3);  
   color:var(--text);  
   border:none;  
-  padding:5px 18px;  
+  padding:5px 14px; /* 패딩 축소 */
   border-radius:20px;  
   cursor:pointer;  
   font-weight:700;  
-  /* 17.6px (16px * 1.1) */
-  font-size:1.1rem;  
+  font-size:1rem; /* 1.1rem -> 1rem 축소 */
   transition:all .14s;  
 }  
 .tab:hover{ transform:translateY(-2px); }  
@@ -145,20 +147,19 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 .subtabs{  
   display:flex;  
   justify-content:center;  
-  gap:8px;  
+  gap:6px;  
   flex-wrap:wrap;  
-  margin:10px 0;  
+  margin:8px 0;  
 }  
 .subtab{  
   background:var(--bg-dark2);  
   color:var(--text);  
   border:none;  
-  padding:6px 14px;  
+  padding:5px 12px; /* 패딩 축소 */
   border-radius:14px;  
   cursor:pointer;  
   font-weight:700;  
-  /* 16px (16px * 1.0) */
-  font-size:1rem;  
+  font-size:0.95rem; /* 1rem -> 0.95rem 축소 */
   transition:all .12s;  
   display:flex;  
   align-items:center;  
@@ -191,15 +192,15 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 #search-wrapper.active {  
   opacity: 1;  
   pointer-events: auto;
-  height: 40px; 
-  margin-top: 10px;
-  margin-bottom: 5px;
+  height: 36px; /* 높이 약간 축소 */
+  margin-top: 8px;
+  margin-bottom: 4px;
 }  
 #search-wrapper input {  
   width: 100%;  
-  padding: 6px 12px;  
+  padding: 5px 12px;  
   border-radius: 12px;  
-  font-size: 1rem;  
+  font-size: 0.95rem;  
   border: 1px solid #ccc; 
   background-color: white; 
   color: var(--bg-dark);
@@ -214,30 +215,30 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
   
 /* 📝 콘텐츠 영역 스타일 */
 #content{  
-  max-width:380px;  /* 너비 제한 유지 */
-  margin:10px auto;
-  padding:10px;
+  max-width:380px;  
+  margin:8px auto;
+  padding:5px;
 }  
   
 /* 💡 Accordion Wrapper */
 .accordion-card-wrapper {
-    margin: 8px 0; 
-    border-radius: 12px;
+    margin: 6px 0; 
+    border-radius: 10px;
     overflow: hidden; 
 }
 
-/* 💡 Accordion Header */
+/* 💡 Accordion Header - 높이 축소 */
 .accordion-header {
     background: rgba(128, 128, 128, 0.5); 
-    padding: 4px 18px; 
+    padding: 8px 15px; 
     font-weight: 700; 
-    min-height: 40px; 
+    min-height: 36px; /* 40px -> 36px 축소 */
     display: flex; 
     align-items: center; 
     justify-content: space-between; 
     cursor: pointer;
     transition: background 0.2s;
-    border-radius: 12px 12px 0 0; 
+    border-radius: 10px 10px 0 0; 
     position: relative;
 }
 
@@ -249,19 +250,18 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 .accordion-content {
     background: var(--bg-dark2); 
     color: var(--text);
-    padding: 0 18px; 
+    padding: 0 15px; 
     max-height: 0; 
     overflow: hidden;
-    /* 🚀 속도 설정: 0.0s */
     transition: max-height 0.0s ease-in-out, padding 0.0s ease-in-out; 
-    border-radius: 0 0 12px 12px; 
+    border-radius: 0 0 10px 10px; 
     border-top: 1px solid var(--bg-dark3);
 }
 
 .accordion-content.open {
     max-height: 800px; 
-    padding-top: 18px; 
-    padding-bottom: 18px;
+    padding-top: 15px; 
+    padding-bottom: 15px;
 }
 
 
@@ -270,38 +270,33 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 ======================= */
 .accordion-content.open .vertical-move-details {
     display: grid;
-    /* 이미지+박스(왼쪽) 35% | 65% */
     grid-template-columns: 35% 65%; 
     gap: 10px; 
     align-items: start;
     margin-bottom: 0;
 }
 
-/* Left Column: Image + Box */
 .grid-left-visual-with-box {
     grid-column: 1 / 2;
     display: flex;
     flex-direction: column;
-    gap: 8px; 
+    gap: 6px; 
 }
 
-/* 🌟 이미지 태그를 위한 스타일 추가 (크기 통일) */
 .grid-left-visual-with-box img.move-image {
     width: 100%; 
-    height: 130px; 
-    border-radius: 8px; 
+    height: 110px; /* 이미지 높이 축소 */
+    border-radius: 6px; 
     object-fit: cover; 
 }
 
 
-/* Right Column: Description */
 .grid-right-info {
     grid-column: 2 / 3;
     padding: 0;
 }
-/* 16px * 0.9 = 14.4px */
 .move-description {
-    font-size: 0.9rem; 
+    font-size: 0.9rem; /* 12.6px */
     line-height: 1.4;
     white-space: pre-wrap;
     padding: 0;
@@ -312,18 +307,16 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 }
 
 
-/* 1. Visual Placeholder (Image/Video) */
 .visual-placeholder {
     background: #444; 
-    min-height: 120px; 
-    border-radius: 8px; 
+    min-height: 100px; /* 높이 축소 */
+    border-radius: 6px; 
     display: flex; 
     justify-content: center; 
     align-items: center; 
     font-weight: 700; 
     text-align: center; 
-    padding: 10px;
-    /* 16px * 0.8 = 12.8px */
+    padding: 8px;
     font-size: 0.8rem; 
     color: #aaa;
     width: 100%;
@@ -332,26 +325,24 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 /* 🎯 타겟 근육 박스 스타일 */
 .target-muscle-box {
     background: rgba(128, 128, 128, 0.5); 
-    padding: 8px;                    
+    padding: 6px;                    
     border-radius: 6px;              
     margin-top: 0;                   
-    margin-bottom: 10px; 
+    margin-bottom: 8px; 
     text-align: center;
 }
 
 .target-muscle-box .target-label {
     font-weight: 700;
     color: #fff;
-    /* 16px * 0.9 = 14.4px */
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     margin: 0;
     display: block;
 }
 
 .target-muscle-box .target-value {
     color: #ffd700;
-    /* 16px * 1.0 = 16px */
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 800;
     display: block; 
 }
@@ -360,8 +351,8 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
    기타 스타일
    -------------------------------------------------------- */
 .accordion-icon {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
     transition: transform 0.3s;
 }
 
@@ -371,11 +362,12 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 
 .info-card{ 
   background:rgba(128, 128, 128, 0.5);  
-  border-radius:12px; 
-  padding:10px 18px; 
-  margin:8px 0;  
+  border-radius:10px; 
+  padding:8px 15px; 
+  margin:6px 0;  
   font-weight:700;  
-  min-height:40px;  
+  min-height:36px;  
+  font-size: 0.95rem;
   display:flex;  
   align-items:center;  
   justify-content:center;
@@ -386,7 +378,9 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
     background: rgba(169, 169, 169, 0.6);
 }
 .info-card img {
-    margin-right: 12px;
+    margin-right: 10px;
+    width: 20px;
+    height: 20px;
 }
   
 .hidden{ display:none !important; }  
@@ -418,30 +412,38 @@ header h1{ font-size:2.2rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 </div> 
 <script>  
 // ===================================
-// 🌟 키보드 움직임 방지 (높이만 고정하는 최소 JS)
-// 폰트 크기 조절 로직은 완전히 제거됨.
+// 🌟 키보드 움직임 방지 (JS 부분)
 // ===================================
+
 function setViewportHeight() {
-    // 뷰포트의 실제 높이를 픽셀 단위로 계산
     let vh = window.innerHeight * 0.01;
-    // CSS 변수 --vh에 이 값을 설정
     document.documentElement.style.setProperty('--vh', `${vh * 100}px`);
 }
 
-// 윈도우 로드 및 리사이즈(키보드/주소창 변화) 시 높이 고정 함수 실행
+// 1. 윈도우 로드 시 높이 고정 함수 실행
 window.addEventListener('load', setViewportHeight);
-window.addEventListener('resize', setViewportHeight);
+
+// 2. 🚨 window.resize 제거됨
+
+// 3. 화면 방향 전환 시에만 재계산
+window.addEventListener('orientationchange', setViewportHeight); 
+
+// 4. 검색창 포커스 아웃(blur) 시 높이 재계산
+const searchInput = document.getElementById('search-input');
+if (searchInput) {
+    searchInput.addEventListener('blur', setViewportHeight);
+}
+
 
 // =======================
 // 🌟 전역 변수 및 초기화
 // =======================
-let initialViewportHeight = 0; 
+let initialVh = 0; 
 let currentType='', currentPart=''; 
 const typeTabs=document.getElementById('type-tabs'); 
 const partTabs=document.getElementById('part-tabs'); 
 const content=document.getElementById('content'); 
 const searchWrapper=document.getElementById('search-wrapper'); 
-const searchInput=document.getElementById('search-input'); 
 let moveNameToPart = {}; // 운동 이름 -> 부위 매핑 테이블
 
 /* =======================
@@ -454,88 +456,37 @@ function hideIntro(){
 }  
   
 /* =======================
-   🌟 데이터 정의: 🏋️ 운동 데이터 (Type > Part > Moves 구조)
+   🌟 데이터 정의: 🏋️ 운동 데이터
    ======================= */
 const videoData = {  
   '프리웨이트': { 
-    /* =======================
-       🔥 가슴 (Chest) 부위 (프리웨이트)
-       ======================= */
     '가슴': ['벤치프레스', '인클라인 덤벨프레스', '체스트 플라이'], 
-    
-    /* =======================
-       🔥 등 (Back) 부위 (프리웨이트)
-       ======================= */
     '등': ['랫풀다운', '풀업', '바벨로우', '데드리프트'], 
-    
-    /* =======================
-       🔥 어깨 (Shoulder) 부위 (프리웨이트)
-       ======================= */
     '어깨': ['프론트 레이즈', '사이드 레터럴 레이즈', '리버스 플라이'], 
-    
-    /* =======================
-       🔥 팔 (Arms) 부위 (프리웨이트)
-       ======================= */
     '팔': ['바벨컬', '덤벨컬', '트라이셉스 푸시다운'], 
-    
-    /* =======================
-       🔥 하체 (Legs) 부위 (프리웨이트)
-       ======================= */
     '하체': ['스쿼트', '레그프레스', '루마니안 데드리프트', '힙 쓰러스트'],
-    
-    /* =======================
-       🔥 복근 (Abs) 부위 (프리웨이트)
-       ======================= */
     '복근': ['크런치', '레그레이즈', '플랭크', '바이시클 크런치'] 
   } ,  
   '머신': { 
-    /* =======================
-       🔩 가슴 (Chest) 부위 (머신)
-       ======================= */
     '가슴': ['인클라인 체스트프레스', '체스트플라이 머신', '디클라인 체스트프레스'], 
-    
-    /* =======================
-       🔩 등 (Back) 부위 (머신)
-       ======================= */
     '등': ['랫풀다운 머신', '시티드로우', '로우 머신', '와이드풀다운'], 
-    
-    /* =======================
-       🔩 어깨 (Shoulder) 부위 (머신)
-       ======================= */
     '어깨': ['숄더프레스 머신', '사이드 레터럴 머신', '리어 델트 머신'], 
-    
-    /* =======================
-       🔩 팔 (Arms) 부위 (머신)
-       ======================= */
     '팔': ['이두컬 머신', '트라이셉스 머신'],
-    
-    /* =======================
-       🔩 하체 (Legs) 부위 (머신)
-       ======================= */
     '하체': ['레그프레스', '레그익스텐션', '레그컬', '글루트 머신', 'v스쿼트', '스미스머신스쿼트'],
-    
-    /* =======================
-       🔩 복근 (Abs) 부위 (머신)
-       ======================= */
     '복근': ['복부 크런치 머신', '케이블 크런치', '토르소 로테이션', '행잉 레그레이즈']
   },
-  
-  /* =======================
-     🏃 유산소 (Cardio) 데이터
-     ======================= */
   '유산소': {
       '전신': ['러닝머신', '사이클', '일립티컬', '스텝퍼/천국의 계단']
   }
 };
 
 /* =======================
-   🌟 운동 이름 -> 부위 (Part) 매핑 테이블 생성 (자동)
+   🌟 맵핑 생성
    ======================= */
 function generateMoveToPartMap() {
     for (const type in videoData) {
         for (const part in videoData[type]) {
             videoData[type][part].forEach(move => {
-                // 부위 정보가 없으면 추가
                 if (!moveNameToPart[move]) {
                     moveNameToPart[move] = part;
                 }
@@ -543,21 +494,15 @@ function generateMoveToPartMap() {
         }
     }
 }
-// 초기 로드 시 맵 생성
 generateMoveToPartMap();
 
 
 /* =======================
-   🌟 데이터 정의: 📖 운동 상세 정보 (Accordion Content)
+   🌟 데이터 정의: 상세 정보
    ======================= */
 const exerciseInfo = {
-    
-    /* =======================
-     💪 상세 정보: 하체 (Legs)
-     ======================= */
     '스쿼트': {
         target: '대퇴사두근, 둔근',
-        // 🌟 새로 추가된 스쿼트 이미지 URL
         imageUrl: 'https://i.postimg.cc/660fpL2q/Screenshot-20251125-133252-Samsung-Internet.jpg', 
         imagePlaceholder: '스쿼트 동작 이미지', 
         description: ` 1. 발을 어깨너비로 벌리고, 시선은 정면, 가슴을 폅니다.
@@ -578,12 +523,6 @@ const exerciseInfo = {
         description: `- 어깨패드 꺾이는부분에 어깨가 오게 두번째 흰줄에 발 맞춰 서주기
 - 무릎 벌리면서 앉아서 둔근 이완 후 둔근 수축시키면서 일어서주기`,
     },
-    // (레그프레스, 레그익스텐션 등 나머지 하체 운동 정보 추가 필요)
-
-
-    /* =======================
-     💪 상세 정보: 등 (Back)
-     ======================= */
     '시티드로우': {
         target: '광배근, 승모근 중하부, 능형근',
         imageUrl: 'https://i.postimg.cc/c4XLLswN/images.jpg',
@@ -597,68 +536,45 @@ const exerciseInfo = {
         imagePlaceholder: '랫풀다운 동작 이미지',
         description: `**1. 준비:** 무릎 패드를 조정하고 넓게 바를 잡습니다. 상체를 살짝 뒤로 젖혀 광배근의 시작 지점을 찾습니다.
         **2. 당기기:** 숨을 내쉬며 바를 쇄골 아래쪽(가슴 상부)으로 당깁니다. 팔꿈치가 몸통 쪽으로 내려오도록 하며 광배근을 강하게 수축합니다.
-        **3. 이완:** 숨을 들이마시며 천천히 바를 올립니다. 팔이 완전히 펴지지 않도록 긴장을 유지합니다.
-        **⚠️ 주의:** 바를 내릴 때 허리가 과도하게 젖혀지거나(과신전) 팔의 힘으로만 당기지 않도록 주의합니다.`,
+        **3. 이완:** 숨을 들이마시며 천천히 바를 올립니다. 팔이 완전히 펴지지 않도록 긴장을 유지합니다.`,
     },
-    // (바벨로우, 데드리프트, 로우 머신 등 나머지 등 운동 정보 추가 필요)
-
-
-    /* =======================
-     💪 상세 정보: 가슴 (Chest)
-     ======================= */
     '벤치프레스': {
-        target: '대흉근 (가슴 전체), 삼두근, 전면 삼각근',
+        target: '대흉근, 삼두근',
         imagePlaceholder: '벤치프레스 동작 이미지',
-        description: `**1. 준비:** 벤치에 누워 발을 땅에 고정하고, 견갑골(날개뼈)을 모아 벤치에 붙입니다. 어깨너비보다 넓게 바벨을 잡습니다.
-        **2. 하강:** 숨을 들이마시며 바벨을 가슴 중앙(젖꼭지 라인)으로 천천히 내립니다. 팔꿈치는 몸통에서 45~75도 각도를 유지합니다.
-        **3. 상승:** 숨을 내쉬며 가슴 근육의 힘으로 바벨을 밀어 올립니다. 최고 지점에서 가슴을 쥐어짜듯 수축합니다.
-        **⚠️ 주의:** 어깨가 으쓱 올라가지 않도록 견갑골 고정을 유지하는 것이 가장 중요합니다.`,
+        description: `**1. 준비:** 벤치에 누워 발을 땅에 고정하고, 견갑골을 모아 벤치에 붙입니다.
+        **2. 하강:** 숨을 들이마시며 바벨을 가슴 중앙으로 천천히 내립니다.
+        **3. 상승:** 숨을 내쉬며 가슴 근육의 힘으로 바벨을 밀어 올립니다.`,
     },
-    // (인클라인 덤벨프레스, 체스트 플라이, 체스트프레스 머신 등 나머지 가슴 운동 정보 추가 필요)
-
-
-    /* =======================
-     💪 상세 정보: 유산소 (Cardio/Full Body)
-     ======================= */
     '러닝머신': {
         target: '전신, 심폐 지구력',
         imagePlaceholder: '러닝머신 동작 이미지', 
-        description: `**1. 올바른 자세:** 허리를 곧게 펴고 시선은 정면을 봅니다. 손잡이는 필요할 때만 가볍게 잡고, 팔은 자연스럽게 앞뒤로 흔듭니다.
-        **2. 걷기/뛰기:** 초보자는 경사도 0~3%에서 걷기로 시작하고, 점차 속도를 올려 뜁니다.
-        **3. 인터벌:** 속도와 경사도를 주기적으로 변화시키면 운동 효율을 높일 수 있습니다.`,
+        description: `**1. 올바른 자세:** 허리를 곧게 펴고 시선은 정면을 봅니다.
+        **2. 걷기/뛰기:** 초보자는 경사도 0~3%에서 걷기로 시작합니다.`,
     },
     '사이클': {
         target: '하체, 심폐 지구력',
         imagePlaceholder: '사이클 동작 이미지', 
-        description: `**1. 안장 높이:** 페달이 가장 아래 있을 때 무릎이 살짝 굽혀지는 정도(약 25~35도)로 안장을 조절합니다.
-        **2. 페달링:** 발바닥 중앙(볼)로 페달을 밟고, 원을 그리듯 부드럽게 돌립니다. 무릎이 벌어지지 않게 주의합니다.
-        **3. 강도 조절:** 숨이 차면서 대화하기 어려울 정도의 강도를 유지합니다.`,
+        description: `**1. 안장 높이:** 무릎이 살짝 굽혀지는 정도로 안장을 조절합니다.
+        **2. 페달링:** 발바닥 중앙으로 페달을 밟고 부드럽게 돌립니다.`,
     },
     '일립티컬': {
-        target: '전신, 심폐 지구력 (무릎 부담↓)',
+        target: '전신, 심폐 지구력',
         imagePlaceholder: '일립티컬 동작 이미지',
-        description: `**1. 자세:** 상체를 곧게 세우고, 발 전체로 페달을 밟습니다. 핸들을 밀고 당기며 상체 근육도 함께 사용합니다.
-        **2. 역방향:** 가끔씩 역방향으로 페달을 밟으면 햄스트링과 둔근을 더 자극할 수 있습니다.
-        **3. 저항 조절:** 너무 가볍지 않게 적절한 저항을 설정하여 운동 효과를 높입니다.`,
+        description: `**1. 자세:** 상체를 곧게 세우고 핸들을 밀고 당깁니다.
+        **2. 저항 조절:** 적절한 저항을 설정하여 운동 효과를 높입니다.`,
     },
     '스텝퍼/천국의 계단': {
-        target: '둔근, 햄스트링, 심폐 지구력',
+        target: '둔근, 햄스트링',
         imagePlaceholder: '스텝퍼/천국의 계단 동작 이미지',
-        description: `**1. 발 위치:** 발판의 앞쪽보다는 중앙이나 뒤꿈치 쪽에 무게 중심을 두어 둔근 사용을 극대화합니다.
-        **2. 자세:** 상체를 살짝 숙여(약 5~10도) 엉덩이 근육의 개입을 높이고, 손잡이를 가볍게 잡습니다.
-        **3. 속도:** 너무 빠르기보다는 정확하고 깊은 움직임에 집중합니다.`,
+        description: `**1. 발 위치:** 발뒤꿈치 쪽에 무게 중심을 둡니다.
+        **2. 자세:** 상체를 살짝 숙여 둔근 개입을 높입니다.`,
     },
-
-
-    /* =======================
-     💪 상세 정보: 복근 (Abs) - 프리웨이트
-     ======================= */
     '크런치': {
         target: '복직근 상부',
          imageUrl: 'https://i.postimg.cc/gkWt1xpB/2022052701943-0.jpg',
         imagePlaceholder: '크런치 동작 이미지', 
-       description: `- 숨을 내쉬며 복부 힘으로 상체(어깨)를 웅크려 바닥에서 살짝 들어 올리기 (허리는 바닥에 붙이고 목은 당기지 않기)
-- ​복부의 긴장을 유지하며 천천히 저항을 느끼면서 처음 자세로 돌아오기`,
+       description: `- 숨을 내쉬며 복부 힘으로 상체(어깨)를 웅크려 바닥에서 살짝 들어 올리기
+- ​복부의 긴장을 유지하며 천천히 처음 자세로 돌아오기`,
     },
     '레그레이즈': {
         target: '복직근 하부',
@@ -668,151 +584,99 @@ const exerciseInfo = {
 - 다리를 내릴 때도 긴장을 유지하며 바닥에 닿지 않게 내린 후 반복하기`,
     },
     '플랭크': {
-        target: '코어 근육 (복직근, 복사근, 둔근)',
+        target: '코어 근육',
         imagePlaceholder: '플랭크 동작 이미지', 
-        description: `1. 팔꿈치를 굽혀 바닥에 대고 몸을 일직선으로 만듭니다.
-2. 머리부터 발끝까지 일자가 되도록 코어에 힘을 주고 버팁니다.
-3. 엉덩이가 처지거나 너무 올라가지 않도록 주의합니다.`,
+        description: `1. 팔꿈치를 바닥에 대고 몸을 일직선으로 만듭니다.
+2. 코어에 힘을 주고 버팁니다.`,
     },
     '바이시클 크런치': {
         target: '복직근, 복사근',
         imagePlaceholder: '바이시클 크런치 동작 이미지', 
-        description: `1. 등을 대고 누워 무릎을 굽히고 손은 머리 뒤에 댑니다.
-2. 왼쪽 팔꿈치와 오른쪽 무릎을, 오른쪽 팔꿈치와 왼쪽 무릎을 번갈아 가며 교차시킵니다.
-3. 복사근의 수축에 집중하며 자전거를 타듯이 동작을 수행합니다.`,
+        description: `1. 등을 대고 누워 무릎을 굽힙니다.
+2. 팔꿈치와 반대쪽 무릎을 교차시킵니다.`,
     },
-    
-    
-    /* =======================
-     💪 상세 정보: 복근 (Abs) - 머신
-     ======================= */
     '복부 크런치 머신': {
-        target: '복직근 (상부 집중)',
+        target: '복직근',
         imagePlaceholder: '복부 크런치 머신 동작 이미지', 
-        description: `1. 머신에 앉아 발을 고정하고 패드 위치를 복부 중앙에 맞춥니다.
-2. 복부 힘으로 상체를 웅크려 중량을 아래로 누릅니다.
-3. 허리나 팔의 힘이 아닌 복직근의 수축에 집중하여 천천히 이완합니다.`,
+        description: `1. 머신에 앉아 패드 위치를 맞춥니다.
+2. 복부 힘으로 상체를 웅크립니다.`,
     },
     '케이블 크런치': {
         target: '복직근 전체',
         imagePlaceholder: '케이블 크런치 동작 이미지', 
-        description: `1. 케이블 머신 앞에 무릎을 꿇고 로프를 잡고 머리 뒤에 둡니다.
-2. 복부의 힘으로 상체를 둥글게 말아 바닥 쪽으로 내립니다.
-3. 복부가 최대한 수축되는 지점에서 잠시 멈춘 뒤 천천히 복직근의 저항을 느끼며 돌아옵니다.`,
+        description: `1. 케이블 머신 앞에 무릎을 꿇고 로프를 잡습니다.
+2. 복부의 힘으로 상체를 둥글게 맙니다.`,
     },
     '토르소 로테이션': {
-        target: '복사근 (옆구리)',
+        target: '복사근',
         imagePlaceholder: '토르소 로테이션 동작 이미지', 
-        description: `1. 머신에 앉아 패드를 가슴에 대고 발을 고정합니다.
-2. 복사근의 힘을 이용하여 몸통을 한쪽 방향으로 회전시킵니다.
-3. 허리가 아닌 옆구리 근육이 늘어나고 수축되는 것을 느끼며 천천히 반대 방향으로 반복합니다.`,
+        description: `1. 머신에 앉아 패드를 잡습니다.
+2. 복사근 힘으로 몸통을 회전시킵니다.`,
     },
     '행잉 레그레이즈': {
-        target: '복직근 하부, 장요근',
+        target: '복직근 하부',
         imagePlaceholder: '행잉 레그레이즈 동작 이미지', 
-        description: `1. 머신의 팔꿈치 패드에 팔을 대고 등받이에 기대어 자세를 잡습니다.
-2. 복부의 힘으로 무릎을 가슴 쪽으로 들어 올립니다.
-3. 다리를 내릴 때 허리가 뒤로 과도하게 젖혀지지 않도록 복부에 긴장을 유지합니다.`,
+        description: `1. 바에 매달리거나 패드에 기댑니다.
+2. 복부의 힘으로 다리를 들어 올립니다.`,
     },
-
-    
-    /* =======================
-     💡 상세 정보: 미정의 (Default)
-     ======================= */
     'DEFAULT': {
         target: '정보 준비 중',
         imagePlaceholder: '준비 중 이미지',
-        description: `이 운동에 대한 상세 정보는 현재 데이터 준비 중입니다. 운동영상 링크를 참고하시거나 잠시 후 다시 시도해 주세요.`,
+        description: `이 운동에 대한 상세 정보는 현재 데이터 준비 중입니다.`,
     }
 };
 
 /* =======================
-   🌟 데이터 정의: 🔗 유튜브/인스타 링크 데이터 (모든 운동)
+   🌟 데이터 정의: 링크
    ======================= */
 const videoLinks = {
-  
-  /* ==========================================================
-     💪 1. 프리웨이트 (FREIGHT) 운동 링크 목록
-     ========================================================== */
-     
-  /* 🏋️ 가슴 (Chest) - 프리웨이트 */
+  /* 프리웨이트 */
   '벤치프레스': {youtube:['https://www.youtube.com/watch?v=Evjxm8MZ2bM'], insta:['']},
   '인클라인 덤벨프레스': {youtube:['https://www.youtube.com/watch?v=8iPEnn-ltC8'], insta:['']},
   '체스트 플라이': {youtube:['https://www.youtube.com/watch?v=eozdVDA78K0'], insta:['']},
-  
-  /* 🏋️ 등 (Back) - 프리웨이트 */
   '랫풀다운': {youtube:['https://www.youtube.com/watch?v=CAwf7n6Luuc'], insta:['']},
   '풀업': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g'], insta:['']},
   '바벨로우': {youtube:['https://www.youtube.com/watch?v=vT2GjY_Umpw'], insta:['']},
   '데드리프트': {youtube:['https://www.youtube.com/watch?v=r4MzxtBKyNE'], insta:['']},
-  
-  /* 🏋️ 어깨 (Shoulder) - 프리웨이트 */
   '프론트 레이즈': {youtube:['https://www.youtube.com/watch?v=-t7fuZ0KhDA'], insta:['']},
   '사이드 레터럴 레이즈': {youtube:['https://www.youtube.com/watch?v=3VcKaXpzqRo'], insta:['']},
   '리버스 플라이': {youtube:['https://www.youtube.com/watch?v=QOVaHwm-Q6U'], insta:['']},
-  
-  /* 🏋️ 팔 (Arms) - 프리웨이트 */
   '바벨컬': {youtube:['https://www.youtube.com/watch?v=kwG2ipFRgfo'], insta:['']},
   '덤벨컬': {youtube:['https://www.youtube.com/watch?v=av7-8igSXTs'], insta:['']},
   '트라이셉스 푸시다운': {youtube:['https://www.youtube.com/watch?v=2-LAMcpzODU'], insta:['']},
-  
-  /* 🏋️ 하체 (Legs) - 프리웨이트 */
   '스쿼트': {youtube:['https://www.youtube.com/watch?v=aclHkVaku9U'], insta:['']},
-  '레그프레스': {youtube:['https://www.youtube.com/watch?v=zvM10AW4r8U'], insta:['']}, // 프리웨이트(스미스)/머신 겸용 가능
+  '레그프레스': {youtube:['https://www.youtube.com/watch?v=zvM10AW4r8U'], insta:['']}, 
   '루마니안 데드리프트': {youtube:['https://www.youtube.com/watch?v=2SHsk9AzdjA'], insta:['']},
   '힙 쓰러스트': {youtube:['https://www.youtube.com/watch?v=9vOcdRxzA1k'], insta:['']},
-  
-  /* 🏋️ 복근 (Abs) - 프리웨이트 */
   '크런치': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g0'], insta:['']},
   '레그레이즈': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g1'], insta:['']},
   '플랭크': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g2'], insta:['']},
   '바이시클 크런치': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g3'], insta:['']},
 
-
-  /* ==========================================================
-     🔩 2. 머신 (MACHINE) 운동 링크 목록
-     ========================================================== */
-     
-  /* ⚙️ 가슴 (Chest) - 머신 */
+  /* 머신 */
   '인클라인 체스트프레스': {youtube:['https://www.youtube.com/watch?v=8iPEnn-ltC8'], insta:['']},
   '체스트플라이 머신': {youtube:['https://www.youtube.com/watch?v=eozdVDA78K0'], insta:['']},
   '디클라인 체스트프레스': {youtube:['https://www.youtube.com/watch?v=SrqOu55lrYU'], insta:['']},
-  
-  /* ⚙️ 등 (Back) - 머신 */
   '랫풀다운 머신': {youtube:['https://www.youtube.com/watch?v=CAwf7n6Luuc'], insta:['']},
   '시티드로우': {youtube:['https://youtube.com/shorts/8cVrdR2xqc8?si=Ugjzf0wYY_cUYeqr'], insta:['']}, 
   '로우 머신': {youtube:['https://www.youtube.com/watch?v=vT2GjY_Umpw'], insta:['']},
   '와이드풀다운': {youtube:['https://www.youtube.com/watch?v=0Bb4efiiXEQ'], insta:['']},
-  
-  /* ⚙️ 어깨 (Shoulder) - 머신 */
   '숄더프레스 머신': {youtube:['https://www.youtube.com/watch?v=B-aVuyhvLHU'], insta:['']},
   '사이드 레터럴 머신': {youtube:['https://www.youtube.com/watch?v=3VcKaXpzqRo'], insta:['']},
   '리어 델트 머신': {youtube:['https://www.youtube.com/watch?v=QOVaHwm-Q6U'], insta:['']},
-  
-  /* ⚙️ 팔 (Arms) - 머신 */
   '이두컬 머신': {youtube:['https://www.youtube.com/watch?v=kwG2ipFRgfo'], insta:['']},
   '트라이셉스 머신': {youtube:['https://www.youtube.com/watch?v=2-LAMcpzODU'], insta:['']},
-  
-  /* ⚙️ 하체 (Legs) - 머신 */
-  // '레그프레스'는 위에 프리웨이트와 함께 기재됨
   '레그익스텐션': {youtube:['https://www.youtube.com/watch?v=yR9oYydGXkE'], insta:['']},
   '레그컬': {youtube:['https://www.youtube.com/watch?v=ybKdTqLw7g4'], insta:['']},
   '글루트 머신': {youtube:['https://www.youtube.com/watch?v=Gw6mnk8XHnk'], insta:['']},
   'v스쿼트': {youtube:['https://www.youtube.com/watch?v=PZgdGvJh9w8'], insta:['']},
   '스미스머신스쿼트': {youtube:['https://youtube.com/shorts/7E5k6mIXCNM?si=aRAggyG6xKARjLyZ'], insta:['']},
-  
-  /* ⚙️ 복근 (Abs) - 머신 */
   '복부 크런치 머신': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g0'], insta:['']},
   '케이블 크런치': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g1'], insta:['']},
   '토르소 로테이션': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g2'], insta:['']},
   '행잉 레그레이즈': {youtube:['https://www.youtube.com/watch?v=eGo4IYlbE5g3'], insta:['']},
   
-
-  /* ==========================================================
-     🏃 3. 유산소 (CARDIO) 운동 링크 목록
-     ========================================================== */
-     
-  /* ⏱️ 전신/심폐 지구력 - 유산소 */
+  /* 유산소 */
   '러닝머신': {youtube:['https://www.youtube.com/watch?v=CAwf7n6Luuc2'], insta:['']},
   '사이클': {youtube:['https://www.youtube.com/watch?v=CAwf7n6Luuc3'], insta:['']},
   '일립티컬': {youtube:['https://www.youtube.com/watch?v=CAwf7n6Luuc4'], insta:['']},
@@ -820,11 +684,10 @@ const videoLinks = {
 };
 
 /* =======================
-   🌟 타입(Type) 탭 렌더링 및 이벤트 처리 (1단계: 프리웨이트, 머신, 유산소, 검색)
+   🌟 렌더링 로직
    ======================= */
 function renderTypeTabs(){  
   typeTabs.innerHTML=''; 
-  // '복근'을 제거하고 '프리웨이트' 부위로 이동
   const types=['프리웨이트','머신', '유산소', '검색']; 
   
   types.forEach(t=>{  
@@ -834,8 +697,8 @@ function renderTypeTabs(){
     if(t==='검색'){
       const icon=document.createElement('img');  
       icon.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' stroke='white' fill='none' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg>";  
-      icon.style.width='13px';  
-      icon.style.height='18px';  
+      icon.style.width='12px';  
+      icon.style.height='16px';  
       btn.appendChild(icon);
       
       btn.onclick=()=>{
@@ -850,11 +713,9 @@ function renderTypeTabs(){
         
         partTabs.classList.add('hidden');
         
-        // 검색 탭은 UI 전환이 크므로 블러를 명시적으로 켬 (안정성 확보)
         const blurOverlay = document.getElementById('blurOverlay'); 
         if (blurOverlay) blurOverlay.style.opacity='1';
         
-        // 포커스를 약간 지연시켜 onblur가 즉시 발동되는 것을 방지
         setTimeout(() => {
             searchInput.focus();
             searchInput.onfocus(); 
@@ -883,9 +744,6 @@ function renderTypeTabs(){
   typeTabs.classList.remove('hidden'); 
 }  
   
-/* =======================
-   🌟 부위(Part) 탭 렌더링 및 이벤트 처리 (2단계: 가슴, 등, 어깨)
-   ======================= */
 function renderPartTabs(){  
   partTabs.innerHTML='';  
   if(!currentType) return; 
@@ -896,7 +754,6 @@ function renderPartTabs(){
   for(const p of tabs){  
     const btn=document.createElement('button');  
     btn.className='subtab';  
-    
     btn.textContent=p;  
     
     btn.onclick=()=>{  
@@ -908,32 +765,23 @@ function renderPartTabs(){
       
       renderMoves();  
     };  
-
     partTabs.appendChild(btn);  
   }
   partTabs.classList.remove('hidden'); 
 }  
   
-/* =======================
-   🌟 운동 상세 정보 HTML 생성 (Grid Layout - Visual Left | Text Right)
-   ======================= */
 function renderAccordionContent(moveName) {
-    // 상세 정보 데이터 가져오기 (없으면 DEFAULT 사용)
     const info = exerciseInfo[moveName] || exerciseInfo['DEFAULT'];
     const description = info.description;
-    const imageUrl = info.imageUrl; // 이미지 URL 가져오기
+    const imageUrl = info.imageUrl; 
     
-    // 이미지/플레이스홀더 내용 결정
     let visualContent = '';
     if (imageUrl) {
-        // 이미지 URL이 있을 경우, <img> 태그 사용
         visualContent = `<img src="${imageUrl}" alt="${moveName} 자세" class="move-image">`;
     } else {
-        // 없을 경우, 기존 플레이스홀더 사용
-        visualContent = `<div class="visual-placeholder">[${moveName} 동작 영상/이미지]</div>`;
+        visualContent = `<div class="visual-placeholder">[${moveName} 동작]</div>`;
     }
     
-    // 🎯 최종 수정된 타겟 근육 섹션
     const targetMuscleHtml = `
         <div class="target-muscle-box">
             <span class="target-label">주요 타겟 근육</span>
@@ -943,13 +791,9 @@ function renderAccordionContent(moveName) {
 
     const html = `
         <div class="vertical-move-details">
-            
             <div class="grid-left-visual-with-box">
-                
                 ${visualContent}
-                
-                </div>
-
+            </div>
             <div class="grid-right-info">
                 ${targetMuscleHtml}
                 <div class="move-description">${description}</div>
@@ -959,16 +803,12 @@ function renderAccordionContent(moveName) {
     return html;
 }
 
-/* =======================
-   🌟 운동 목록 렌더링 (3단계)
-   ======================= */
 function renderMoves(searchTerm = '') {  
   content.innerHTML = ''; 
   let moves = [];  
   let targetTypes = [];
 
   if (searchWrapper.classList.contains('active')) {
-    
     if (currentType === 'ALL_SEARCH') {
         targetTypes = Object.keys(videoData); 
     } 
@@ -988,11 +828,10 @@ function renderMoves(searchTerm = '') {
             }
         }
     }
-    
     moves = [...new Set(moves)].sort((a, b) => a.localeCompare(b, 'ko'));
     
     if (moves.length === 0) {
-        content.innerHTML = `<p style="text-align:center; margin-top:50px;">${searchTerm ? `"${searchTerm}"에 해당하는 운동을 찾을 수 없습니다.` : '선택된 타입의 전체 운동 목록이 없습니다.'}</p>`;
+        content.innerHTML = `<p style="text-align:center; margin-top:40px; font-size:0.9rem;">${searchTerm ? `"${searchTerm}" 없음` : '목록 없음'}</p>`;
         return;
     }
     
@@ -1004,11 +843,10 @@ function renderMoves(searchTerm = '') {
   }
   
   if (moves.length === 0) {
-    content.innerHTML = `<p style="text-align:center; margin-top:50px;">선택된 부위의 운동이 없습니다.</p>`;
+    content.innerHTML = `<p style="text-align:center; margin-top:40px; font-size:0.9rem;">운동 목록이 없습니다.</p>`;
     return;
   }
   
-  // 3. 운동 목록을 아코디언 형태로 렌더링
   moves.forEach(moveName => {
     const cardWrapper = document.createElement('div');
     cardWrapper.className = 'accordion-card-wrapper';
@@ -1018,7 +856,7 @@ function renderMoves(searchTerm = '') {
     
     const title = document.createElement('div');  
     title.textContent = moveName;  
-    title.style.fontSize = '1.1rem';  
+    title.style.fontSize = '1.0rem'; /* 제목 크기 조정 */ 
     title.style.fontWeight = '800';  
     title.style.whiteSpace = 'nowrap'; 
     title.style.overflow = 'hidden';   
@@ -1029,95 +867,81 @@ function renderMoves(searchTerm = '') {
     iconBox.style.alignItems = 'center';  
     iconBox.style.gap = '8px';
     
-    // 🌟 [추가] 링크 텍스트의 색상을 초기화하고 클릭된 링크를 강조하는 헬퍼 함수
     const highlightLink = (clickedElement) => {
-        const highlightColor = '#ffd700'; // 강조 색상 (금색)
-        const defaultColor = 'var(--text)'; // 기본 색상 (흰색)
+        const highlightColor = '#ffd700'; 
+        const defaultColor = 'var(--text)'; 
 
-        // 1. 현재 카드 헤더 내 모든 링크 텍스트 초기화
         iconBox.querySelectorAll('.link-text-span').forEach(span => {
             span.style.color = defaultColor;
         });
-
-        // 2. 클릭된 요소의 텍스트 색상 강조
         if (clickedElement) {
             clickedElement.style.color = highlightColor;
         }
     };
     
-    // 💡 YouTube 링크 버튼 (헤더에 유지)
     const ytWrap = document.createElement('div');  
     ytWrap.style.display = 'flex';  
     ytWrap.style.alignItems = 'center';  
-    ytWrap.style.gap = '4px'; 
+    ytWrap.style.gap = '3px'; 
     ytWrap.style.cursor = 'pointer';  
     ytWrap.onclick = (e) => { 
         e.stopPropagation(); 
         const link = videoLinks[moveName]?.youtube?.[0]; 
         if(link) window.open(link,'_blank'); 
-        
-        // 🌟 수정된 로직 적용
         const ytTextSpan = e.currentTarget.querySelector('.link-text-span');
         highlightLink(ytTextSpan);
     };  
     const yt = document.createElement('img');  
     yt.src = 'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg';  
-    yt.style.width = '20px'; 
-    yt.style.height = '20px';  
+    yt.style.width = '18px'; /* 아이콘 축소 */
+    yt.style.height = '18px';  
     const ytText = document.createElement('span'); 
     ytText.textContent = 'YouTube'; 
-    ytText.className = 'link-text-span'; // 🌟 클래스 추가
-    ytText.style.fontSize = '0.85rem'; 
+    ytText.className = 'link-text-span'; 
+    ytText.style.fontSize = '0.75rem'; /* 폰트 축소 */
     ytText.style.fontWeight = '700';  
     ytWrap.appendChild(yt); 
     ytWrap.appendChild(ytText); 
   
-    // 💡 Instagram 링크 버튼 (헤더에 유지)
     const igWrap = document.createElement('div');  
     igWrap.style.display = 'flex';  
     igWrap.style.alignItems = 'center';  
-    igWrap.style.gap = '4px'; 
+    igWrap.style.gap = '3px'; 
     igWrap.style.cursor = 'pointer';  
     igWrap.onclick = (e) => { 
         e.stopPropagation(); 
         const link = videoLinks[moveName]?.insta?.[0]; 
         if(link) window.open(link,'_blank'); 
-        
-        // 🌟 수정된 로직 적용
         const igTextSpan = e.currentTarget.querySelector('.link-text-span');
         highlightLink(igTextSpan);
     };  
     const ig = document.createElement('img');  
     ig.src = 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg';  
-    ig.style.width = '20px';  
-    ig.style.height = '20px';  
+    ig.style.width = '18px';  
+    ig.style.height = '18px';  
     const igText = document.createElement('span'); 
     igText.textContent = 'Instagram'; 
-    igText.className = 'link-text-span'; // 🌟 클래스 추가
-    igText.style.fontSize = '0.85rem'; 
+    igText.className = 'link-text-span'; 
+    igText.style.fontSize = '0.75rem'; 
     igText.style.fontWeight = '700';  
     igWrap.appendChild(ig); 
     igWrap.appendChild(igText); 
   
-    // 💡 펼침/닫힘 아이콘 (SVG)
     const toggleIcon = document.createElement('img');
     toggleIcon.className = 'accordion-icon';
     toggleIcon.src = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>";
     toggleIcon.style.marginLeft = '1px';
 
-    // 최종 조립
     iconBox.appendChild(ytWrap); 
     iconBox.appendChild(igWrap);  
     iconBox.appendChild(toggleIcon); 
     header.appendChild(title); 
     header.appendChild(iconBox);  
     
-    // --- Accordion Content 생성 ---
     const contentBody = document.createElement('div');
     contentBody.className = 'accordion-content';
     contentBody.innerHTML = renderAccordionContent(moveName);
 
-    // --- Accordion Toggle Event ---
     header.onclick = function() {
         const isOpen = contentBody.classList.contains('open');
         
@@ -1150,14 +974,9 @@ function renderMoves(searchTerm = '') {
     content.appendChild(cardWrapper);
   });
 }  
-  
-// =======================
-// 🔍 검색 로직 이벤트 처리
-// =======================
 
 searchInput.oninput=()=>{  
   const keyword=searchInput.value.toLowerCase().trim(); 
-  
   if(searchWrapper.classList.contains('active') && currentType === 'ALL_SEARCH'){
     renderMoves(keyword); 
   }
@@ -1166,62 +985,41 @@ searchInput.oninput=()=>{
 searchInput.onfocus=()=>{
   if(searchWrapper.classList.contains('active') && currentType === 'ALL_SEARCH'){
     if(searchInput.value) return; 
-    
     renderMoves(); 
   }
 }
   
-/* =======================
-   🌟 탭 상태 관리 함수
-   ======================= */
 function setActiveTab(id){  
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));  
   document.getElementById(id).classList.add('active');  
 }  
-  
-// =======================
-// 🌟 메인 탭 이벤트 리스너 (UI 전환 로직)
-// =======================
 
 document.getElementById('tab-videos').onclick=()=>{  
   setActiveTab('tab-videos');  
-  
   currentType = '';
   currentPart = '';
   searchInput.value = '';
-  
   renderTypeTabs();  
-  
   partTabs.classList.add('hidden');  
   searchWrapper.classList.remove('active');  
   content.innerHTML='';  
-  
-  // 💡 메인 ON 스위치: 블러 유지
   const blurOverlay = document.getElementById('blurOverlay'); 
   if (blurOverlay) blurOverlay.style.opacity='1';
 };  
   
 document.getElementById('tab-info').onclick=()=>{  
   setActiveTab('tab-info');  
-  
   currentType = '';
   currentPart = '';
   searchInput.value = '';
-  
   typeTabs.classList.add('hidden');  
   partTabs.classList.add('hidden');  
   searchWrapper.classList.remove('active');  
-  
   renderInfoContent();
-  
-  // 💡 메인 ON 스위치: 블러 유지
   const blurOverlay = document.getElementById('blurOverlay'); 
   if (blurOverlay) blurOverlay.style.opacity='1';
 };  
 
-/* =======================
-   🌟 정보 카드 렌더링
-   ======================= */
 function renderInfoContent(){  
   const info=[  
     { text:'박준호선생님 블로그', url:'https://www.jungho-park.com/', icon:'https://i.postimg.cc/hj2NGBJ9/Screenshot-20251116-221434-Samsung-Internet.jpg' },  
@@ -1250,12 +1048,7 @@ function renderInfoContent(){
   });
 }  
 
-
-// =======================
-// 🌟 초기 로드 시 설정
-// =======================
 document.addEventListener('DOMContentLoaded', () => {  
-    // DOM 로드 후 바로 높이 설정 실행
     setViewportHeight();
 });  
 
