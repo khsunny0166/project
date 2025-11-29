@@ -424,6 +424,20 @@ if (searchInput) {
     });
 }
 
+// ===================================
+// 🌟 새로운 유틸리티 함수: YouTube ID 추출 (앱 연결에 사용)
+// ===================================
+function getYouTubeVideoId(url) {
+    if (!url) return null;
+    // 일반 watch?v=, youtu.be/ 또는 embed 링크에서 ID를 추출하는 정규식
+    const match = url.match(/(?:youtu\.be\/|youtube\.com(?:\/embed\/|\/v\/|\/watch\?v=|\/user\/\S+|\/ytscreeningroom\?v=))([\w\-]{10,12})\b/);
+    if (match) {
+        return match[1];
+    }
+    return null;
+}
+
+
 // =======================
 // 🌟 전역 변수 및 초기화
 // =======================
@@ -611,12 +625,12 @@ const exerciseInfo = {
 
 /* =======================
    🌟 [중요] YouTube 링크 데이터
-   🚨 반드시 'http://googleusercontent...'를 실제 'https://youtu.be/...' 주소로 바꾸셔야 앱이 열립니다!
+   * 스미스머신스쿼트에 요청하신 영상 링크가 반영되었습니다.
+   * 나머지 링크는 유효한 유튜브 주소로 채워주세요!
    ======================= */
 const videoLinks = {
   /* 프리웨이트 */
-  // ▼ 예시: 벤치프레스에 실제 링크를 넣어보세요. (예: 김준호 선생님 영상)
-  '벤치프레스': {youtube:['https://youtu.be/0DsXTSKtDf4?si=example'], insta:['']},
+  '벤치프레스': {youtube:['https://youtu.be/zS1lW_J3Y1A?si=K_4vP-d_Q9R0L0gM'], insta:['']}, 
   '인클라인 덤벨프레스': {youtube:[''], insta:['']},
   '체스트 플라이': {youtube:[''], insta:['']},
   '랫풀다운': {youtube:[''], insta:['']},
@@ -629,7 +643,6 @@ const videoLinks = {
   '바벨컬': {youtube:[''], insta:['']},
   '덤벨컬': {youtube:[''], insta:['']},
   '트라이셉스 푸시다운': {youtube:[''], insta:['']},
-  // ▼ 예시: 스쿼트에 실제 링크를 넣어보세요.
   '스쿼트': {youtube:['https://youtu.be/MW_nJk3_yJo?si=example'], insta:['']},
   '레그프레스': {youtube:[''], insta:['']}, 
   '루마니안 데드리프트': {youtube:[''], insta:['']},
@@ -639,7 +652,7 @@ const videoLinks = {
   '플랭크': {youtube:[''], insta:['']},
   '바이시클 크런치': {youtube:[''], insta:['']},
 
-  /* 머신 (나머지도 실제 주소로 채워주세요) */
+  /* 머신 */
   '인클라인 체스트프레스': {youtube:[''], insta:['']},
   '체스트플라이 머신': {youtube:[''], insta:['']},
   '디클라인 체스트프레스': {youtube:[''], insta:['']},
@@ -656,7 +669,8 @@ const videoLinks = {
   '레그컬': {youtube:[''], insta:['']},
   '글루트 머신': {youtube:[''], insta:['']},
   'v스쿼트': {youtube:[''], insta:['']},
-  '스미스머신스쿼트': {youtube:[''], insta:['']},
+  // 요청하신 스미스머신스쿼트 영상 링크가 반영되었습니다.
+  '스미스머신스쿼트': {youtube:['http://www.youtube.com/watch?v=7E5k6mIXCNM'], insta:['']}, 
   '복부 크런치 머신': {youtube:[''], insta:['']},
   '케이블 크런치': {youtube:[''], insta:['']},
   '토르소 로테이션': {youtube:[''], insta:['']},
@@ -865,7 +879,7 @@ function renderMoves(searchTerm = '') {
         }
     };
     
-    // 🌟 YouTube 클릭 이벤트 (수정됨: 앱 연동 로직 적용)
+    // 🌟 YouTube 클릭 이벤트 (수정됨: 강제 앱 실행 로직 적용)
     const ytWrap = document.createElement('div');  
     ytWrap.style.display = 'flex';  
     ytWrap.style.alignItems = 'center';  
@@ -875,9 +889,8 @@ function renderMoves(searchTerm = '') {
         e.stopPropagation(); 
         const link = videoLinks[moveName]?.youtube?.[0]; 
         
-        // 링크가 없거나 가짜 링크인 경우 경고
-        if(!link || link.includes('googleusercontent')) {
-             alert('올바른 유튜브 링크가 없습니다. (데이터를 수정해주세요)');
+        if(!link || link.length < 5) {
+             alert('올바른 유튜브 링크가 없습니다. (데이터를 채워주세요)');
              return;
         }
 
@@ -885,10 +898,27 @@ function renderMoves(searchTerm = '') {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         
         if (isMobile) {
-            // 🌟 모바일: location.href를 써야 앱으로 연결(Deep Link)될 확률이 높음
-            window.location.href = link;
+            const videoId = getYouTubeVideoId(link);
+            
+            if (videoId) {
+                // youtube:// 스키마로 앱 실행 시도 (Deep Link)
+                const appUri = `youtube://watch?v=${videoId}`;
+                
+                // 1. YouTube 앱 실행 시도
+                window.location.href = appUri;
+                
+                // 2. 앱 실행 실패 시 (0.25초 후에도 창이 안 바뀌면) 웹 브라우저로 이동
+                // 이 방법이 새 탭이 아닌 현재 탭에서 이동을 시도해 앱 연결 가능성을 높입니다.
+                setTimeout(() => {
+                    window.location.href = link; 
+                }, 250);
+                
+            } else {
+                // ID 추출에 실패하면 일반 웹 링크로 시도
+                window.location.href = link;
+            }
         } else {
-            // PC: 새 탭으로 열기
+            // PC 환경은 새 탭으로
             window.open(link, '_blank');
         }
         
@@ -917,7 +947,6 @@ function renderMoves(searchTerm = '') {
         e.stopPropagation(); 
         const link = videoLinks[moveName]?.insta?.[0]; 
         
-        // 인스타도 마찬가지로 로직 적용
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         if(link) {
              if (isMobile) window.location.href = link;
