@@ -6,7 +6,8 @@
 
 <title>준호쌤 운동앱</title>
 
-<link rel="manifest" href="manifest.json">
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#000000">
 
 <style>
 
@@ -21,14 +22,6 @@ header{
 text-align:center;
 padding:20px;
 background:#000;
-}
-
-input{
-padding:10px;
-width:80%;
-border-radius:10px;
-border:none;
-margin-top:10px;
 }
 
 nav{
@@ -60,29 +53,6 @@ color:white;
 margin-top:8px;
 }
 
-.info-btn{
-background:#444;
-margin-top:8px;
-}
-
-.fav{
-cursor:pointer;
-font-size:20px;
-margin-right:8px;
-}
-
-#installBox{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-background:#222;
-padding:12px 16px;
-border-radius:12px;
-display:none;
-z-index:9999;
-}
-
 </style>
 
 </head>
@@ -90,196 +60,48 @@ z-index:9999;
 <body>
 
 <header>
-
-<h1>💪 준호쌤 운동 앱</h1>
-
-<input id="searchInput" placeholder="운동 검색">
-
+<h1>💪 준호쌤 운동</h1>
 </header>
 
 <nav>
-
-<button onclick="showPage('exercise')">운동</button>
-<button onclick="showPage('info')">정보</button>
-<button onclick="showFavorites()">⭐ 즐겨찾기</button>
-
+<button onclick="showExercise()">운동</button>
+<button onclick="showInfo()">정보</button>
 </nav>
 
 <div id="content"></div>
 
-<div id="installBox">
-📱 홈 화면에 설치하기
-<button id="installBtn">설치</button>
-</div>
-
 <script>
 
-const exercises=[
+function showExercise(){
 
-{
-name:"스쿼트",
-video:"https://www.youtube.com/watch?v=aclHkVaku9U",
-desc:"하체 전반 강화"
-},
+document.getElementById("content").innerHTML=`
 
-{
-name:"푸쉬업",
-video:"https://www.youtube.com/watch?v=IODxDxX7oi4",
-desc:"가슴 삼두 강화"
-},
-
-{
-name:"플랭크",
-video:"https://www.youtube.com/watch?v=pSHjTRCQxIw",
-desc:"코어 강화"
-}
-
-];
-
-const infoLinks=[
-
-{
-text:"박준호 선생님 유튜브 채널",
-url:"https://youtube.com/channel/UCLQI9kOHxRCMwEHcx8M3nOA"
-}
-
-];
-
-let favorites=JSON.parse(localStorage.getItem("favs"))||[];
-
-const content=document.getElementById("content");
-const searchInput=document.getElementById("searchInput");
-
-function showPage(page){
-
-content.innerHTML="";
-
-if(page==="exercise"){
-renderExercises();
-}else{
-renderInfo();
-}
-
-}
-
-function renderExercises(term=""){
-
-content.innerHTML="";
-
-let list=exercises;
-
-if(term){
-
-const t=term.toLowerCase();
-
-list=exercises.filter(e=>
-e.name.toLowerCase().includes(t)
-);
-
-}
-
-list.forEach(e=>{
-
-const fav=favorites.includes(e.name);
-
-const div=document.createElement("div");
-div.className="card";
-
-div.innerHTML=`
-
-<div>
-<span class="fav" onclick="toggleFav('${e.name}')">
-${fav?"⭐":"☆"}
-</span>
-<strong>${e.name}</strong>
+<div class="card">
+<h3>스쿼트</h3>
+<button class="youtube-btn"
+onclick="openYoutube('https://www.youtube.com/watch?v=aclHkVaku9U')">
+운동 영상 보기
+</button>
 </div>
 
-<p>${e.desc}</p>
-
-<button class="youtube-btn"
-onclick="openYoutube('${e.video}')">
-운동 영상 보기
-</button>
-
 `;
-
-content.appendChild(div);
-
-});
 
 }
 
-function renderInfo(){
+function showInfo(){
 
-content.innerHTML="";
+document.getElementById("content").innerHTML=`
 
-infoLinks.forEach(link=>{
+<div class="card">
+<h3>박준호 선생님 유튜브 채널</h3>
 
-const div=document.createElement("div");
-div.className="card";
-
-div.innerHTML=`
-
-<h3>${link.text}</h3>
-
-<button class="info-btn"
-onclick="openChannel('${link.url}')">
-
+<button onclick="openChannel('https://youtube.com/channel/UCLQI9kOHxRCMwEHcx8M3nOA')">
 채널 열기
-
 </button>
 
-`;
-
-content.appendChild(div);
-
-});
-
-}
-
-function showFavorites(){
-
-content.innerHTML="";
-
-const list=exercises.filter(e=>
-favorites.includes(e.name)
-);
-
-list.forEach(e=>{
-
-const div=document.createElement("div");
-div.className="card";
-
-div.innerHTML=`
-
-<strong>${e.name}</strong>
-
-<p>${e.desc}</p>
-
-<button class="youtube-btn"
-onclick="openYoutube('${e.video}')">
-운동 영상 보기
-</button>
+</div>
 
 `;
-
-content.appendChild(div);
-
-});
-
-}
-
-function toggleFav(name){
-
-if(favorites.includes(name)){
-favorites=favorites.filter(f=>f!==name);
-}else{
-favorites.push(name);
-}
-
-localStorage.setItem("favs",JSON.stringify(favorites));
-
-renderExercises();
 
 }
 
@@ -307,43 +129,16 @@ window.open(url,"_blank");
 
 }
 
-searchInput.oninput=(e)=>{
-renderExercises(e.target.value);
-};
+showExercise();
 
-showPage("exercise");
+/* 서비스워커 등록 */
 
 if("serviceWorker" in navigator){
-navigator.serviceWorker.register("service-worker.js");
-}
 
-let deferredPrompt;
-
-window.addEventListener("beforeinstallprompt",(e)=>{
-
-e.preventDefault();
-
-deferredPrompt=e;
-
-document.getElementById("installBox").style.display="block";
-
-});
-
-document.getElementById("installBtn").onclick=async()=>{
-
-document.getElementById("installBox").style.display="none";
-
-if(deferredPrompt){
-
-deferredPrompt.prompt();
-
-await deferredPrompt.userChoice;
-
-deferredPrompt=null;
+navigator.serviceWorker.register("./service-worker.js")
+.then(()=>console.log("SW 등록 성공"));
 
 }
-
-};
 
 </script>
 
