@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <title>준호쌤 운동앱</title>
 
@@ -13,7 +14,7 @@
 
 body{
 margin:0;
-font-family:Arial;
+font-family:system-ui;
 background:#111;
 color:white;
 }
@@ -21,7 +22,17 @@ color:white;
 header{
 text-align:center;
 padding:20px;
+font-size:22px;
+font-weight:bold;
 background:#000;
+}
+
+#search{
+width:85%;
+padding:10px;
+border-radius:10px;
+border:none;
+margin-top:10px;
 }
 
 nav{
@@ -32,11 +43,10 @@ padding:10px;
 background:#1a1a1a;
 }
 
-button{
+nav button{
 padding:10px 14px;
 border:none;
 border-radius:8px;
-cursor:pointer;
 font-weight:bold;
 }
 
@@ -47,10 +57,32 @@ padding:14px;
 border-radius:12px;
 }
 
-.youtube-btn{
+.card img{
+width:100%;
+border-radius:10px;
+}
+
+.youtube{
 background:#ff0000;
 color:white;
 margin-top:8px;
+padding:10px;
+border:none;
+border-radius:8px;
+width:100%;
+}
+
+.installGuide{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#222;
+padding:14px;
+border-radius:12px;
+font-size:14px;
+z-index:9999;
+box-shadow:0 5px 20px rgba(0,0,0,0.5);
 }
 
 </style>
@@ -60,31 +92,101 @@ margin-top:8px;
 <body>
 
 <header>
-<h1>💪 준호쌤 운동</h1>
+
+💪 준호쌤 운동
+
+<br>
+
+<input id="search" placeholder="운동 검색">
+
 </header>
 
 <nav>
+
 <button onclick="showExercise()">운동</button>
 <button onclick="showInfo()">정보</button>
+
 </nav>
 
 <div id="content"></div>
 
+<div id="installBox" class="installGuide">
+
+📱 앱처럼 사용하려면
+
+<br><br>
+
+Chrome → 메뉴 ⋮ → 홈 화면에 추가  
+Safari → 공유 → 홈 화면에 추가  
+Samsung → 메뉴 → 홈 화면에 추가
+
+<br><br>
+
+<button onclick="closeInstall()">닫기</button>
+
+</div>
+
 <script>
 
-function showExercise(){
+const exercises=[
 
-document.getElementById("content").innerHTML=`
+{
+name:"스쿼트",
+video:"aclHkVaku9U"
+},
+
+{
+name:"푸쉬업",
+video:"IODxDxX7oi4"
+},
+
+{
+name:"플랭크",
+video:"pSHjTRCQxIw"
+}
+
+];
+
+function showExercise(term=""){
+
+let list=exercises;
+
+if(term){
+
+list=exercises.filter(e=>
+e.name.includes(term)
+);
+
+}
+
+const content=document.getElementById("content");
+
+content.innerHTML="";
+
+list.forEach(e=>{
+
+const thumb=`https://img.youtube.com/vi/${e.video}/0.jpg`;
+
+content.innerHTML+=`
 
 <div class="card">
-<h3>스쿼트</h3>
-<button class="youtube-btn"
-onclick="openYoutube('https://www.youtube.com/watch?v=aclHkVaku9U')">
+
+<h3>${e.name}</h3>
+
+<img src="${thumb}">
+
+<button class="youtube"
+onclick="openYoutube('${e.video}')">
+
 운동 영상 보기
+
 </button>
+
 </div>
 
 `;
+
+});
 
 }
 
@@ -93,10 +195,14 @@ function showInfo(){
 document.getElementById("content").innerHTML=`
 
 <div class="card">
+
 <h3>박준호 선생님 유튜브 채널</h3>
 
-<button onclick="openChannel('https://youtube.com/channel/UCLQI9kOHxRCMwEHcx8M3nOA')">
+<button class="youtube"
+onclick="openChannel()">
+
 채널 열기
+
 </button>
 
 </div>
@@ -105,11 +211,13 @@ document.getElementById("content").innerHTML=`
 
 }
 
-function openYoutube(url){
+function openYoutube(id){
 
-const appUrl=url.replace("https://www.youtube.com","vnd.youtube://");
+const url=`https://www.youtube.com/watch?v=${id}`;
 
-window.location.href=appUrl;
+const app=`vnd.youtube://${id}`;
+
+window.location.href=app;
 
 setTimeout(()=>{
 window.open(url,"_blank");
@@ -117,26 +225,35 @@ window.open(url,"_blank");
 
 }
 
-function openChannel(url){
+function openChannel(){
 
-const appUrl=url.replace("https://youtube.com","vnd.youtube://");
+const url="https://youtube.com/channel/UCLQI9kOHxRCMwEHcx8M3nOA";
 
-window.location.href=appUrl;
+window.location.href="vnd.youtube://channel/UCLQI9kOHxRCMwEHcx8M3nOA";
 
 setTimeout(()=>{
 window.open(url,"_blank");
 },500);
+
+}
+
+document.getElementById("search").oninput=(e)=>{
+
+showExercise(e.target.value);
+
+};
+
+function closeInstall(){
+
+document.getElementById("installBox").style.display="none";
 
 }
 
 showExercise();
 
-/* 서비스워커 등록 */
-
 if("serviceWorker" in navigator){
 
-navigator.serviceWorker.register("./service-worker.js")
-.then(()=>console.log("SW 등록 성공"));
+navigator.serviceWorker.register("./service-worker.js");
 
 }
 
