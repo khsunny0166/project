@@ -1,0 +1,16 @@
+{
+  "name": "준호쌤 운동강의",
+  "short_name": "준호쌤",
+  "start_url": "/project/index.html",
+  "display": "standalone",
+  "background_color": "#111111",
+  "theme_color": "#A9A9A9",
+  "scope": "/project/",
+  "icons": [
+    {
+      "src": "https://i.postimg.cc/QxWSC2MD/Screenshot-20251029-084633-Kakao-Talk.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
