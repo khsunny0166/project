@@ -134,6 +134,16 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 </div> 
 
 <script>  
+<script>
+// 서비스 워커 등록 로직
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then((reg) => console.log('SW registered', reg))
+      .catch((err) => console.log('SW registration failed', err));
+  });
+}
+
 function setViewportHeight() { let vh = window.innerHeight * 0.01; document.documentElement.style.setProperty('--vh', `${vh * 100}px`); }
 window.addEventListener('load', setViewportHeight);
 window.addEventListener('orientationchange', setViewportHeight); 
