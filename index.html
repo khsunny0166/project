@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>준호쌤 운동앱</title>
+<title>준호쌤 운동 강의</title>
 
 <link rel="manifest" href="./manifest.json">
+
 <meta name="theme-color" content="#000000">
 
 <style>
@@ -17,6 +19,7 @@ margin:0;
 font-family:system-ui;
 background:#111;
 color:white;
+padding-bottom:70px;
 }
 
 header{
@@ -35,21 +38,6 @@ border:none;
 margin-top:10px;
 }
 
-nav{
-display:flex;
-justify-content:center;
-gap:10px;
-padding:10px;
-background:#1a1a1a;
-}
-
-nav button{
-padding:10px 14px;
-border:none;
-border-radius:8px;
-font-weight:bold;
-}
-
 .card{
 background:#1e1e1e;
 margin:12px;
@@ -65,24 +53,41 @@ border-radius:10px;
 .youtube{
 background:#ff0000;
 color:white;
-margin-top:8px;
+margin-top:10px;
 padding:10px;
 border:none;
 border-radius:8px;
 width:100%;
 }
 
-.installGuide{
+#bottomNav{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#000;
+display:flex;
+justify-content:space-around;
+padding:10px 0;
+}
+
+#bottomNav button{
+background:none;
+border:none;
+color:white;
+font-size:14px;
+}
+
+.installPopup{
 position:fixed;
 bottom:20px;
 left:50%;
 transform:translateX(-50%);
 background:#222;
-padding:14px;
+padding:16px;
 border-radius:12px;
-font-size:14px;
 z-index:9999;
-box-shadow:0 5px 20px rgba(0,0,0,0.5);
+font-size:14px;
 }
 
 </style>
@@ -93,7 +98,7 @@ box-shadow:0 5px 20px rgba(0,0,0,0.5);
 
 <header>
 
-💪 준호쌤 운동
+💪 준호쌤 운동 강의
 
 <br>
 
@@ -101,28 +106,33 @@ box-shadow:0 5px 20px rgba(0,0,0,0.5);
 
 </header>
 
-<nav>
-
-<button onclick="showExercise()">운동</button>
-<button onclick="showInfo()">정보</button>
-
-</nav>
-
 <div id="content"></div>
 
-<div id="installBox" class="installGuide">
+<div id="installPopup" class="installPopup">
 
-📱 앱처럼 사용하려면
-
-<br><br>
-
-Chrome → 메뉴 ⋮ → 홈 화면에 추가  
-Safari → 공유 → 홈 화면에 추가  
-Samsung → 메뉴 → 홈 화면에 추가
+📱 앱처럼 사용하려면 설치하세요
 
 <br><br>
+
+<div id="installText"></div>
+
+<br>
 
 <button onclick="closeInstall()">닫기</button>
+
+</div>
+
+<div id="bottomNav">
+
+<button onclick="renderExercises()">🏋 운동</button>
+
+<button onclick="renderExercises('상체')">💪 상체</button>
+
+<button onclick="renderExercises('하체')">🦵 하체</button>
+
+<button onclick="showFavorites()">⭐ 즐겨찾기</button>
+
+<button onclick="showInfo()">ℹ 정보</button>
 
 </div>
 
@@ -130,34 +140,83 @@ Samsung → 메뉴 → 홈 화면에 추가
 
 const exercises=[
 
-{
-name:"스쿼트",
-video:"aclHkVaku9U"
-},
-
-{
-name:"푸쉬업",
-video:"IODxDxX7oi4"
-},
-
-{
-name:"플랭크",
-video:"pSHjTRCQxIw"
-}
+{name:"스쿼트",video:"aclHkVaku9U",part:"하체"},
+{name:"푸쉬업",video:"IODxDxX7oi4",part:"상체"},
+{name:"플랭크",video:"pSHjTRCQxIw",part:"코어"}
 
 ];
 
-function showExercise(term=""){
+let favorites=JSON.parse(localStorage.getItem("fav"))||[];
+
+function renderExercises(filter="전체",search=""){
 
 let list=exercises;
 
-if(term){
+if(filter!=="전체"){
+list=list.filter(e=>e.part===filter);
+}
 
-list=exercises.filter(e=>
-e.name.includes(term)
-);
+if(search){
+list=list.filter(e=>e.name.includes(search));
+}
+
+const content=document.getElementById("content");
+
+content.innerHTML="";
+
+list.forEach(e=>{
+
+const thumb=`https://img.youtube.com/vi/${e.video}/0.jpg`;
+
+const fav=favorites.includes(e.name)?"⭐":"☆";
+
+content.innerHTML+=`
+
+<div class="card">
+
+<h3>
+
+<span onclick="toggleFav('${e.name}')">${fav}</span>
+
+${e.name}
+
+</h3>
+
+<p>${e.part}</p>
+
+<img src="${thumb}">
+
+<button class="youtube" onclick="openYoutube('${e.video}')">
+
+운동 영상 보기
+
+</button>
+
+</div>
+
+`;
+
+});
 
 }
+
+function toggleFav(name){
+
+if(favorites.includes(name)){
+favorites=favorites.filter(f=>f!==name);
+}else{
+favorites.push(name);
+}
+
+localStorage.setItem("fav",JSON.stringify(favorites));
+
+renderExercises();
+
+}
+
+function showFavorites(){
+
+const list=exercises.filter(e=>favorites.includes(e.name));
 
 const content=document.getElementById("content");
 
@@ -175,8 +234,7 @@ content.innerHTML+=`
 
 <img src="${thumb}">
 
-<button class="youtube"
-onclick="openYoutube('${e.video}')">
+<button class="youtube" onclick="openYoutube('${e.video}')">
 
 운동 영상 보기
 
@@ -198,8 +256,7 @@ document.getElementById("content").innerHTML=`
 
 <h3>박준호 선생님 유튜브 채널</h3>
 
-<button class="youtube"
-onclick="openChannel()">
+<button class="youtube" onclick="openChannel()">
 
 채널 열기
 
@@ -215,12 +272,12 @@ function openYoutube(id){
 
 const url=`https://www.youtube.com/watch?v=${id}`;
 
-const app=`vnd.youtube://${id}`;
-
-window.location.href=app;
+window.location.href=`vnd.youtube://${id}`;
 
 setTimeout(()=>{
+
 window.open(url,"_blank");
+
 },500);
 
 }
@@ -232,24 +289,62 @@ const url="https://youtube.com/channel/UCLQI9kOHxRCMwEHcx8M3nOA";
 window.location.href="vnd.youtube://channel/UCLQI9kOHxRCMwEHcx8M3nOA";
 
 setTimeout(()=>{
+
 window.open(url,"_blank");
+
 },500);
 
 }
 
 document.getElementById("search").oninput=(e)=>{
 
-showExercise(e.target.value);
+renderExercises("전체",e.target.value);
 
 };
 
-function closeInstall(){
+function detectBrowser(){
 
-document.getElementById("installBox").style.display="none";
+const ua=navigator.userAgent.toLowerCase();
+
+let text="";
+
+if(ua.includes("kakaotalk")||ua.includes("naver")){
+
+text="카카오/네이버 브라우저입니다.<br><br>Chrome에서 열면 설치할 수 있습니다.";
 
 }
 
-showExercise();
+else if(ua.includes("samsung")){
+
+text="Samsung Internet → 메뉴 ☰ → 홈 화면에 추가";
+
+}
+
+else if(ua.includes("chrome")){
+
+text="Chrome → 메뉴 ⋮ → 홈 화면에 추가";
+
+}
+
+else if(ua.includes("safari")){
+
+text="Safari → 공유 → 홈 화면에 추가";
+
+}
+
+document.getElementById("installText").innerHTML=text;
+
+}
+
+function closeInstall(){
+
+document.getElementById("installPopup").style.display="none";
+
+}
+
+detectBrowser();
+
+renderExercises();
 
 if("serviceWorker" in navigator){
 
