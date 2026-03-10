@@ -1,360 +1,351 @@
-<!DOCTYPE html>  
-<html lang="ko">  
-<head>  
-<meta charset="utf-8" />  
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />  
-<title>준호쌤 운동강의</title>  
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800&display=swap" rel="stylesheet">  
-<style>  
-:root{ --accent:#ffffff; --bg-dark:#111; --bg-dark2:#222; --bg-dark3:#444; --text:#fff; --vh: 100vh; }  
-html { font-size: 14px !important; }
-*{ box-sizing:border-box; }  
-html, body { height: var(--vh); margin: 0; overflow: hidden; }
-body { height: var(--vh); font-family: 'Noto Sans KR', sans-serif; color:var(--text); background-color: var(--bg-dark); position: relative; font-size: 14px !important; line-height: 1.5; }  
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-.bg-fixed { 
-    position: fixed; top: 0; left: 0; bottom: 0; width: 100%; z-index: -2; height: var(--vh); 
-    background: url('https://i.postimg.cc/qMnnw9Gt/Screen-Recording-20260116-214823-Cap-Cut.jpg') no-repeat center center / cover; 
-}  
-@media (min-width: 1024px) {
-    .bg-fixed {
-        background: url('https://i.postimg.cc/MZnr6pWQ/Screen-Recording-20260116-221151-Cap-Cut.jpg') no-repeat center center / cover;
-    }
+<title>준호쌤 운동앱</title>
+
+<link rel="manifest" href="manifest.json">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial;
+background:#111;
+color:white;
 }
 
-#main-scroll-wrapper { position: absolute; top: 0; bottom: 0; left: 0; right: 0; width: 100%; height: auto; overflow-y: auto; padding: 15px; z-index: 10; }
-header, .tabs, .subtabs, #content { position: relative; z-index: 1; }  
-.blur-overlay { position: fixed; top: 0; left: 0; bottom: 0; width: 100%; height: var(--vh); backdrop-filter: blur(3px); background: rgba(0,0,0,0.7); z-index: 0; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }  
-
-#intro{ position:fixed; top:0; left:0; width:100%; height:var(--vh); background:#000; display:flex; justify-content:center; align-items:center; z-index:2000; transition:opacity .45s; }  
-.intro-mobile { display: block; width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
-.intro-desktop { display: none; width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
-
-@media (min-width: 1024px) {
-    .intro-mobile { display: none; }
-    .intro-desktop { display: block; }
+header{
+text-align:center;
+padding:20px;
+background:#000;
 }
 
-header{ text-align:center; margin-bottom:10px; display:flex; justify-content:center; align-items:center; gap:8px; }  
-header img.logo{ height:40px; } 
-header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }  
-.tabs{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-bottom:10px; }  
-.tab{ background:var(--bg-dark3); color:var(--text); border:none; padding:5px 14px; border-radius:20px; cursor:pointer; font-weight:700; font-size:1rem; transition:all .14s; }  
-.tab.active{ background:#A9A9A9; color:#fff; box-shadow:0 6px 18px rgba(0,0,0,.45); }  
-.subtabs{ display:flex; justify-content:center; gap:6px; flex-wrap:wrap; margin:8px 0; }  
-.subtab{ background:var(--bg-dark2); color:var(--text); border:none; padding:5px 12px; border-radius:14px; cursor:pointer; font-weight:700; font-size:0.95rem; transition:all .12s; display:flex; align-items:center; justify-content:center; gap:4px; }  
-.subtab.active{ background:#A9A9A9; font-weight:800; }  
-
-/* 검색창 확장 스타일 */
-#search-wrapper { position: relative; left: 50%; transform: translateX(-50%); z-index: 10; width: 260px; height: 0; overflow: hidden; opacity: 0; pointer-events: none; transition: all 0.2s ease-out; }  
-#search-wrapper.active { opacity: 1; pointer-events: auto; height: 38px; margin-top: 8px; margin-bottom: 4px; }  
-#search-wrapper input { width: 100%; height: 100%; padding: 5px 15px; border-radius: 15px; font-size: 1.1rem; border: 2px solid #A9A9A9; background-color: white; color: #111; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }  
-
-/* 즐겨찾기 별 스타일 */
-.fav-star { font-size: 1.3rem; margin-right: 8px; cursor: pointer; color: #555; transition: color 0.2s; }
-.fav-star.on { color: #FFD700; }
-
-#content{ max-width:380px; margin:8px auto; padding:5px; }  
-.accordion-card-wrapper { margin: 6px 0; border-radius: 10px; overflow: hidden; }
-.accordion-header { background: rgba(128, 128, 128, 0.5); padding: 8px 15px; font-weight: 700; min-height: 42px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-radius: 10px 10px 0 0; }
-
-.accordion-content { 
-    background: var(--bg-dark2); 
-    color: var(--text); 
-    padding: 0 15px; 
-    max-height: 0; 
-    overflow: hidden; 
-    transition: max-height 0.1s ease-in-out, padding 0.1s ease-in-out; 
-    border-radius: 0 0 10px 10px; 
-    border-top: 1px solid var(--bg-dark3);
-}
-.accordion-content.open { max-height: 800px; padding-top: 15px; padding-bottom: 15px; }
-.vertical-move-details { display: grid; grid-template-columns: 35% 65%; gap: 10px; align-items: start; }
-.grid-left-visual-with-box img.move-image { width: 100%; height: auto; border-radius: 6px; object-fit: contain; }
-.move-description { font-size: 0.9rem; line-height: 1.4; white-space: pre-wrap; margin: 0; }
-.target-muscle-box { background: rgba(128, 128, 128, 0.5); padding: 6px; border-radius: 6px; margin-bottom: 8px; text-align: center; }
-.target-muscle-box .target-label { font-weight: 700; color: #fff; font-size: 0.85rem; display: block; }
-.target-muscle-box .target-value { color: #ffd700; font-size: 0.95rem; font-weight: 800; display: block; }
-.accordion-icon { width: 14px; height: 14px; transition: transform 0.3s; }
-.accordion-icon.rotated { transform: rotate(180deg); }
-.info-card{ background:rgba(128, 128, 128, 0.5); border-radius:10px; padding:8px 15px; margin:6px 0; font-weight:700; min-height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
-.hidden{ display:none !important; }  
-.fade{ transition:opacity .18s; }  
-</style>  
-</head>  
-<body>  
-<div class="bg-fixed"></div>  
-<div class="blur-overlay" id="blurOverlay"></div>  
-
-<div id="intro" onclick="hideIntro()">
-    <img src="https://i.postimg.cc/WpytQX4x/Screen-Recording-20260116-214823-Cap-Cut-ezgif-com-video-to-gif-converter.gif" class="intro-mobile" alt="인트로 모바일">
-    <img src="https://i.postimg.cc/xdstQWhc/Screen-Recording-20260116-221151-Cap-Cut-ezgif-com-video-to-gif-converter.gif" class="intro-desktop" alt="인트로 데스크탑">
-</div> 
-
-<div id="main-scroll-wrapper">
-  <header>  
-    <img class="logo" src="https://i.postimg.cc/QxWSC2MD/Screenshot-20251029-084633-Kakao-Talk.png" alt="준호쌤">  
-    <h1>준호쌤 프로젝트</h1>  
-  </header>  
-  <div class="tabs" id="main-tabs">  
-    <button class="tab" id="tab-videos">운동영상</button>  
-    <button class="tab" id="tab-info">운동정보</button>  
-  </div>  
-  <div class="subtabs hidden fade" id="type-tabs"></div>  
-  <div class="subtabs hidden fade" id="part-tabs"></div>  
-  <div id="search-wrapper"><input type="text" id="search-input" placeholder="운동 이름 검색..."></div>  
-  <div id="content" class="fade"></div>  
-</div> 
-
-<script>  
-// 기본 설정 및 데이터
-function setViewportHeight() { let vh = window.innerHeight * 0.01; document.documentElement.style.setProperty('--vh', `${vh * 100}px`); }
-window.addEventListener('load', setViewportHeight);
-window.addEventListener('orientationchange', setViewportHeight); 
-
-function hideIntro(){ const intro = document.getElementById('intro'); intro.style.opacity='0'; setTimeout(()=>intro.style.display='none',450); }  
-
-// 즐겨찾기 로컬 스토리지 관리
-let favorites = JSON.parse(localStorage.getItem('gunho_favs')) || [];
-
-function toggleFavorite(e, moveName) {
-    e.stopPropagation();
-    const idx = favorites.indexOf(moveName);
-    if (idx > -1) favorites.splice(idx, 1);
-    else favorites.push(moveName);
-    localStorage.setItem('gunho_favs', JSON.stringify(favorites));
-    if (currentType === 'FAVORITE') renderMoves();
-    else {
-        const star = e.target;
-        star.classList.toggle('on');
-        star.innerText = star.classList.contains('on') ? '★' : '☆';
-    }
+input{
+padding:10px;
+width:80%;
+border-radius:10px;
+border:none;
+margin-top:10px;
 }
 
-// [수정 부분] 앱 실행 통합 함수 (유튜브, 인스타그램 등)
-function openApp(url, type) {
-    if (!url) return alert('링크 준비중입니다.');
-
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    const isAndroid = /Android/i.test(navigator.userAgent);
-
-    if (isMobile) {
-        let appUrl = '';
-        
-        if (type === 'youtube') {
-            // 유튜브 영상 ID 추출
-            let videoId = "";
-            if (url.includes("shorts/")) videoId = url.split("shorts/")[1].split("?")[0];
-            else if (url.includes("v=")) videoId = url.split("v=")[1].split("&")[0];
-            else if (url.includes("youtu.be/")) videoId = url.split("youtu.be/")[1].split("?")[0];
-            
-            // 앱 스킴 설정 (안드로이드와 iOS 대응 보강)
-            appUrl = isAndroid ? `intent://www.youtube.com/watch?v=${videoId}#Intent;package=com.google.android.youtube;scheme=https;end` : `vnd.youtube://${videoId}`;
-        } 
-        else if (type === 'insta') {
-            // 인스타그램 릴스 또는 프로필 ID 추출
-            if (url.includes("instagram.com/reel/") || url.includes("instagram.com/reels/")) {
-                let reelId = url.split("/reel/")[1] || url.split("/reels/")[1];
-                reelId = reelId.split("/")[0].split("?")[0];
-                appUrl = `instagram://reels/${reelId}`;
-            } else if (url.includes("instagram.com/")) {
-                let userId = url.split("instagram.com/")[1].split("/")[0].split("?")[0];
-                appUrl = `instagram://user?username=${userId}`;
-            }
-        }
-
-        if (appUrl) {
-            // 앱 실행 시도
-            location.href = appUrl;
-            // 앱이 없을 경우를 대비해 약간의 지연 후 웹 브라우저로 실행
-            setTimeout(() => { window.open(url, '_blank'); }, 1500);
-            return;
-        }
-    }
-    
-    // PC거나 스킴 추출 실패 시 웹으로 열기
-    window.open(url, '_blank');
+nav{
+display:flex;
+justify-content:center;
+gap:10px;
+padding:10px;
+background:#1a1a1a;
 }
 
-const exerciseMaster = {
-    '벤치프레스': { type: '프리웨이트', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/3JMcxvxR/benchipeuleseu.jpg', description: `1. 누웠을 때 팔을 뻗어서 여유가 되는 높이에 바벨 거치대 설정 후 눕기\n2. 뒤꿈치로 바닥 밟고, 둔근 수축, 가슴 내밀고 바벨 어깨보다 살짝 넓게 잡아주기\n3. 손에 힘 빼고 가슴 내밀면서 이완 후 이두와 가슴이 붙는다는 느낌으로 밀어주기`, youtube: 'https://www.youtube.com/shorts/p4v1E_o_YCc', insta: '' },
-    '덤벨프레스': { type: '프리웨이트', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/BQDRTCVH/deombelpeuleseu.jpg', description: `1. 덤벨 중앙 잡고, 덤벨 오버그립으로 만들어서 하늘보고 눕기\n2. 뒤꿈치로 바닥 밟고, 둔근 수축, 가슴 내밀어 어깨 내려주기\n3. 턱 당기고 가슴 내밀면서 이완 후 이두와 가슴이 붙게 밀어주기`, youtube: '', insta: '' },
-    '덤벨플라이': { type: '프리웨이트', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/k4BpBNSM/deombelpeullai.jpg', description: `1. 덤벨 중앙 잡고, 덤벨 뉴트럴그립으로 만들어서 하늘보고 눕기\n2. 어깨에 부담 없는 선에서 옆으로 나란히 하다가 팔꿈치 살짝 구부리면서 가슴 이완시켜주기\n3. 앞으로 밀듯 가슴 내밀면서 원위치 만들어주기`, youtube: '', insta: '' },
-    '푸쉬업': { type: '프리웨이트', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/x165MJn3/puswieob.jpg', description: `1. 손은 45º 정도 틀어서 어깨 넓이로 바닥 짚어주기\n2. 손과 팔꿈치가 수직 위치에 있게 팔꿈치 벌리지 않고, 등 접으면서 내려가주기\n3. 뒤꿈치, 엉덩이, 뒤통수가 정렬이 되게 자세 유지하면서 가슴과 팔 붙이면서 바닥 밀어주기`, youtube: '', insta: '' },
-    '인클라인 덤벨프레스': { type: '프리웨이트', part: '가슴', target: '윗가슴', imageUrl: 'https://i.postimg.cc/vZhqh2Lx/inkeullain-deombel-peuleseu.jpg', description: `1. 벤치 2칸 올려서 덤벨 중앙 잡고 하늘보고 눕기\n2. 덤벨이 쇄골 아래쪽 가슴 옆으로 가게 내렸다가 가슴과 이두 붙이면서 밀어주기\n3. 팔꿈치가 과하게 벌어지거나 덤벨이 위·아래로 쏠리지 않게 수직 맞춰주기`, youtube: '', insta: '' },
-    '인클라인 벤치프레스': { type: '프리웨이트', part: '가슴', target: '윗가슴', imageUrl: 'https://i.postimg.cc/6qCzvMp5/inkeullain-benchipeuleseu.jpg', description: `1. 벤치 두 칸 올리고 누웠을 때 팔을 뻗어서 여유가 되는 높이에 바벨 거치대 설정 후 눕기\n2. 바벨은 어깨 넓이보다 살짝 넓게 잡고, 쇄골 아래로 바벨이 오도록 내렸다가 가슴 내밀면서 밀어주기\n3. 팔꿈치가 과하게 벌어지지 않게 주의해주기`, youtube: '', insta: '' },
-    '인클라인 덤벨 플라이': { type: '프리웨이트', part: '가슴', target: '윗가슴', imageUrl: 'https://i.postimg.cc/wvyw6qKT/inkeullain-deombel-peullai.jpg', description: `1. 벤치 2칸 올리고 덤벨 뉴트럴그립으로 잡고 가슴 들고 누워주기\n2. 덤벨이 쇄골 라인에서 팔이 벌어지면서 팔꿈치 구부려서 가슴 이완시켜주기\n3. 가슴 내밀면서 덤벨 다시 쇄골 쪽으로 가게 밀어주기`, youtube: '', insta: '' },
-    '풀오버(가슴)': { type: '프리웨이트', part: '가슴', target: '대흉근, 광배근', imageUrl: 'https://i.postimg.cc/Hkk4YYXs/pul-obeo-deung.webp', description: `1. 벤치에 누워서 덤벨 받쳐 잡기\n2. 팔꿈치가 옆을 보게 살짝 돌린 후 골반 아래로 내리면서 만세 하기\n3. 덤벨이 반원을 그리도록 덤벨을 앞으로 밀듯 올려주기`, youtube: '', insta: '' },
-    '스미스머신 벤치프레스': { type: '머신', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/sfTkfXZ2/seumiseumeosinbenchipeuleseu.jpg', description: `1. 스미스머신바가 중간이 맞도록 벤치로 맞춰 세팅하기\n2. 어깨보다 살짝 넓게 잡고, 가슴을 들어주면서 바 내려주기\n3. 손에 힘을 빼고, 이두와 가슴이 만난다는 느낌으로 가슴 내밀면서 밀어주기`, youtube: '', insta: '' },
-    '스미스머신 인클라인 벤치프레스': { type: '머신', part: '가슴', target: '윗가슴', imageUrl: 'https://i.postimg.cc/mD2mKYjQ/seumiseumeosin-inkeullain-benchipeuleseu.jpg', description: `1. 벤치 2칸 올리고 쇄골 아래에 바벨이 오게 벤치 세팅해주기\n2. 팔꿈치가 많이 벌어지지 않게 가슴 내밀면서 이완 후 사선 아래로 민다는 느낌으로 밀어주기`, youtube: '', insta: '' },
-    '케이블 크로스오버': { type: '머신', part: '가슴', target: '대흉근, 아랫가슴, 윗가슴', imageUrl: 'https://i.postimg.cc/pr3k9gHD/keibeul-keuloseu-obeo.jpg', description: `1. 수행하고 싶은 부위에 맞는 높이에 케이블 손잡이를 조정하여 한 손 그립 걸어주기\n2. 케이블 중앙에 맞춰 서서 팔꿈치를 살짝 구부린 상태로 가슴 내밀면서 이완 후 앞으로 밀어주기\n3. 시선은 정면을 봐주기`, youtube: '', insta: '' },
-    '플랫프레스': { type: '머신', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/jjRcJHpC/peullaespeuleseu.webp', description: `1. 본인에 맞는 가동범위를 레버를 이용해 조절해주기\n2. 그립의 넓이는 어깨 넓이로 맞춰 잡아주기\n3. 등과 허리는 최대한 붙이고, 가슴을 내밀면서 이완 후 이두와 가슴이 붙도록 밀어주기`, youtube: '', insta: '' },
-    '바벨로우': { type: '프리웨이트', part: '등', target: '광배근, 능형근, 중부·하부 승모근', imageUrl: 'https://i.postimg.cc/267VLvfk/babellou.jpg', description: `1. 몸통보다 살짝 넓게 바벨 잡아주기\n2. 골반 넓이로 힙힌지 만들어 상체 숙여서 서기\n3. 척주의 정렬을 맞춘 상태를 유지하면서 가슴 내밀면서 바를 배꼽쪽으로 당겨주기`, youtube: '', insta: '' },
-    '덤벨로우': { type: '프리웨이트', part: '등', target: '광배근, 능형근, 중부·하부 승모근', imageUrl: 'https://i.postimg.cc/rmXrrM0j/deombellou.jpg', description: `1. 덤벨 뉴트럴 그립으로 잡고, 힙힌지 만들어 상체 숙여서 서기\n2. 팔꿈치가 옆구리로 가도록 가슴 내밀면서 당겨주기\n3. 이완 시 척주는 세운 상태로 고정시키고, 팔을 펴서 등 이완시켜주기`, youtube: '', insta: '' },
-    '쉬러그': { type: '프리웨이트', part: '등', target: '상부 승모근', imageUrl: 'https://i.postimg.cc/1RWzxymV/swileogeu.jpg', description: `1. 바벨이나 덤벨을 잡고 둔근 수축 후 거북목 만들어 서기\n2. 등 뒤로 접고 어깨를 올려서 상부 승모근에 힘 들어가게 올려주기\n3. 목이 아프지 않게 수축 범위 조절해주기`, youtube: '', insta: '' },
-    '원 암 덤벨 로우': { type: '프리웨이트', part: '등', target: '광배근', imageUrl: 'https://i.postimg.cc/5yQTk59G/won-amdeombellou.jpg', description: `1. 배꼽 높이에 맞는 구조물이나 벤치에 한 손 올리고 덤벨 잡아주기\n2. 힙힌지 만들고 상체 숙인 후 몸통이 틀어지지 않게 정면 보기\n3. 덤벨을 발등으로 내리고, 엉덩이를 뒤로 빼면서 등 이완 후 골반 앞으로 밀면서 팔꿈치가 옆구리로 가게 당겨주기`, youtube: '', insta: '' },
-    '풀오버(등)': { type: '프리웨이트', part: '등', target: '광배근, 대원근, 전거근', imageUrl: 'https://i.postimg.cc/Hkk4YYXs/pul-obeo-deung.webp', description: `1. 벤치에 누워서 덤벨 받쳐 잡기\n2. 팔꿈치가 옆을 보게 살짝 돌린 후 골반 아래로 내리면서 만세 하기\n3. 덤벨이 반원을 그리도록 덤벨을 앞으로 밀듯 올려주기`, youtube: '', insta: '' },
-    '풀업': { type: '프리웨이트', part: '등', target: '광배근', imageUrl: 'https://i.postimg.cc/wxSjx0Nz/pul-eob.jpg', description: `1. 어깨 넓이보다 살짝 넓게 손잡이 잡고 매달리기\n2. 시선은 사선 위, 발이 살짝 뒤로 가도록 다리 구부린 후\n3. 가슴이 손잡이에 닿는다는 느낌으로 팔꿈치가 옆구리로 가도록 당겨주기`, youtube: '', insta: '' },
-    'T바로우': { type: '머신', part: '등', target: '광배근, 등 중앙', imageUrl: 'https://i.postimg.cc/L6KmFhd0/Tba-lou.png', description: `1. 명치에 패드가 오도록 골반이 뜨지 않게 엎드리기\n2. 원하는 그립을 손에 힘을 뺀 상태로 잡기\n3. 어깨부터 넘기면서 등 수축시켜주기`, youtube: '', insta: '' },
-    '로우로우': { type: '머신', part: '등', target: '등 상부', imageUrl: 'https://i.postimg.cc/JhtfkWVr/loulou.webp', description: `1. 패드에 명치가 오도록 엎드리고 손잡이 잡아주기\n2. 어깨부터 넘겨주고, 손잡이를 당겨서 등 접어주기\n3. 이완 시 가슴은 세운 상태 유지해주기`, youtube: '', insta: '' },
-    '암풀다운': { type: '머신', part: '등', target: '광배근', imageUrl: 'https://i.postimg.cc/T1xNQzSh/ampuldaun.jpg', description: `1. 케이블에 바를 연결 후 맨 위쪽으로 올려주기\n2. 바를 넓게 잡고, 상체 살짝 숙여서 서기\n3. 가슴 들고, 바를 반원 그리듯 아래로 눌러주기`, youtube: '', insta: '' },
-    '롱풀': { type: '머신', part: '등', target: '광배근', imageUrl: 'https://i.postimg.cc/vZZjJdm1/longpul.jpg', description: `1. 명치 높이에 패러럴그립 걸고, 상체 세운 상태로 앉아주기\n2. 어깨 아래로 누르고, 그립을 아래로 누르면서 배꼽쪽으로 당겨주기\n3. 이완 시 승모근이 딸려나가지 않도록 가슴을 내민 상태 유지해주기`, youtube: '', insta: '' },
-    '렛풀다운': { type: '머신', part: '등', target: '광배근', imageUrl: 'https://i.postimg.cc/Y2gwRk4g/lespeuldaun.jpg', description: `1. 케이블 맨 위에 바 연결 후 힙힌지 만들어 앉아주기\n2. 어깨 넓이보다 넓게 바를 잡고, 어깨를 아래로 내린 후 팔꿈치가 옆구리로 가도록 당겨주기\n3. 이완 시 팔꿈치를 위로 올린다는 느낌으로 등 이완시켜주다가 팔꿈치 펴주기`, youtube: '', insta: '' },
-    '와이드풀다운': { type: '머신', part: '등', target: '광배근, 대원근', imageUrl: 'https://i.postimg.cc/X7Q1cDgS/waideupuldaun.jpg', description: `1. 무릎이 고정이 되도록 앉아서 어깨보다 넓게 손잡이 잡아주기\n2. 어깨를 아래로 내린 상태로 팔꿈치가 밖에서 안으로 오도록 당겨주기\n3. 이완 시 팔꿈치를 올려준다는 느낌으로 늘려주기`, youtube: '', insta: '' },
-    '라잉레그컬': { type: '머신', part: '하체', target: '햄스트링', imageUrl: 'https://i.postimg.cc/sxwFWfX7/laing-legeukeol.jpg', description: `1. 본인에게 맞는 레버 세팅 후 무릎 바로 위에 패드가 오게 엎드리기\n2. 발목에 힘을 줘서 발가락을 올려주기\n3. 둔근에 힘을 준 상태로 뒤꿈치로 패드 올려주기`, youtube: '', insta: '' },
-    '레그익스텐션': { type: '머신', part: '하체', target: '대퇴사두근', imageUrl: 'https://i.postimg.cc/wMxZ9KkW/legeu-igseutensyeon.jpg', description: `1. 본인에 체형에 맞게 레버 조절해서 앉아주기\n2. 발목 세운 상태로 다리를 든다는 느낌으로 무릎 펴주기\n3. 발로 찬다는 느낌으로 펴지 않도록 주의해주기`, youtube: '', insta: '' },
-    '레그프레스': { type: '머신', part: '하체', target: '대퇴사두근, 둔근', imageUrl: 'https://i.postimg.cc/15j21jVr/legeupeuleseu.webp', description: `1. 원하는 부위에 맞게 발 위치 조정해주기\n2. 복부로 호흡 마시면서 발이 보는 방향에 맞게 다리 구부려주기\n3. 발바닥 전체적으로 발판을 밀어주고, 수축 시 무릎은 90%만 펴주기`, youtube: '', insta: '' },
-    '리버스V스쿼트': { type: '머신', part: '하체', target: '대퇴사두근, 둔근', imageUrl: 'https://i.postimg.cc/zvft9CzN/libeoseu-Vseukwoteu.png', description: `1. 대퇴사두근과 둔근에 따라 발 위치를 조정하기\n2. 힙힌지를 만들어준 상태로 가슴을 들고 발이 보는 방향대로 무릎 보내주며 앉아주기\n3. 발바닥으로 바닥을 밀고, 둔근을 수축시키면서 일어서주기`, youtube: '', insta: '' },
-    '백익스텐션': { type: '머신', part: '하체', target: '햄스트링, 척추기립근', imageUrl: 'https://i.postimg.cc/fRd2nTNY/baeg-igseutensyeon.webp', description: `1. 골반 아래에 패드가 오게 레버 조절 후 허벅지 올려주기\n2. 타깃에 맞게 상체를 세우거나, 말아준 상태로 골반을 기준으로 숙여주기\n3. 타깃하는 부위에 맞게 둔근을 수축시키면서 올라오거나 상체를 세우며 올라오기`, youtube: 'https://youtube.com/shorts/Yj5KskhVeZQ?si=4-SwByxZ_vBH5dBK', insta: 'https://www.instagram.com/reel/DVV4z4Pk0-S/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==' },
-    '벨트스쿼트': { type: '머신', part: '하체', target: '대퇴사두근', imageUrl: 'https://i.postimg.cc/RhqdPvd6/belteu-seukwoteu.jpg', description: `1. 벨트를 골반에 착용 후 머신과 연결해주기\n2. 골반 넓이로 서서 머신 안전 바 밀어주기\n3. 가슴들고 정면 본 상태로 앉았다가 발바닥으로 바닥 밀면서 일어서주기`, youtube: '', insta: '' },
-    '스미스머신스쿼트': { type: '머신', part: '하체', target: '대퇴사두근, 둔근', imageUrl: 'https://i.postimg.cc/5283K7Bj/seumiseumeosin-seukwoteu.webp', description: `1. 스미스머신 바가 승모근 위로 오도록 올리고 일자로 골반 넓이로 서주기\n2. 시선은 정면을 유지한 상태로 힙힌지 만들면서 앉아주기\n3. 무릎부터 펴지 말고 발바닥으로 바닥을 밀듯 밟으면서 일어서주기`, youtube: '', insta: '' },
-    '힙어덕션': { type: '머신', part: '하체', target: '내전근', imageUrl: 'https://i.postimg.cc/jSY6fHpw/hib-eodeogsyeon.jpg', description: `1. 허벅지 안쪽에 패드가 오도록 패드 돌린 후 레버 당겨서 최대한 열어주기\n2. 발과 무릎이 같은 위치에 있게 올리고, 무릎 살짝 펴서 발이 멀어지게 두기\n3. 골반을 말아 앉아서 발이 아닌 무릎으로 패드 모아주기`, youtube: '', insta: '' },
-    '힙어브덕션': { type: '머신', part: '하체', target: '중둔근', imageUrl: 'https://i.postimg.cc/sXL7g7PF/hib-eobeudeogsyeon.jpg', description: `1. 허벅지 바깥쪽에 패드가 오도록 패드 돌리고 무릎 안쪽에 넣어 앉아주기\n2. 발과 무릎이 같은 위치에 있게 두고 레버 당겨서 최대한 모아주기\n3. 힙힌지 만든 상태로 앉아서, 무릎으로 패드 밀어주기`, youtube: '', insta: '' },
-    '덤벨스쿼트': { type: '프리웨이트', part: '하체', target: '대퇴사두근, 둔근', imageUrl: 'https://i.postimg.cc/jdPgBSKD/deombel-seukwoteu.webp', description: `1. 덤벨을 받쳐잡고 가슴에 붙인 후 골반 넓이로 서주기\n2. 상체 세운 상태로 발이 보는 방향대로 무릎이 가도록 앉았다가 일어서주기\n3. 덤벨이 몸에서 멀어지지 않게 주의해주기`, youtube: '', insta: '' },
-    '런지': { type: '프리웨이트', part: '하체', target: '대퇴사두근, 둔근', imageUrl: 'https://i.postimg.cc/MGPd1cbx/leonji.jpg', description: `1. 덤벨 뉴트럴그립으로 잡고 서주기\n2. 상체 세우고, 한 발을 앞으로 뻗으면서 착지와 동시에 뒷 무릎 구부려 앉아주기\n3. 일어설 때 발바닥으로 바닥 밟으면서 다시 뒤로 돌아와주기`, youtube: '', insta: '' },
-    '루마니안데드': { type: '프리웨이트', part: '하체', target: '햄스트링, 둔근', imageUrl: 'https://i.postimg.cc/QC5mL024/lumaniandedeu.jpg', description: `1. 어깨 넓이로 바벨 잡고, 골반 넓이로 서주기\n2. 힙힌지 만들면서 무릎 구간까지 내렸다가 상체 세워주기\n3. 수축 시 허리를 꺾지 말고 바벨을 허벅지에 붙인다는 느낌으로 일어서주기`, youtube: '', insta: '' },
-    '백스쿼트': { type: '프리웨이트', part: '하체', target: '대퇴사두근, 둔근', imageUrl: 'https://i.postimg.cc/m2fV3WMW/baegseukwoteu.jpg', description: `1. 어깨보다 살짝 낮게 바벨 거치대 조정해주기\n2. 승모근 위에 바벨을 올리고 골반 넓이로 서주기\n3. 시선 정면 본 상태로 무릎이 발이 보는 방향대로 가게 앉았다가 둔근 수축시키면서 일어서주기`, youtube: '', insta: '' },
-    '스티프데드': { type: '프리웨이트', part: '하체', target: '햄스트링, 둔근', imageUrl: 'https://i.postimg.cc/zfcFVs85/seutipeudedeu.jpg', description: `1. 덤벨 오버그립으로 허벅지 앞에 두고 골반 넓이로 힙힌지 만든 상태로 서주기\n2. 꼬리뼈를 위로 든다는 느낌으로 발등에 덤벨이 오도록 숙였다가 둔근 수축시키면서 무릎 위까지 올라와주기\n3. 고개나 허리를 과하게 꺾지 않기`, youtube: '', insta: '' },
-    '스플릿스쿼트': { type: '프리웨이트', part: '하체', target: '대퇴사두근, 둔근', imageUrl: 'https://i.postimg.cc/ydRcWWLv/seupeullis-seukwoteu.jpg', description: `1. 벤치 위에 발등 올리고, 한 발로 서주기\n2. 상체 세우고 정면 본 상태로 올린 다리 무릎이 뒤로 빠지도록 앉았다가 일어서주기\n3. 올린 다리의 발목에 힘을 주지 않게 주의해주기`, youtube: '', insta: '' },
-    '워킹런지': { type: '프리웨이트', part: '하체', target: '대퇴사두근, 둔근', imageUrl: 'https://i.postimg.cc/3J1pksFf/woking-leonji.webp', description: `1. 상체 세우고 정면 본 상태로 서주기\n2. 기본 런지하듯 한 발 앞으로 뻗으면서 착지와 동시에 뒷쪽 다리 구부리면서 앉아주기\n3. 다리를 뻗을 땐 멀고 옆으로 넓게 뻗어주기\n4. 무릎이 바닥에 찍히기 전에 일어서면서 반대발 동일하게 수행해주기`, youtube: '', insta: '' },
-    '컨벤데드': { type: '프리웨이트', part: '하체', target: '둔근, 햄스트링, 척추기립근', imageUrl: 'https://i.postimg.cc/GtQBsDG2/keonbendedeu.jpg', description: `1. 바벨이 발등 위에 오도록 골반 넓이로 넓게 서서 팔이 허벅지에 닿도록 바벨 잡아주기\n2. 힙힌지 만들고 앉아서, 등이 늘어나게 상체 세워주기\n3. 무릎이 먼저 펴지지 않게 상체를 든다는 느낌으로 일어서면서 둔근 수축시켜주기\n4. 힙힌지 만들면서 앞으로 숙이다가 다시 원위치로 돌아가주기`, youtube: '', insta: '' },
-    '프론트스쿼트': { type: '프리웨이트', part: '하체', target: '대퇴사두근', imageUrl: 'https://i.postimg.cc/qRHgbwGk/peulonteuseukwoteu.webp', description: `1. 어깨보다 살짝 낮은 위치에 바벨 거치해주고, 전면 삼각근 위에 바벨 올려주기\n2. 양손이 반대쪽 어깨에 가도록 올리고 팔꿈치 들어주기\n3. 고개들고 상체 세워서 앉았다가 일어서주기`, youtube: '', insta: '' },
-    '바이킹프레스': { type: '머신', part: '어깨', target: '전면, 측면 삼각근', imageUrl: 'https://i.postimg.cc/HnS05FC1/baikingpeuleseu.jpg', description: `1. 어깨 높이로 손잡이가 오도록 레버로 조절해주기\n2. 손에 힘을 뺀 상태로 어깨 넓이로 손잡이 잡고, 골반 넓이로 서주기\n3. 둔근에 힘 준 상태로 가슴 내밀면서 내렸다가 정수리 위로 밀어주기`, youtube: 'https://youtube.com/shorts/v0zvErO7bS8?si=MuGacjQaLqvBK1m3', insta: 'https://www.instagram.com/reel/DVF89peE7iS/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==' },
-    '숄더프레스': { type: '머신', part: '어깨', target: '전면, 측면 삼각근', imageUrl: 'https://i.postimg.cc/qvKnMNqm/syoldyeopeuleseu.jpg', description: `1. 어깨 높이에 손잡이가 오도록 의자 높이 조절해주기\n2. 허리 붙여 앉아서 손잡이 손에 힘 빼고 잡아주기\n3. 어깨는 내린 상태로 손잡이 귀까지 내렸다가 수직으로 밀어주기`, youtube: '', insta: '' },
-    '케이블업라이트로우': { type: '머신', part: '어깨', target: '측면 삼각근', imageUrl: 'https://i.postimg.cc/KYyTKmgt/keibeul-eoblaiteu-lou.webp', description: `1. 케이블 맨 아래에 바 걸고 넓게 잡아주기\n2. 몸통 세운 후 팔꿈치를 옆으로 올린다는 느낌으로 올려주기\n3. 손원은 팔꿈치보다 아래 있어야 되고, 바와 몸통 사이에 주먹 하나 공간 만들어주기`, youtube: '', insta: '' },
-    '덤벨숄더프레스': { type: '프리웨이트', part: '어깨', target: '전·측면 삼각근', imageUrl: 'https://i.postimg.cc/rmfRYWZj/deombel-syoldeopeuleseu.webp', description: `1. 벤치를 세워서 허리 붙이고 앉아주기\n2. 손에 힘 뺀 상태로 덤벨 잡고, 귀에서 머리 위로 밀어주기\n3. 덤벨의 움직임은 수직 궤적으로 만들어주기`, youtube: '', insta: '' },
-    '덤벨 프론트레이즈': { type: '프리웨이트', part: '어깨', target: '전면 삼각근', imageUrl: 'https://i.postimg.cc/XJYpFqNN/deombel-peulonteuleijeu.webp', description: `1. 손등이 하늘로 가게 덤벨 잡고 상체 숙여서 서기\n2. 손이 턱 높이까지 가도록 앞으로 밀듯 올려주기\n3. 이완 시 허벅지에 손이 닿지 않게 천천히 내려주기`, youtube: '', insta: '' },
-    '벤트오버레터럴레이즈': { type: '프리웨이트', part: '어깨', target: '후면 삼각근', imageUrl: 'https://i.postimg.cc/X7CX9TWZ/benteuobeoleteoleolleijeu.webp', description: `1. 발을 앞으로 뻗어 공간 만들어 앉아주기\n2. 팔꿈치가 옆을 보게 살짝 돌린 후 덤벨 잡고 상체 말아 숙여주기\n3. 등이 접히지 않게 팔꿈치를 옆으로 민다는 느낌으로 덤벨 옆으로 보내주기`, youtube: '', insta: '' },
-    '사이드레터럴레이즈': { type: '프리웨이트', part: '어깨', target: '측면 삼각근', imageUrl: 'https://i.postimg.cc/qvcR5yz2/saideuleteoleolleijeu.webp', description: `1. 상·하지·체간 안정화 시킨 후 덤벨이 허벅지 옆에 오도록 잡고 서주기\n2. 자세를 유지한 상태로 팔꿈치를 올려서 옆으로 나란히 해주기\n3. 이완 시 손이 허벅지에 닿지 않게 내려주기`, youtube: '', insta: '' },
-    '아놀드프레스': { type: '프리웨이트', part: '어깨', target: '전면 삼각근', imageUrl: 'https://i.postimg.cc/MTHpHLtT/anoldeupeuleseu.jpg', description: `1. 손등이 앞을 보게 덤벨 잡고 앉아주기\n2. 손에 힘 빼고 이마 높이까지 수직으로 밀어주고, 바깥쪽으로 돌리면서 머리 위로 밀어주기\n3. 이완 시 다시 원위치로 돌아오면서 턱 높이까지 내려주기`, youtube: '', insta: '' },
-    '업라이트 로우': { type: '프리웨이트', part: '어깨', target: '측면 삼각근', imageUrl: 'https://i.postimg.cc/PNsX65HP/eoblaiteu-lou.webp', description: `1. 어깨 넓이로 이지바 잡기\n2. 시선 정면, 가슴 들어 서서 몸통 고정\n3. 팔꿈치가 어깨 높이까지 오도록 팔꿈치를 든다는 느낌으로 올려주기\n4. 몸통과 바 사이는 주먹 하나 띄워주기`, youtube: '', insta: '' },
-    '오버헤드프레스': { type: '프리웨이트', part: '어깨', target: '전면, 측면 삼각근', imageUrl: 'https://i.postimg.cc/Z5m3nTNB/obeohedeupeuleseu.webp', description: `1. 바벨이 쇄골보다 아래로 가게 거치해주기\n2. 어깨 넓이로 바벨 손에 힘 뺀 상태로 잡아주기\n3. 상·하지·체간이 안정화가 되도록 세팅 후 턱에서 정수리 위로 밀어주기`, youtube: '', insta: '' },
-    '케이블컬': { type: '머신', part: '팔', target: '이두근', imageUrl: 'https://i.postimg.cc/jd0n3sZP/keibeulkeol.jpg', description: `1. 케이블 맨 아래에 바 걸고 넓게 잡아주기\n2. 가슴 들고 너무 뒤로 가지 않고 바로 앞에 서서 팔꿈치 고정 후 위쪽으로 당겨주기\n3. 이완 시 손이 허벅지에 닿지 않게 천천히 내려주기`, youtube: '', insta: '' },
-    '푸쉬다운': { type: '머신', part: '팔', target: '삼두근', imageUrl: 'https://i.postimg.cc/qq8qH3jW/puswidaun.webp', description: `1. 케이블에 로프나 바를, 키보다 살짝 높게 걸어주기\n2. 힙힌지 만든 상태로 로프나 바를 잡고 상체 살짝 숙여서 서기\n3. 팔꿈치를 옆구리보다 살짝 앞쪽에 고정 후 손이 아래로 가도록 팔꿈치 펴주기`, youtube: '', insta: '' },
-    '덤벨 오버헤드익스': { type: '프리웨이트', part: '팔', target: '삼두근', imageUrl: 'https://i.postimg.cc/wTQMWDtk/deombel-obeohedeu-igseu.jpg', description: `1. 상체가 누워지지 않게 앉아서 덤벨이 머리 뒤로 가도록 받쳐 잡아주기\n2. 팔꿈치 모아주면서 머리 뒤로 내렸다가 수직으로 밀어주기\n3. 팔꿈치가 벌어지거나 앞뒤로 움직이지 않게 주의해주기`, youtube: '', insta: '' },
-    '덤벨킥백': { type: '프리웨이트', part: '팔', target: '삼두근', imageUrl: 'https://i.postimg.cc/1zfz5TvN/deombel-kigbaeg.webp', description: `1. 덤벨 잡고 상체 살짝 숙여서 서기\n2. 가슴들고, 팔꿈치 살짝 위로 올려서 고정 후 팔꿈치 펴주기\n3. 팔꿈치가 위·아래로 흔들리지 않게 주의해주기`, youtube: 'https://youtube.com/shorts/MmlSWo8he6E?si=EztIv2cYQiDFwelb', insta: 'https://www.instagram.com/reel/DVN3cn4E0cM/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==' },
-    '덤벨컬': { type: '프리웨이트', part: '팔', target: '이두근', imageUrl: 'https://i.postimg.cc/4ybfSTx2/deombelkeol.jpg', description: `1. 손등이 몸통 쪽으로 오게끔 덤벨 잡고, 골반 넓이로 가슴 들고 서주기\n2. 팔꿈치는 몸통보다 살짝 앞에 고정 후 덤벨을 수평을 만든 상태로 운동 진행해주기\n3. 이완 시 삼두를 다 펴준다는 느낌으로 이완시켜주기`, youtube: '', insta: '' },
-    '라잉 트라이셉스 익스텐션': { type: '프리웨이트', part: '팔', target: '삼두근', imageUrl: 'https://i.postimg.cc/c40486D6/laing.jpg', description: `1. 이지바 안쪽 매끈한 부분 잡고, 하늘보고 누워주기\n2. 이지바가 얼굴이 아닌 이마 쪽으로 가게 보내주기\n3. 팔꿈치 고정 후 손목 말아주면서 이마 쪽으로 내렸다가 이지바가 수직으로 가도록 팔꿈치 펴주기`, youtube: '', insta: '' },
-    '리버스컬': { type: '프리웨이트', part: '팔', target: '전완근', imageUrl: 'https://i.postimg.cc/VkHYTgzy/libeoseukeol.jpg', description: `1. 오버그립으로 이지바 잡기\n2. 팔꿈치끼리 만난다는 느낌으로 모으면서 당겨주기\n3. 천천히 팔 펴서 전완근 늘려주기`, youtube: '', insta: '' },
-    '바벨컬': { type: '프리웨이트', part: '팔', target: '이두근', imageUrl: 'https://i.postimg.cc/fbGMWbtT/babelkeol.jpg', description: `1. 본인에 체형에 맞게 그립의 넓이를 설정하기\n2. 가슴들고 서서 바벨을 위로 올리듯 당겨주기\n3. 팔꿈치가 과하게 움직이지 않게 조절해주기`, youtube: '', insta: '' },
-    '해머컬': { type: '프리웨이트', part: '팔', target: '상완근', imageUrl: 'https://i.postimg.cc/SNgq2d2T/haemeokeol.jpg', description: `1. 뉴트럴그립으로 덤벨 잡고, 손목 살짝 세운 상태로 팔꿈치 고정 후 손이 안쪽으로 오게 팔 접어주기\n2. 어깨 눌러서 어깨가 올라가지 않게 잡아주기\n3. 손을 앞으로 들어서 팔을 접기보단 손이 안쪽으로 가도록 팔을 접어주기`, youtube: '', insta: '' },
-    '레그레이즈': { type: '프리웨이트', part: '복부', target: '복직근', imageUrl: 'https://i.postimg.cc/138B0Rt7/legeuleijeu.jpg', description: `1. 벤치에 누워서 머리 옆쪽 벤치를 손으로 잡아서 몸통 고정시켜주기\n2. 다리 펴서 발가락 눕힌 후 호흡 마시면서 몸통이 가로가 되도록 내려주기\n3. 다리를 올릴 땐 복부를 말아주면서 다리를 머리 뒤쪽이 아닌 위로 보내주기`, youtube: '', insta: '' },
-    '크런치': { type: '프리웨이트', part: '복부', target: '복직근', imageUrl: 'https://i.postimg.cc/MGRY4s1t/keuleonchi.jpg', description: `1. 발바닥이 바닥에 닿게 다리 구부리고 바닥에 하늘보고 누워주기\n2. 시선은 정면, 손으로 허벅지 쓸어 무릎까지 올려주기\n3. 고개를 숙이면 목이 아플 수 있으니 시선 처리 잘 해주기`, youtube: '', insta: '' }
+button{
+padding:10px 14px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.card{
+background:#1e1e1e;
+margin:12px;
+padding:14px;
+border-radius:12px;
+}
+
+.youtube-btn{
+background:#ff0000;
+color:white;
+margin-top:8px;
+}
+
+.info-btn{
+background:#444;
+margin-top:8px;
+}
+
+.fav{
+cursor:pointer;
+font-size:20px;
+margin-right:8px;
+}
+
+#installBox{
+position:fixed;
+bottom:20px;
+left:50%;
+transform:translateX(-50%);
+background:#222;
+padding:12px 16px;
+border-radius:12px;
+display:none;
+z-index:9999;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>💪 준호쌤 운동 앱</h1>
+
+<input id="searchInput" placeholder="운동 검색">
+
+</header>
+
+<nav>
+
+<button onclick="showPage('exercise')">운동</button>
+<button onclick="showPage('info')">정보</button>
+<button onclick="showFavorites()">⭐ 즐겨찾기</button>
+
+</nav>
+
+<div id="content"></div>
+
+<div id="installBox">
+📱 홈 화면에 설치하기
+<button id="installBtn">설치</button>
+</div>
+
+<script>
+
+const exercises=[
+
+{
+name:"스쿼트",
+video:"https://www.youtube.com/watch?v=aclHkVaku9U",
+desc:"하체 전반 강화"
+},
+
+{
+name:"푸쉬업",
+video:"https://www.youtube.com/watch?v=IODxDxX7oi4",
+desc:"가슴 삼두 강화"
+},
+
+{
+name:"플랭크",
+video:"https://www.youtube.com/watch?v=pSHjTRCQxIw",
+desc:"코어 강화"
+}
+
+];
+
+const infoLinks=[
+
+{
+text:"박준호 선생님 유튜브 채널",
+url:"https://youtube.com/channel/UCLQI9kOHxRCMwEHcx8M3nOA"
+}
+
+];
+
+let favorites=JSON.parse(localStorage.getItem("favs"))||[];
+
+const content=document.getElementById("content");
+const searchInput=document.getElementById("searchInput");
+
+function showPage(page){
+
+content.innerHTML="";
+
+if(page==="exercise"){
+renderExercises();
+}else{
+renderInfo();
+}
+
+}
+
+function renderExercises(term=""){
+
+content.innerHTML="";
+
+let list=exercises;
+
+if(term){
+
+const t=term.toLowerCase();
+
+list=exercises.filter(e=>
+e.name.toLowerCase().includes(t)
+);
+
+}
+
+list.forEach(e=>{
+
+const fav=favorites.includes(e.name);
+
+const div=document.createElement("div");
+div.className="card";
+
+div.innerHTML=`
+
+<div>
+<span class="fav" onclick="toggleFav('${e.name}')">
+${fav?"⭐":"☆"}
+</span>
+<strong>${e.name}</strong>
+</div>
+
+<p>${e.desc}</p>
+
+<button class="youtube-btn"
+onclick="openYoutube('${e.video}')">
+운동 영상 보기
+</button>
+
+`;
+
+content.appendChild(div);
+
+});
+
+}
+
+function renderInfo(){
+
+content.innerHTML="";
+
+infoLinks.forEach(link=>{
+
+const div=document.createElement("div");
+div.className="card";
+
+div.innerHTML=`
+
+<h3>${link.text}</h3>
+
+<button class="info-btn"
+onclick="openChannel('${link.url}')">
+
+채널 열기
+
+</button>
+
+`;
+
+content.appendChild(div);
+
+});
+
+}
+
+function showFavorites(){
+
+content.innerHTML="";
+
+const list=exercises.filter(e=>
+favorites.includes(e.name)
+);
+
+list.forEach(e=>{
+
+const div=document.createElement("div");
+div.className="card";
+
+div.innerHTML=`
+
+<strong>${e.name}</strong>
+
+<p>${e.desc}</p>
+
+<button class="youtube-btn"
+onclick="openYoutube('${e.video}')">
+운동 영상 보기
+</button>
+
+`;
+
+content.appendChild(div);
+
+});
+
+}
+
+function toggleFav(name){
+
+if(favorites.includes(name)){
+favorites=favorites.filter(f=>f!==name);
+}else{
+favorites.push(name);
+}
+
+localStorage.setItem("favs",JSON.stringify(favorites));
+
+renderExercises();
+
+}
+
+function openYoutube(url){
+
+const appUrl=url.replace("https://www.youtube.com","vnd.youtube://");
+
+window.location.href=appUrl;
+
+setTimeout(()=>{
+window.open(url,"_blank");
+},500);
+
+}
+
+function openChannel(url){
+
+const appUrl=url.replace("https://youtube.com","vnd.youtube://");
+
+window.location.href=appUrl;
+
+setTimeout(()=>{
+window.open(url,"_blank");
+},500);
+
+}
+
+searchInput.oninput=(e)=>{
+renderExercises(e.target.value);
 };
 
-let currentType='', currentPart=''; 
-const typeTabs=document.getElementById('type-tabs'), partTabs=document.getElementById('part-tabs'), content=document.getElementById('content'), searchWrapper=document.getElementById('search-wrapper'), searchInput = document.getElementById('search-input');
+showPage("exercise");
 
-function renderTypeTabs(){  
-  typeTabs.innerHTML=''; 
-  const types=['프리웨이트','머신', '유산소', '검색', '즐겨찾기']; 
-  types.forEach(t=>{  
-    const btn=document.createElement('button'); btn.className='subtab';  
-    if(t==='검색'){
-      btn.innerHTML=`<svg width='16' height='16' viewBox='0 0 24 24' stroke='white' fill='none' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><line x1='21' y1='21' x2='16.65' y2='16.65'/></svg>`;
-      btn.onclick=()=>{
-        Array.from(typeTabs.children).forEach(x=>x.classList.remove('active')); btn.classList.add('active');  
-        currentType='ALL_SEARCH'; currentPart=''; searchWrapper.classList.add('active');
-        searchInput.value = ''; content.innerHTML=''; partTabs.classList.add('hidden');
-        document.getElementById('blurOverlay').style.opacity='1'; setTimeout(() => { searchInput.focus(); renderMoves(); }, 10);
-      };
-    } else if(t==='즐겨찾기'){
-      btn.innerHTML=`<span style="color:#FFD700; font-size:1.2rem;">★</span>`;
-      btn.onclick=()=>{
-        Array.from(typeTabs.children).forEach(x=>x.classList.remove('active')); btn.classList.add('active');  
-        currentType='FAVORITE'; currentPart=''; searchWrapper.classList.remove('active');
-        content.innerHTML=''; partTabs.classList.add('hidden');
-        document.getElementById('blurOverlay').style.opacity='1'; renderMoves();
-      };
-    } else { 
-        btn.textContent=t; btn.onclick=()=>{ Array.from(typeTabs.children).forEach(x=>x.classList.remove('active')); btn.classList.add('active'); content.innerHTML=''; currentPart=''; searchInput.value = ''; currentType=t; searchWrapper.classList.remove('active'); renderPartTabs(); };  
-    }
-    typeTabs.appendChild(btn);  
-  });  
-  typeTabs.classList.remove('hidden'); 
-}  
-  
-function renderPartTabs(){  
-  partTabs.innerHTML=''; if(!currentType) return; 
-  const parts = [...new Set(Object.values(exerciseMaster).filter(ex => ex.type === currentType).map(ex => ex.part))];
-  parts.forEach(p=>{  
-    const btn=document.createElement('button'); btn.className='subtab'; btn.textContent=p;  
-    btn.onclick=()=>{ Array.from(partTabs.children).forEach(x=>x.classList.remove('active')); btn.classList.add('active'); currentPart=p; renderMoves(); };  
-    partTabs.appendChild(btn);  
-  });
-  partTabs.classList.remove('hidden'); 
-}  
-
-function renderMoves(searchTerm = '') {  
-  content.innerHTML = ''; 
-  let moves = [];
-  if (currentType === 'ALL_SEARCH') {
-      moves = Object.keys(exerciseMaster).filter(m => m.toLowerCase().includes(searchTerm.toLowerCase()));
-      moves.sort((a,b) => a.localeCompare(b, 'ko'));
-  } else if (currentType === 'FAVORITE') {
-      moves = favorites;
-      if(moves.length === 0) { content.innerHTML = '<div style="text-align:center; padding:40px; color:#888;">즐겨찾기한 운동이 없습니다.<br>운동 제목 옆의 별(☆)을 눌러보세요!</div>'; return; }
-  } else if (currentType && currentPart) {
-      moves = Object.keys(exerciseMaster).filter(m => exerciseMaster[m].type === currentType && exerciseMaster[m].part === currentPart);
-  } else return;
-
-  moves.forEach(moveName => {
-    const data = exerciseMaster[moveName];
-    if(!data) return;
-    const isFav = favorites.includes(moveName);
-    const cardWrapper = document.createElement('div'); cardWrapper.className = 'accordion-card-wrapper';
-    const header = document.createElement('div'); header.className = 'accordion-header';
-    // [수정 부분] onclick 이벤트를 openApp으로 변경
-    header.innerHTML = `
-        <div style="display:flex; align-items:center; flex:1; min-width:0;">
-            <span class="fav-star ${isFav?'on':''}" onclick="toggleFavorite(event, '${moveName}')">${isFav?'★':'☆'}</span>
-            <div style="font-size:1.0rem; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${moveName}</div>
-        </div>
-        <div style="display:flex; align-items:center; gap:12px; margin-right:8px;">
-            <div class="link-yt" onclick="event.stopPropagation(); openApp('${data.youtube}', 'youtube')" style="display:flex; align-items:center; cursor:pointer;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" style="width:22px;">
-            </div>
-            <div class="link-ig" onclick="event.stopPropagation(); openApp('${data.insta}', 'insta')" style="display:flex; align-items:center; cursor:pointer;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" style="width:18px;">
-            </div>
-        </div>
-        <img class="accordion-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>">`;
-    
-    const contentBody = document.createElement('div'); contentBody.className = 'accordion-content';
-    contentBody.innerHTML = `<div class="vertical-move-details"><div class="grid-left-visual-with-box">${data.imageUrl ? `<img src="${data.imageUrl}" class="move-image">` : `<div style="background:#444; min-height:100px; border-radius:6px; display:flex; justify-content:center; align-items:center; font-size:0.8rem; color:#aaa;">이미지 준비중</div>`}</div><div class="grid-right-info"><div class="target-muscle-box"><span class="target-label">주요 타겟 근육</span><strong class="target-value">${data.target}</strong></div><div class="move-description">${data.description || '정보가 없습니다.'}</div></div></div>`;
-    
-    header.onclick = () => { const isOpen = contentBody.classList.contains('open'); document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('open')); document.querySelectorAll('.accordion-icon').forEach(i => i.classList.remove('rotated')); if(!isOpen) { contentBody.classList.add('open'); header.querySelector('.accordion-icon').classList.add('rotated'); } };
-    cardWrapper.appendChild(header); cardWrapper.appendChild(contentBody); content.appendChild(cardWrapper);
-  });
+if("serviceWorker" in navigator){
+navigator.serviceWorker.register("service-worker.js");
 }
 
-searchInput.oninput=()=>renderMoves(searchInput.value.trim());
-document.getElementById('tab-videos').onclick=()=>{ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('tab-videos').classList.add('active'); currentType = ''; currentPart = ''; renderTypeTabs(); partTabs.classList.add('hidden'); searchWrapper.classList.remove('active'); content.innerHTML=''; document.getElementById('blurOverlay').style.opacity='1'; };
-document.getElementById('tab-info').onclick=()=>{ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('tab-info').classList.add('active'); typeTabs.classList.add('hidden'); partTabs.classList.add('hidden'); searchWrapper.classList.remove('active'); renderInfoContent(); document.getElementById('blurOverlay').style.opacity='1'; };
+let deferredPrompt;
 
-// [수정 부분] 정보 탭에서도 앱으로 열기 적용
-function renderInfoContent(){  
-  const info=[ 
-    { text:'박준호선생님 블로그', url:'https://www.jungho-park.com/', icon:'https://i.postimg.cc/hj2NGBJ9/Screenshot-20251116-221434-Samsung-Internet.jpg', type:'web' }, 
-    { text:'박준호선생님 카카오톡', url:'http://pf.kakao.com/_xomZzn', icon:'https://upload.wikimedia.org/wikipedia/commons/e/e3/KakaoTalk_logo.svg', type:'web' }, 
-    { text:'박준호선생님 유튜브채널', url:'https://youtube.com/channel/UCLQI9kOHxRCMwEHcx8M3nOA?si=3n61bFLvA1ACk1aE', icon:'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg', type:'youtube' }, 
-    { text:'박준호선생님 인스타그램', url:'https://www.instagram.com/jun_ho910', icon:'https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg', type:'insta' } 
-  ];  
-  
-  content.innerHTML = ''; 
-  info.forEach(item => { 
-    const card = document.createElement('div'); 
-    card.className = 'info-card'; 
-    // 아이템 타입에 따라 openApp 호출
-    card.onclick = () => {
-        if(item.type === 'web') window.open(item.url, '_blank');
-        else openApp(item.url, item.type);
-    };
-    card.innerHTML = `<img src="${item.icon}" style="width:20px; margin-right:10px;"> ${item.text}`; 
-    content.appendChild(card); 
-  });
+window.addEventListener("beforeinstallprompt",(e)=>{
+
+e.preventDefault();
+
+deferredPrompt=e;
+
+document.getElementById("installBox").style.display="block";
+
+});
+
+document.getElementById("installBtn").onclick=async()=>{
+
+document.getElementById("installBox").style.display="none";
+
+if(deferredPrompt){
+
+deferredPrompt.prompt();
+
+await deferredPrompt.userChoice;
+
+deferredPrompt=null;
+
 }
-document.addEventListener('DOMContentLoaded', setViewportHeight);
+
+};
+
 </script>
+
 </body>
 </html>
