@@ -1,354 +1,162 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>준호쌤 운동 강의</title>
 
-<link rel="manifest" href="./manifest.json">
-
+<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#000000">
 
 <style>
+body{margin:0;font-family:sans-serif;background:#f5f5f5;padding-bottom:80px}
 
-body{
-margin:0;
-font-family:system-ui;
-background:#111;
-color:white;
-padding-bottom:70px;
-}
+.app-header{position:sticky;top:0;background:white;padding:10px;box-shadow:0 2px 10px rgba(0,0,0,0.1);z-index:1000}
+.app-title{text-align:center;font-weight:bold;font-size:20px;margin-bottom:10px}
 
-header{
-text-align:center;
-padding:20px;
-font-size:22px;
-font-weight:bold;
-background:#000;
-}
+.filter-bar{display:flex;gap:8px;overflow-x:auto}
+.filter-bar button{border:none;background:#eee;padding:8px 12px;border-radius:20px;font-size:13px}
 
-#search{
-width:85%;
-padding:10px;
-border-radius:10px;
-border:none;
-margin-top:10px;
-}
+.video-list{padding:10px}
+.video-card{background:white;margin-bottom:10px;border-radius:12px;overflow:hidden;box-shadow:0 3px 10px rgba(0,0,0,0.1)}
+.video-card iframe{width:100%;height:200px;border:none}
+.video-card .title{padding:10px;font-size:14px}
 
-.card{
-background:#1e1e1e;
-margin:12px;
-padding:14px;
-border-radius:12px;
-}
+.bottom-nav{position:fixed;bottom:0;width:100%;background:#000;display:flex;justify-content:space-around;padding:10px 0}
+.bottom-nav button{background:none;border:none;color:white;font-size:13px}
 
-.card img{
-width:100%;
-border-radius:10px;
-}
-
-.youtube{
-background:#ff0000;
-color:white;
-margin-top:10px;
-padding:10px;
-border:none;
-border-radius:8px;
-width:100%;
-}
-
-#bottomNav{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:#000;
-display:flex;
-justify-content:space-around;
-padding:10px 0;
-}
-
-#bottomNav button{
-background:none;
-border:none;
-color:white;
-font-size:14px;
-}
-
-.installPopup{
-position:fixed;
-bottom:20px;
-left:50%;
-transform:translateX(-50%);
-background:#222;
-padding:16px;
-border-radius:12px;
-z-index:9999;
-font-size:14px;
-}
-
+.install-btn{position:fixed;right:20px;bottom:90px;background:#ff3b30;color:white;border:none;padding:14px 18px;border-radius:30px;font-size:14px;box-shadow:0 8px 20px rgba(0,0,0,0.3)}
 </style>
 
 </head>
 
 <body>
 
-<header>
+<header class="app-header">
+<div class="app-title">💪 준호쌤 운동 강의</div>
 
-💪 준호쌤 운동 강의
-
-<br>
-
-<input id="search" placeholder="운동 검색">
-
+<div class="filter-bar">
+<button onclick="filter('all')">전체</button>
+<button onclick="filter('상체')">상체</button>
+<button onclick="filter('하체')">하체</button>
+<button onclick="filter('코어')">코어</button>
+<button onclick="showFavorites()">⭐ 즐겨찾기</button>
+</div>
 </header>
 
-<div id="content"></div>
+<div class="video-list" id="videoList"></div>
 
-<div id="installPopup" class="installPopup">
+<button id="installBtn" class="install-btn">📱 앱 설치</button>
 
-📱 앱처럼 사용하려면 설치하세요
-
-<br><br>
-
-<div id="installText"></div>
-
-<br>
-
-<button onclick="closeInstall()">닫기</button>
-
-</div>
-
-<div id="bottomNav">
-
-<button onclick="renderExercises()">🏋 운동</button>
-
-<button onclick="renderExercises('상체')">💪 상체</button>
-
-<button onclick="renderExercises('하체')">🦵 하체</button>
-
+<nav class="bottom-nav">
+<button onclick="renderVideos()">🏠 홈</button>
+<button onclick="filter('상체')">💪 상체</button>
+<button onclick="filter('하체')">🦵 하체</button>
 <button onclick="showFavorites()">⭐ 즐겨찾기</button>
-
 <button onclick="showInfo()">ℹ 정보</button>
-
-</div>
+</nav>
 
 <script>
 
-const exercises=[
-
-{name:"스쿼트",video:"aclHkVaku9U",part:"하체"},
-{name:"푸쉬업",video:"IODxDxX7oi4",part:"상체"},
-{name:"플랭크",video:"pSHjTRCQxIw",part:"코어"}
-
+const videos=[
+{title:"상체 운동1",type:"상체",id:"dQw4w9WgXcQ"},
+{title:"하체 운동1",type:"하체",id:"ysz5S6PUM-U"},
+{title:"코어 운동1",type:"코어",id:"UItWltVZZmE"}
 ];
 
-let favorites=JSON.parse(localStorage.getItem("fav"))||[];
+function renderVideos(list=videos){
 
-function renderExercises(filter="전체",search=""){
+const container=document.getElementById("videoList");
 
-let list=exercises;
+container.innerHTML="";
 
-if(filter!=="전체"){
-list=list.filter(e=>e.part===filter);
-}
+list.forEach(v=>{
 
-if(search){
-list=list.filter(e=>e.name.includes(search));
-}
-
-const content=document.getElementById("content");
-
-content.innerHTML="";
-
-list.forEach(e=>{
-
-const thumb=`https://img.youtube.com/vi/${e.video}/0.jpg`;
-
-const fav=favorites.includes(e.name)?"⭐":"☆";
-
-content.innerHTML+=`
-
-<div class="card">
-
-<h3>
-
-<span onclick="toggleFav('${e.name}')">${fav}</span>
-
-${e.name}
-
-</h3>
-
-<p>${e.part}</p>
-
-<img src="${thumb}">
-
-<button class="youtube" onclick="openYoutube('${e.video}')">
-
-운동 영상 보기
-
-</button>
-
+container.innerHTML+=`
+<div class="video-card">
+<iframe src="https://www.youtube.com/embed/${v.id}" allowfullscreen></iframe>
+<div class="title">${v.title}
+<button onclick="toggleFavorite('${v.id}')">⭐</button>
 </div>
-
-`;
+</div>`;
 
 });
 
 }
 
-function toggleFav(name){
+function filter(type){
 
-if(favorites.includes(name)){
-favorites=favorites.filter(f=>f!==name);
-}else{
-favorites.push(name);
+if(type==='all'){
+renderVideos();
+return;
 }
 
-localStorage.setItem("fav",JSON.stringify(favorites));
+const filtered=videos.filter(v=>v.type===type);
 
-renderExercises();
+renderVideos(filtered);
+
+}
+
+function toggleFavorite(id){
+
+let fav=JSON.parse(localStorage.getItem("favorites")||"[]");
+
+if(fav.includes(id)){
+
+fav=fav.filter(v=>v!==id);
+
+}else{
+
+fav.push(id);
+
+}
+
+localStorage.setItem("favorites",JSON.stringify(fav));
 
 }
 
 function showFavorites(){
 
-const list=exercises.filter(e=>favorites.includes(e.name));
+const fav=JSON.parse(localStorage.getItem("favorites")||"[]");
 
-const content=document.getElementById("content");
+const filtered=videos.filter(v=>fav.includes(v.id));
 
-content.innerHTML="";
-
-list.forEach(e=>{
-
-const thumb=`https://img.youtube.com/vi/${e.video}/0.jpg`;
-
-content.innerHTML+=`
-
-<div class="card">
-
-<h3>${e.name}</h3>
-
-<img src="${thumb}">
-
-<button class="youtube" onclick="openYoutube('${e.video}')">
-
-운동 영상 보기
-
-</button>
-
-</div>
-
-`;
-
-});
+renderVideos(filtered);
 
 }
 
 function showInfo(){
-
-document.getElementById("content").innerHTML=`
-
-<div class="card">
-
-<h3>박준호 선생님 유튜브 채널</h3>
-
-<button class="youtube" onclick="openChannel()">
-
-채널 열기
-
-</button>
-
-</div>
-
-`;
-
+alert("준호쌤 운동 강의 앱");
 }
 
-function openYoutube(id){
+renderVideos();
 
-const url=`https://www.youtube.com/watch?v=${id}`;
+let deferredPrompt;
 
-window.location.href=`vnd.youtube://${id}`;
+window.addEventListener("beforeinstallprompt",e=>{
+e.preventDefault();
+deferredPrompt=e;
+});
 
-setTimeout(()=>{
+installBtn.onclick=async()=>{
 
-window.open(url,"_blank");
+if(deferredPrompt){
 
-},500);
+deferredPrompt.prompt();
 
-}
+await deferredPrompt.userChoice;
 
-function openChannel(){
+}else{
 
-const url="https://youtube.com/channel/UCLQI9kOHxRCMwEHcx8M3nOA";
-
-window.location.href="vnd.youtube://channel/UCLQI9kOHxRCMwEHcx8M3nOA";
-
-setTimeout(()=>{
-
-window.open(url,"_blank");
-
-},500);
+alert("브라우저 메뉴 → 홈 화면에 추가 선택하세요.");
 
 }
-
-document.getElementById("search").oninput=(e)=>{
-
-renderExercises("전체",e.target.value);
 
 };
 
-function detectBrowser(){
-
-const ua=navigator.userAgent.toLowerCase();
-
-let text="";
-
-if(ua.includes("kakaotalk")||ua.includes("naver")){
-
-text="카카오/네이버 브라우저입니다.<br><br>Chrome에서 열면 설치할 수 있습니다.";
-
-}
-
-else if(ua.includes("samsung")){
-
-text="Samsung Internet → 메뉴 ☰ → 홈 화면에 추가";
-
-}
-
-else if(ua.includes("chrome")){
-
-text="Chrome → 메뉴 ⋮ → 홈 화면에 추가";
-
-}
-
-else if(ua.includes("safari")){
-
-text="Safari → 공유 → 홈 화면에 추가";
-
-}
-
-document.getElementById("installText").innerHTML=text;
-
-}
-
-function closeInstall(){
-
-document.getElementById("installPopup").style.display="none";
-
-}
-
-detectBrowser();
-
-renderExercises();
-
 if("serviceWorker" in navigator){
 
-navigator.serviceWorker.register("./service-worker.js");
+navigator.serviceWorker.register("sw.js");
 
 }
 
