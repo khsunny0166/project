@@ -1,8 +1,8 @@
-const CACHE="workout-app";
+const CACHE="junho-workout-app";
 
-self.addEventListener("install",e=>{
+self.addEventListener("install",event=>{
 
-e.waitUntil(
+event.waitUntil(
 
 caches.open(CACHE).then(cache=>{
 
@@ -17,13 +17,13 @@ return cache.addAll([
 
 });
 
-self.addEventListener("fetch",e=>{
+self.addEventListener("fetch",event=>{
 
-e.respondWith(
+event.respondWith(
 
-caches.match(e.request).then(res=>{
+caches.match(event.request).then(response=>{
 
-return res || fetch(e.request);
+return response || fetch(event.request);
 
 })
 
