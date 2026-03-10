@@ -1,32 +1,11 @@
-const CACHE="junho-workout-app";
+const CACHE="workout-app-v1";
 
-self.addEventListener("install",event=>{
+self.addEventListener("install",e=>{
 
-event.waitUntil(
-
-caches.open(CACHE).then(cache=>{
-
-return cache.addAll([
-"/project/",
-"/project/index.html"
-]);
-
-})
-
-);
+self.skipWaiting();
 
 });
 
-self.addEventListener("fetch",event=>{
-
-event.respondWith(
-
-caches.match(event.request).then(response=>{
-
-return response || fetch(event.request);
-
-})
-
-);
+self.addEventListener("fetch",e=>{
 
 });
