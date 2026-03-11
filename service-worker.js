@@ -1,5 +1,7 @@
+// sw.js (이 파일은 오직 서비스 워커 이벤트만 처리해야 합니다)
 const CACHE_NAME = 'junho-v1';
 const ASSETS = [
+  './', // index.html 대신 경로의 루트를 캐싱
   './index.html',
   './manifest.json'
 ];
@@ -15,11 +17,3 @@ self.addEventListener('fetch', (e) => {
     caches.match(e.request).then((response) => response || fetch(e.request))
   );
 });
-
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => console.log('SW registered'))
-      .catch(err => console.log('SW registration failed', err));
-  });
-}
