@@ -120,7 +120,7 @@ const bannerText = installBanner.querySelector('div');
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
 
 function triggerInstall() {
-    bannerText.innerText = "앱으로 설치해서 더 편하게 보세요!";
+    bannerText.innerText = "📱홈화면 바로가기를 설치해보세요";
     document.getElementById('btn-install').style.display = 'block';
     
     if (deferredPrompt) { 
