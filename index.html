@@ -114,12 +114,23 @@ window.addEventListener('orientationchange', setViewportHeight);
 function hideIntro(){ const intro = document.getElementById('intro'); intro.style.opacity='0'; setTimeout(()=>intro.style.display='none',450); }  
 
 let deferredPrompt;
+const installBanner = document.getElementById('install-banner');
+const bannerText = installBanner.querySelector('div');
+
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
 
 function triggerInstall() {
-    const banner = document.getElementById('install-banner');
-    if (deferredPrompt) { banner.style.bottom = '20px'; } 
-    else { alert('이미 설치되어 있거나 브라우저에서 설치를 지원하지 않습니다.'); }
+    bannerText.innerText = "앱으로 설치해서 더 편하게 보세요!";
+    document.getElementById('btn-install').style.display = 'block';
+    
+    if (deferredPrompt) { 
+        installBanner.style.bottom = '20px'; 
+    } else { 
+        bannerText.innerText = "이미 설치되었거나 지원하지 않는 환경입니다.";
+        document.getElementById('btn-install').style.display = 'none';
+        installBanner.style.bottom = '20px';
+        setTimeout(closeBanner, 3000);
+    }
 }
 
 function closeBanner() { document.getElementById('install-banner').style.bottom = '-100px'; }
@@ -135,7 +146,7 @@ document.getElementById('btn-install').addEventListener('click', () => {
 });
 
 function openApp(url, type) {
-    if (!url) return alert('링크 준비중입니다.');
+    if (!url) return; 
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     if (isMobile) {
         let fallback = setTimeout(() => { window.open(url, '_blank'); }, 1000);
