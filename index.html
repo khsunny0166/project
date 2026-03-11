@@ -4,6 +4,7 @@
 <meta charset="utf-8" />  
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />  
 <title>준호쌤 운동강의</title>  
+<link rel="manifest" href="manifest.json">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800&display=swap" rel="stylesheet">  
 <style>  
 :root{ --accent:#ffffff; --bg-dark:#111; --bg-dark2:#222; --bg-dark3:#444; --text:#fff; --vh: 100vh; }  
@@ -95,25 +96,33 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 </div> 
 
 <script>  
+// 아래 10줄 추가됨 (PWA 등록 및 팝업 이벤트)
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => { navigator.serviceWorker.register('./service-worker.js').catch(() => {}); });
+}
+
 function setViewportHeight() { let vh = window.innerHeight * 0.01; document.documentElement.style.setProperty('--vh', `${vh * 100}px`); }
 window.addEventListener('load', setViewportHeight);
 window.addEventListener('orientationchange', setViewportHeight); 
 
-function hideIntro(){ const intro = document.getElementById('intro'); intro.style.opacity='0'; setTimeout(()=>intro.style.display='none',450); }  
+function hideIntro(){ 
+    const intro = document.getElementById('intro'); 
+    intro.style.opacity='0'; 
+    setTimeout(()=>{
+        intro.style.display='none';
+        // 아래 4줄 추가됨 (인트로 종료 후 설치 팝업 유도)
+        if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => { deferredPrompt = null; }); }
+    },450); 
+}  
 
-// 앱 실행 함수 (수정됨)
 function openApp(url, type) {
     if (!url) return alert('링크 준비중입니다.');
-
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    
     if (isMobile) {
-        // 앱이 없을 경우를 위해 1초 뒤 웹으로 열기 예약
         let fallback = setTimeout(() => { window.open(url, '_blank'); }, 1000);
-        
-        // 포커스가 돌아오면 타이머 취소 (앱이 열렸다는 뜻)
         window.addEventListener('blur', () => clearTimeout(fallback), {once: true});
-        
         window.location.href = url;
     } else {
         window.open(url, '_blank');
@@ -264,7 +273,6 @@ function renderMoves(searchTerm = '') {
     const isFav = favorites.includes(moveName);
     const cardWrapper = document.createElement('div'); cardWrapper.className = 'accordion-card-wrapper';
     const header = document.createElement('div'); header.className = 'accordion-header';
-    // [수정 부분] onclick 이벤트를 openApp으로 변경
     header.innerHTML = `
         <div style="display:flex; align-items:center; flex:1; min-width:0;">
             <span class="fav-star ${isFav?'on':''}" onclick="toggleFavorite(event, '${moveName}')">${isFav?'★':'☆'}</span>
@@ -292,7 +300,6 @@ searchInput.oninput=()=>renderMoves(searchInput.value.trim());
 document.getElementById('tab-videos').onclick=()=>{ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('tab-videos').classList.add('active'); currentType = ''; currentPart = ''; renderTypeTabs(); partTabs.classList.add('hidden'); searchWrapper.classList.remove('active'); content.innerHTML=''; document.getElementById('blurOverlay').style.opacity='1'; };
 document.getElementById('tab-info').onclick=()=>{ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('tab-info').classList.add('active'); typeTabs.classList.add('hidden'); partTabs.classList.add('hidden'); searchWrapper.classList.remove('active'); renderInfoContent(); document.getElementById('blurOverlay').style.opacity='1'; };
 
-// [수정 부분] 정보 탭에서도 앱으로 열기 적용
 function renderInfoContent(){  
   const info=[ 
     { text:'박준호선생님 블로그', url:'https://www.jungho-park.com/', icon:'https://i.postimg.cc/hj2NGBJ9/Screenshot-20251116-221434-Samsung-Internet.jpg', type:'web' }, 
@@ -305,7 +312,6 @@ function renderInfoContent(){
   info.forEach(item => { 
     const card = document.createElement('div'); 
     card.className = 'info-card'; 
-    // 아이템 타입에 따라 openApp 호출
     card.onclick = () => {
         if(item.type === 'web') window.open(item.url, '_blank');
         else openApp(item.url, item.type);
