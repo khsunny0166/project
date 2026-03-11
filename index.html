@@ -1,150 +1,93 @@
-<!DOCTYPE html>  
-<html lang="ko">  
-<head>  
-<meta charset="utf-8" />  
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />  
-<title>준호쌤 운동강의</title>  
-<link rel="manifest" href="manifest.json">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800&display=swap" rel="stylesheet">  
-<style>  
-:root{ --accent:#ffffff; --bg-dark:#111; --bg-dark2:#222; --bg-dark3:#444; --text:#fff; --vh: 100vh; }  
-html { font-size: 14px !important; }
-*{ box-sizing:border-box; }  
-html, body { height: var(--vh); margin: 0; overflow: hidden; }
-body { height: var(--vh); font-family: 'Noto Sans KR', sans-serif; color:var(--text); background-color: var(--bg-dark); position: relative; font-size: 14px !important; line-height: 1.5; }  
-
-.bg-fixed { position: fixed; top: 0; left: 0; bottom: 0; width: 100%; z-index: -2; height: var(--vh); background: url('https://i.postimg.cc/qMnnw9Gt/Screen-Recording-20260116-214823-Cap-Cut.jpg') no-repeat center center / cover; }  
-@media (min-width: 1024px) { .bg-fixed { background: url('https://i.postimg.cc/MZnr6pWQ/Screen-Recording-20260116-221151-Cap-Cut.jpg') no-repeat center center / cover; } }
-
-/* 하단 설치 배너 스타일 */
-#install-banner {
-    position: fixed;
-    bottom: -100px; /* 초기 상태: 화면 아래에 숨김 */
-    left: 20px;
-    right: 20px;
-    background: rgba(40, 40, 40, 0.98);
-    color: #fff;
-    padding: 15px;
-    border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    z-index: 9999;
-    border: 1px solid rgba(255,255,255,0.1);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* 부드러운 등장 */
-    backdrop-filter: blur(10px);
-}
-#install-banner.show { bottom: 20px; }
-.btn-group { display: flex; gap: 8px; }
-.btn-install { background: #fff; color: #000; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
-.btn-close { background: #555; color: #fff; padding: 6px 14px; border-radius: 20px; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
-
-#main-scroll-wrapper { position: absolute; top: 0; bottom: 0; left: 0; right: 0; width: 100%; height: auto; overflow-y: auto; padding: 15px; z-index: 10; }
-#intro{ position:fixed; top:0; left:0; width:100%; height:var(--vh); background:#000; display:flex; justify-content:center; align-items:center; z-index:2000; transition:opacity .45s; }  
-.intro-mobile { display: block; width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
-.intro-desktop { display: none; width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
-@media (min-width: 1024px) { .intro-mobile { display: none; } .intro-desktop { display: block; } }
-
-/* 기존 나머지 레이아웃 스타일 동일 */
-header{ text-align:center; margin-bottom:10px; display:flex; justify-content:center; align-items:center; gap:8px; }  
-header img.logo{ height:40px; } 
-header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }  
-.tabs{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-bottom:10px; }  
-.tab{ background:var(--bg-dark3); color:var(--text); border:none; padding:5px 14px; border-radius:20px; cursor:pointer; font-weight:700; font-size:1rem; transition:all .14s; }  
-.tab.active{ background:#A9A9A9; color:#fff; box-shadow:0 6px 18px rgba(0,0,0,.45); }  
-.subtabs{ display:flex; justify-content:center; gap:6px; flex-wrap:wrap; margin:8px 0; }  
-.subtab{ background:var(--bg-dark2); color:var(--text); border:none; padding:5px 12px; border-radius:14px; cursor:pointer; font-weight:700; font-size:0.95rem; transition:all .12s; display:flex; align-items:center; justify-content:center; gap:4px; }  
-.subtab.active{ background:#A9A9A9; font-weight:800; }  
-#search-wrapper { position: relative; left: 50%; transform: translateX(-50%); z-index: 10; width: 260px; height: 0; overflow: hidden; opacity: 0; pointer-events: none; transition: all 0.2s ease-out; }  
-#search-wrapper.active { opacity: 1; pointer-events: auto; height: 38px; margin-top: 8px; margin-bottom: 4px; }  
-#search-wrapper input { width: 100%; height: 100%; padding: 5px 15px; border-radius: 15px; font-size: 1.1rem; border: 2px solid #A9A9A9; background-color: white; color: #111; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }  
-.fav-star { font-size: 1.3rem; margin-right: 8px; cursor: pointer; color: #555; transition: color 0.2s; }
-.fav-star.on { color: #FFD700; }
-#content{ max-width:380px; margin:8px auto; padding:5px; }  
-.accordion-card-wrapper { margin: 6px 0; border-radius: 10px; overflow: hidden; }
-.accordion-header { background: rgba(128, 128, 128, 0.5); padding: 8px 15px; font-weight: 700; min-height: 42px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-radius: 10px 10px 0 0; }
-.accordion-content { background: var(--bg-dark2); color: var(--text); padding: 0 15px; max-height: 0; overflow: hidden; transition: max-height 0.1s ease-in-out, padding 0.1s ease-in-out; border-radius: 0 0 10px 10px; border-top: 1px solid var(--bg-dark3); }
-.accordion-content.open { max-height: 800px; padding-top: 15px; padding-bottom: 15px; }
-.vertical-move-details { display: grid; grid-template-columns: 35% 65%; gap: 10px; align-items: start; }
-.move-image { width: 100%; height: auto; border-radius: 6px; }
-.target-muscle-box { background: rgba(128, 128, 128, 0.5); padding: 6px; border-radius: 6px; margin-bottom: 8px; text-align: center; }
-.target-label { font-weight: 700; color: #fff; font-size: 0.85rem; display: block; }
-.target-value { color: #ffd700; font-size: 0.95rem; font-weight: 800; display: block; }
-.hidden{ display:none !important; }  
-.fade{ transition:opacity .18s; }  
-.blur-overlay { position: fixed; top: 0; left: 0; bottom: 0; width: 100%; height: var(--vh); backdrop-filter: blur(3px); background: rgba(0,0,0,0.7); z-index: 0; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
-</style>  
-</head>  
-<body>  
-<div class="bg-fixed"></div>  
-<div class="blur-overlay" id="blurOverlay"></div>  
-
-<div id="install-banner">
-    <div style="font-size: 0.9rem; font-weight: 600;">홈 화면에 추가해 보세요!</div>
-    <div class="btn-group">
-        <div class="btn-install" onclick="installApp()">설치</div>
-        <div class="btn-close" onclick="closeBanner()">닫기</div>
-    </div>
-</div>
-
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>준호쌤 운동강의</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root{ --accent:#ffffff; --bg-dark:#111; --bg-dark2:#222; --bg-dark3:#444; --text:#fff; --vh: 100vh; }
+        html { font-size: 14px !important; }
+        *{ box-sizing:border-box; }
+        html, body { height: var(--vh); margin: 0; overflow: hidden; }
+        body { height: var(--vh); font-family: 'Noto Sans KR', sans-serif; color:var(--text); background-color: var(--bg-dark); position: relative; font-size: 14px !important; line-height: 1.5; }
+        .bg-fixed { position: fixed; top: 0; left: 0; bottom: 0; width: 100%; z-index: -2; height: var(--vh); background: url('https://i.postimg.cc/qMnnw9Gt/Screen-Recording-20260116-214823-Cap-Cut.jpg') no-repeat center center / cover; }
+        @media (min-width: 1024px) { .bg-fixed { background: url('https://i.postimg.cc/MZnr6pWQ/Screen-Recording-20260116-221151-Cap-Cut.jpg') no-repeat center center / cover; } }
+        #main-scroll-wrapper { position: absolute; top: 0; bottom: 0; left: 0; right: 0; width: 100%; height: auto; overflow-y: auto; padding: 15px; z-index: 10; }
+        header, .tabs, .subtabs, #content { position: relative; z-index: 1; }
+        .blur-overlay { position: fixed; top: 0; left: 0; bottom: 0; width: 100%; height: var(--vh); backdrop-filter: blur(3px); background: rgba(0,0,0,0.7); z-index: 0; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }
+        #intro{ position:fixed; top:0; left:0; width:100%; height:var(--vh); background:#000; display:flex; justify-content:center; align-items:center; z-index:2000; transition:opacity .45s; }
+        .intro-mobile { display: block; width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        .intro-desktop { display: none; width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
+        @media (min-width: 1024px) { .intro-mobile { display: none; } .intro-desktop { display: block; } }
+        header{ text-align:center; margin-bottom:10px; display:flex; justify-content:center; align-items:center; gap:8px; }
+        header img.logo{ height:40px; }
+        header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
+        .tabs{ display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+        .tab{ background:var(--bg-dark3); color:var(--text); border:none; padding:5px 14px; border-radius:20px; cursor:pointer; font-weight:700; font-size:1rem; transition:all .14s; }
+        .tab.active{ background:#A9A9A9; color:#fff; box-shadow:0 6px 18px rgba(0,0,0,.45); }
+        .subtabs{ display:flex; justify-content:center; gap:6px; flex-wrap:wrap; margin:8px 0; }
+        .subtab{ background:var(--bg-dark2); color:var(--text); border:none; padding:5px 12px; border-radius:14px; cursor:pointer; font-weight:700; font-size:0.95rem; transition:all .12s; display:flex; align-items:center; justify-content:center; gap:4px; }
+        .subtab.active{ background:#A9A9A9; font-weight:800; }
+        #search-wrapper { position: relative; left: 50%; transform: translateX(-50%); z-index: 10; width: 260px; height: 0; overflow: hidden; opacity: 0; pointer-events: none; transition: all 0.2s ease-out; }
+        #search-wrapper.active { opacity: 1; pointer-events: auto; height: 38px; margin-top: 8px; margin-bottom: 4px; }
+        #search-wrapper input { width: 100%; height: 100%; padding: 5px 15px; border-radius: 15px; font-size: 1.1rem; border: 2px solid #A9A9A9; background-color: white; color: #111; outline: none; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .fav-star { font-size: 1.3rem; margin-right: 8px; cursor: pointer; color: #555; transition: color 0.2s; }
+        .fav-star.on { color: #FFD700; }
+        #content{ max-width:380px; margin:8px auto; padding:5px; }
+        .accordion-card-wrapper { margin: 6px 0; border-radius: 10px; overflow: hidden; }
+        .accordion-header { background: rgba(128, 128, 128, 0.5); padding: 8px 15px; font-weight: 700; min-height: 42px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-radius: 10px 10px 0 0; }
+        .accordion-content { background: var(--bg-dark2); color: var(--text); padding: 0 15px; max-height: 0; overflow: hidden; transition: max-height 0.1s ease-in-out, padding 0.1s ease-in-out; border-radius: 0 0 10px 10px; border-top: 1px solid var(--bg-dark3); }
+        .accordion-content.open { max-height: 800px; padding-top: 15px; padding-bottom: 15px; }
+        .vertical-move-details { display: grid; grid-template-columns: 35% 65%; gap: 10px; align-items: start; }
+        .grid-left-visual-with-box img.move-image { width: 100%; height: auto; border-radius: 6px; object-fit: contain; }
+        .move-description { font-size: 0.9rem; line-height: 1.4; white-space: pre-wrap; margin: 0; }
+        .target-muscle-box { background: rgba(128, 128, 128, 0.5); padding: 6px; border-radius: 6px; margin-bottom: 8px; text-align: center; }
+        .target-muscle-box .target-label { font-weight: 700; color: #fff; font-size: 0.85rem; display: block; }
+        .target-muscle-box .target-value { color: #ffd700; font-size: 0.95rem; font-weight: 800; display: block; }
+        .accordion-icon { width: 14px; height: 14px; transition: transform 0.3s; }
+        .accordion-icon.rotated { transform: rotate(180deg); }
+        .info-card{ background:rgba(128, 128, 128, 0.5); border-radius:10px; padding:8px 15px; margin:6px 0; font-weight:700; min-height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+        .hidden{ display:none !important; }
+        .fade{ transition:opacity .18s; }
+    </style>
+</head>
+<body>
+<div class="bg-fixed"></div>
+<div class="blur-overlay" id="blurOverlay"></div>
 <div id="intro" onclick="hideIntro()">
-    <img src="https://i.postimg.cc/WpytQX4x/Screen-Recording-20260116-214823-Cap-Cut-ezgif-com-video-to-gif-converter.gif" class="intro-mobile">
-    <img src="https://i.postimg.cc/xdstQWhc/Screen-Recording-20260116-221151-Cap-Cut-ezgif-com-video-to-gif-converter.gif" class="intro-desktop">
+    <img src="https://i.postimg.cc/WpytQX4x/Screen-Recording-20260116-214823-Cap-Cut-ezgif-com-video-to-gif-converter.gif" class="intro-mobile" alt="인트로 모바일">
+    <img src="https://i.postimg.cc/xdstQWhc/Screen-Recording-20260116-221151-Cap-Cut-ezgif-com-video-to-gif-converter.gif" class="intro-desktop" alt="인트로 데스크탑">
 </div> 
 
 <div id="main-scroll-wrapper">
-  </div> 
+  <header>  
+    <img class="logo" src="https://i.postimg.cc/QxWSC2MD/Screenshot-20251029-084633-Kakao-Talk.png" alt="준호쌤">  
+    <h1>준호쌤 프로젝트</h1>  
+  </header>  
+  <div class="tabs" id="main-tabs">  
+    <button class="tab" id="tab-videos">운동영상</button>  
+    <button class="tab" id="tab-info">운동정보</button>  
+  </div>  
+  <div class="subtabs hidden fade" id="type-tabs"></div>  
+  <div class="subtabs hidden fade" id="part-tabs"></div>  
+  <div id="search-wrapper"><input type="text" id="search-input" placeholder="운동 이름 검색..."></div>  
+  <div id="content" class="fade"></div>  
+</div> 
 
-<script>  
+<script>
 let deferredPrompt;
-const installBanner = document.getElementById('install-banner');
-
-window.addEventListener('beforeinstallprompt', (e) => { 
-    e.preventDefault(); 
-    deferredPrompt = e; 
-});
-
-function hideIntro(){ 
-    const intro = document.getElementById('intro'); 
-    intro.style.opacity='0'; 
-    setTimeout(()=>{ 
-        intro.style.display='none'; 
-        // 여기서 배너를 등장시킴
-        if(deferredPrompt) {
-            installBanner.classList.add('show');
-        }
-    },450); 
-}
-
-function installApp() {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choice) => {
-            closeBanner();
-            deferredPrompt = null;
-        });
-    }
-}
-
-function closeBanner() {
-    installBanner.classList.remove('show');
-}
-
-
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => { navigator.serviceWorker.register('./service-worker.js').catch(() => {}); });
-}
+window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
+if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW fail')); }); }
 
 function setViewportHeight() { let vh = window.innerHeight * 0.01; document.documentElement.style.setProperty('--vh', `${vh * 100}px`); }
 window.addEventListener('load', setViewportHeight);
 window.addEventListener('orientationchange', setViewportHeight); 
 
-function hideIntro(){ 
-    const intro = document.getElementById('intro'); 
-    intro.style.opacity='0'; 
-    setTimeout(()=>{ intro.style.display='none'; },450); 
-}  
+function hideIntro(){ const intro = document.getElementById('intro'); intro.style.opacity='0'; setTimeout(()=>intro.style.display='none',450); }  
 
 function openApp(url, type) {
     if (!url) return alert('링크 준비중입니다.');
@@ -153,13 +96,10 @@ function openApp(url, type) {
         let fallback = setTimeout(() => { window.open(url, '_blank'); }, 1000);
         window.addEventListener('blur', () => clearTimeout(fallback), {once: true});
         window.location.href = url;
-    } else {
-        window.open(url, '_blank');
-    }
+    } else { window.open(url, '_blank'); }
 }
 
 let favorites = JSON.parse(localStorage.getItem('gunho_favs')) || [];
-
 function toggleFavorite(e, moveName) {
     e.stopPropagation();
     const idx = favorites.indexOf(moveName);
@@ -167,15 +107,9 @@ function toggleFavorite(e, moveName) {
     else favorites.push(moveName);
     localStorage.setItem('gunho_favs', JSON.stringify(favorites));
     if (currentType === 'FAVORITE') renderMoves();
-    else {
-        const star = e.target;
-        star.classList.toggle('on');
-        star.innerText = star.classList.contains('on') ? '★' : '☆';
-    }
+    else { const star = e.target; star.classList.toggle('on'); star.innerText = star.classList.contains('on') ? '★' : '☆'; }
 }
 
-// Exercise Master data omitted for brevity as it is unchanged...
-// (기존의 exerciseMaster 객체는 그대로 여기에 유지됩니다)
 
 const exerciseMaster = {
     '벤치프레스': { type: '프리웨이트', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/3JMcxvxR/benchipeuleseu.jpg', description: `1. 누웠을 때 팔을 뻗어서 여유가 되는 높이에 바벨 거치대 설정 후 눕기\n2. 뒤꿈치로 바닥 밟고, 둔근 수축, 가슴 내밀고 바벨 어깨보다 살짝 넓게 잡아주기\n3. 손에 힘 빼고 가슴 내밀면서 이완 후 이두와 가슴이 붙는다는 느낌으로 밀어주기`, youtube: 'https://www.youtube.com/shorts/p4v1E_o_YCc', insta: '' },
@@ -311,20 +245,38 @@ function renderMoves(searchTerm = '') {
             <div style="font-size:1.0rem; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${moveName}</div>
         </div>
         <div style="display:flex; align-items:center; gap:12px; margin-right:8px;">
-            <div class="link-yt" onclick="event.stopPropagation(); openApp('${data.youtube}', 'youtube')" style="display:flex; align-items:center; cursor:pointer;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" style="width:22px;">
-            </div>
-            <div class="link-ig" onclick="event.stopPropagation(); openApp('${data.insta}', 'insta')" style="display:flex; align-items:center; cursor:pointer;">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" style="width:18px;">
-            </div>
+            <div class="link-yt" onclick="event.stopPropagation(); openApp('${data.youtube}', 'youtube')" style="display:flex; align-items:center; cursor:pointer;"><img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" style="width:22px;"></div>
+            <div class="link-ig" onclick="event.stopPropagation(); openApp('${data.insta}', 'insta')" style="display:flex; align-items:center; cursor:pointer;"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" style="width:18px;"></div>
         </div>
         <img class="accordion-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>">`;
     
     const contentBody = document.createElement('div'); contentBody.className = 'accordion-content';
     contentBody.innerHTML = `<div class="vertical-move-details"><div class="grid-left-visual-with-box">${data.imageUrl ? `<img src="${data.imageUrl}" class="move-image">` : `<div style="background:#444; min-height:100px; border-radius:6px; display:flex; justify-content:center; align-items:center; font-size:0.8rem; color:#aaa;">이미지 준비중</div>`}</div><div class="grid-right-info"><div class="target-muscle-box"><span class="target-label">주요 타겟 근육</span><strong class="target-value">${data.target}</strong></div><div class="move-description">${data.description || '정보가 없습니다.'}</div></div></div>`;
-    
     header.onclick = () => { const isOpen = contentBody.classList.contains('open'); document.querySelectorAll('.accordion-content').forEach(c => c.classList.remove('open')); document.querySelectorAll('.accordion-icon').forEach(i => i.classList.remove('rotated')); if(!isOpen) { contentBody.classList.add('open'); header.querySelector('.accordion-icon').classList.add('rotated'); } };
     cardWrapper.appendChild(header); cardWrapper.appendChild(contentBody); content.appendChild(cardWrapper);
+  });
+}
+
+function renderInfoContent(){  
+  const info=[ 
+    { text:'박준호선생님 블로그', url:'https://www.jungho-park.com/', icon:'https://i.postimg.cc/hj2NGBJ9/Screenshot-20251116-221434-Samsung-Internet.jpg', type:'web' }, 
+    { text:'박준호선생님 카카오톡', url:'http://pf.kakao.com/_xomZzn', icon:'https://upload.wikimedia.org/wikipedia/commons/e/e3/KakaoTalk_logo.svg', type:'web' }, 
+    { text:'박준호선생님 유튜브채널', url:'https://youtube.com/channel/UCLQI9kOHxRCMwEHcx8M3nOA?si=3n61bFLvA1ACk1aE', icon:'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg', type:'youtube' }, 
+    { text:'박준호선생님 인스타그램', url:'https://www.instagram.com/jun_ho910', icon:'https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg', type:'insta' },
+    { text:'🏠 홈화면에 운동강의 설치', url:'install', icon:'', type:'install' }
+  ];  
+  content.innerHTML = ''; 
+  info.forEach(item => { 
+    const card = document.createElement('div'); card.className = 'info-card'; 
+    card.onclick = () => {
+        if(item.type === 'install') {
+            if (deferredPrompt) deferredPrompt.prompt();
+            else alert('이미 설치되었거나 지원하지 않는 브라우저입니다.');
+        } else if(item.type === 'web') window.open(item.url, '_blank');
+        else openApp(item.url, item.type);
+    };
+    card.innerHTML = `${item.icon ? `<img src="${item.icon}" style="width:20px; margin-right:10px;">` : ''} ${item.text}`; 
+    content.appendChild(card); 
   });
 }
 
@@ -332,26 +284,6 @@ searchInput.oninput=()=>renderMoves(searchInput.value.trim());
 document.getElementById('tab-videos').onclick=()=>{ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('tab-videos').classList.add('active'); currentType = ''; currentPart = ''; renderTypeTabs(); partTabs.classList.add('hidden'); searchWrapper.classList.remove('active'); content.innerHTML=''; document.getElementById('blurOverlay').style.opacity='1'; };
 document.getElementById('tab-info').onclick=()=>{ document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); document.getElementById('tab-info').classList.add('active'); typeTabs.classList.add('hidden'); partTabs.classList.add('hidden'); searchWrapper.classList.remove('active'); renderInfoContent(); document.getElementById('blurOverlay').style.opacity='1'; };
 
-function renderInfoContent(){  
-  const info=[ 
-    { text:'박준호선생님 블로그', url:'https://www.jungho-park.com/', icon:'https://i.postimg.cc/hj2NGBJ9/Screenshot-20251116-221434-Samsung-Internet.jpg', type:'web' }, 
-    { text:'박준호선생님 카카오톡', url:'http://pf.kakao.com/_xomZzn', icon:'https://upload.wikimedia.org/wikipedia/commons/e/e3/KakaoTalk_logo.svg', type:'web' }, 
-    { text:'박준호선생님 유튜브채널', url:'https://youtube.com/channel/UCLQI9kOHxRCMwEHcx8M3nOA?si=3n61bFLvA1ACk1aE', icon:'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg', type:'youtube' }, 
-    { text:'박준호선생님 인스타그램', url:'https://www.instagram.com/jun_ho910', icon:'https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg', type:'insta' } 
-  ];  
-  
-  content.innerHTML = ''; 
-  info.forEach(item => { 
-    const card = document.createElement('div'); 
-    card.className = 'info-card'; 
-    card.onclick = () => {
-        if(item.type === 'web') window.open(item.url, '_blank');
-        else openApp(item.url, item.type);
-    };
-    card.innerHTML = `<img src="${item.icon}" style="width:20px; margin-right:10px;"> ${item.text}`; 
-    content.appendChild(card); 
-  });
-}
 document.addEventListener('DOMContentLoaded', setViewportHeight);
 </script>
 </body>
