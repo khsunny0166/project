@@ -26,9 +26,16 @@ body { height: var(--vh); font-family: 'Noto Sans KR', sans-serif; color:var(--t
     }
 }
 
-#main-scroll-wrapper { position: absolute; top: 0; bottom: 0; left: 0; right: 0; width: 100%; height: auto; overflow-y: auto; padding: 15px; z-index: 10; }
-header, .tabs, .subtabs, #content { position: relative; z-index: 1; }  
-.blur-overlay { position: fixed; top: 0; left: 0; bottom: 0; width: 100%; height: var(--vh); backdrop-filter: blur(3px); background: rgba(0,0,0,0.7); z-index: 0; opacity: 0; pointer-events: none; transition: opacity 0.4s ease; }  
+#main-scroll-wrapper { 
+    display: flex; flex-direction: column; align-items: center; 
+    width: 100%; height: 100%; overflow-y: auto; padding: 15px; z-index: 10;
+}
+header, .tabs, .subtabs, #content { 
+    width: 100%; max-width: 380px; /* 컨텐츠 너비 제한 */
+    display: flex; justify-content: center; flex-wrap: wrap; 
+}
+#content { display: block; } 
+
 
 #intro{ position:fixed; top:0; left:0; width:100%; height:var(--vh); background:#000; display:flex; justify-content:center; align-items:center; z-index:2000; transition:opacity .45s; }  
 .intro-mobile { display: block; width: 100%; height: 100%; object-fit: cover; cursor: pointer; }
@@ -143,9 +150,11 @@ function triggerInstall() {
         alert(isIOS ? "아이폰은 Safari 하단 [공유] 버튼 클릭 후\n'홈 화면에 추가'를 눌러주세요! :)" : "이미 설치되어 있거나 브라우저 메뉴에서 추가 가능합니다.");
     }
 }
+
 function executeInstall() { closeBanner(); if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => { deferredPrompt = null; }); } }
 function closeBanner() { document.getElementById('installBanner').style.display = 'none'; }
 if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('./service-worker.js').catch(() => {}); }); }
+
 
 function setViewportHeight() { let vh = window.innerHeight * 0.01; document.documentElement.style.setProperty('--vh', `${vh * 100}px`); }
 window.addEventListener('load', setViewportHeight);
