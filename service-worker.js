@@ -1,7 +1,7 @@
 const CACHE_NAME = 'junho-gym-v1';
 const urlsToCache = [
-  '/',
-  '/index.html'
+  '/project/',         // 루트 대신 폴더명 포함
+  '/project/index.html' // index.html도 폴더명 포함
 ];
 
 // 설치 단계: 필요한 자원 캐싱
