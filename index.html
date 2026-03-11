@@ -96,7 +96,6 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 </div> 
 
 <script>  
-// 아래 10줄 추가됨 (PWA 등록 및 팝업 이벤트)
 let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; });
 if ('serviceWorker' in navigator) {
@@ -112,8 +111,11 @@ function hideIntro(){
     intro.style.opacity='0'; 
     setTimeout(()=>{
         intro.style.display='none';
-        // 아래 4줄 추가됨 (인트로 종료 후 설치 팝업 유도)
-        if (deferredPrompt) { deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => { deferredPrompt = null; }); }
+        // 인트로 종료 시점 설치 팝업 호출
+        if (deferredPrompt) { 
+            deferredPrompt.prompt(); 
+            deferredPrompt.userChoice.then((choice) => { deferredPrompt = null; }); 
+        }
     },450); 
 }  
 
