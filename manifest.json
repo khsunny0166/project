@@ -1,7 +1,9 @@
+
 {
   "name": "준호쌤 운동강의",
-  "short_name": "운초가",
+  "short_name": "준호쌤",
   "start_url": "/project/index.html",
+  "scope": "/project/",
   "display": "standalone",
   "background_color": "#111111",
   "theme_color": "#111111",
