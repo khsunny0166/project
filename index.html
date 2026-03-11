@@ -72,6 +72,25 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 .info-card{ background:rgba(128, 128, 128, 0.5); border-radius:10px; padding:8px 15px; margin:6px 0; font-weight:700; min-height:36px; display:flex; align-items:center; justify-content:center; cursor:pointer; }
 .hidden{ display:none !important; }  
 .fade{ transition:opacity .18s; }  
+
+/* [추가] 하단 설치 유도 배너 스타일 */
+#installBanner {
+    display: none; position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+    width: 92%; max-width: 340px; background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px; padding: 12px 16px; align-items: center; justify-content: space-between;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4); z-index: 9999;
+    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+    animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+}
+@keyframes slideUp { from { bottom: -100px; opacity: 0; } to { bottom: 20px; opacity: 1; } }
+
+.banner-left { display: flex; align-items: center; gap: 12px; }
+.home-icon-box { background: #f0f0f0; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+.banner-text-box b { font-size: 0.95rem; color: #111; display: block; font-weight: 800; }
+.banner-text-box span { font-size: 0.8rem; color: #666; font-weight: 500; }
+.banner-btns { display: flex; gap: 6px; }
+.btn-banner-close { background: #eeeeee; color: #444; border: none; padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+.btn-banner-install { background: #222222; color: #fff; border: none; padding: 8px 12px; border-radius: 10px; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
 </style>  
 </head>  
 <body>  
@@ -82,6 +101,22 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
     <img src="https://i.postimg.cc/WpytQX4x/Screen-Recording-20260116-214823-Cap-Cut-ezgif-com-video-to-gif-converter.gif" class="intro-mobile" alt="인트로 모바일">
     <img src="https://i.postimg.cc/xdstQWhc/Screen-Recording-20260116-221151-Cap-Cut-ezgif-com-video-to-gif-converter.gif" class="intro-desktop" alt="인트로 데스크탑">
 </div> 
+
+<div id="installBanner">
+    <div class="banner-left">
+        <div class="home-icon-box">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        </div>
+        <div class="banner-text-box">
+            <b>홈 화면 바로가기</b>
+            <span>빠른 접속 추가</span>
+        </div>
+    </div>
+    <div class="banner-btns">
+        <button class="btn-banner-close" onclick="closeBanner()">취소</button>
+        <button class="btn-banner-install" onclick="executeInstall()">설치</button>
+    </div>
+</div>
 
 <div id="main-scroll-wrapper">
   <header>  
@@ -100,37 +135,48 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 
 <script>  
 // -------------------------------------------------------------------------
-// [핵심] PWA 설치 관련 전역 변수 및 이벤트 리스너
+// [핵심] PWA 설치 관련 수정된 로직
 // -------------------------------------------------------------------------
 let deferredPrompt;
 
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    console.log('설치 프롬프트 준비됨');
 });
+
+function triggerInstall() {
+    if (deferredPrompt) {
+        // 기존 팝업 대신 하단 배너를 보여줌
+        document.getElementById('installBanner').style.display = 'flex';
+    } else {
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if(isIOS) {
+            alert("아이폰은 Safari 하단 [공유] 버튼 클릭 후\n'홈 화면에 추가'를 눌러주세요! :)");
+        } else {
+            alert("이미 바로가기가 설치되어 있거나,\n브라우저 메뉴에서 직접 추가가 필요합니다.");
+        }
+    }
+}
+
+function executeInstall() {
+    closeBanner();
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+            deferredPrompt = null;
+        });
+    }
+}
+
+function closeBanner() {
+    document.getElementById('installBanner').style.display = 'none';
+}
 
 // 서비스 워커 등록
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js')
-            .then(reg => console.log('서비스 워커 등록 성공'))
-            .catch(err => console.log('서비스 워커 등록 실패', err));
+        navigator.serviceWorker.register('./service-worker.js').catch(() => {});
     });
-}
-
-function triggerInstall() {
-    if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === 'accepted') {
-                console.log('사용자가 설치를 승인했습니다.');
-            }
-            deferredPrompt = null;
-        });
-    } else {
-        alert("이미 설치되어 있거나, 이 브라우저에서 '홈 화면에 추가' 기능을 지원하지 않습니다.\n아이폰은 Safari '공유 -> 홈 화면에 추가'를 이용해주세요.");
-    }
 }
 // -------------------------------------------------------------------------
 
@@ -168,7 +214,7 @@ function toggleFavorite(e, moveName) {
     }
 }
 
-// [운동 데이터] (데이터는 사용자 소스 그대로 유지)
+// [운동 데이터] - 유지
 const exerciseMaster = {
     '벤치프레스': { type: '프리웨이트', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/3JMcxvxR/benchipeuleseu.jpg', description: `1. 누웠을 때 팔을 뻗어서 여유가 되는 높이에 바벨 거치대 설정 후 눕기\n2. 뒤꿈치로 바닥 밟고, 둔근 수축, 가슴 내밀고 바벨 어깨보다 살짝 넓게 잡아주기\n3. 손에 힘 빼고 가슴 내밀면서 이완 후 이두와 가슴이 붙는다는 느낌으로 밀어주기`, youtube: '', insta: '' },
     '덤벨프레스': { type: '프리웨이트', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/BQDRTCVH/deombelpeuleseu.jpg', description: `1. 덤벨 중앙 잡고, 덤벨 오버그립으로 만들어서 하늘보고 눕기\n2. 뒤꿈치로 바닥 밟고, 둔근 수축, 가슴 내밀어 어깨 내려주기\n3. 턱 당기고 가슴 내밀면서 이완 후 이두와 가슴이 붙게 밀어주기`, youtube: '', insta: '' },
