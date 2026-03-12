@@ -60,7 +60,6 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 .accordion-content.open { max-height: 800px; padding-top: 15px; padding-bottom: 15px; }
 .vertical-move-details { display: grid; grid-template-columns: 35% 65%; gap: 10px; align-items: start; }
 
-/* 이미지 박스 크기 고정 수정 */
 .grid-left-visual-with-box { width: 100%; aspect-ratio: 1/1; overflow: hidden; border-radius: 6px; background: #222; }
 .grid-left-visual-with-box img.move-image { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; }
 
@@ -75,15 +74,23 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 .fade{ transition:opacity .18s; }  
 
 #image-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); display: none; justify-content: center; align-items: center; z-index: 10000; cursor: zoom-out; }
+
 #image-overlay img { 
-    width: 230px;    /* 고정 가로 크기 */
-    height: 230px;   /* 고정 세로 크기 */
-    object-fit: cover; /* 사진이 찌그러지지 않게 꽉 채움 */
+    max-width: 60%; 
+    max-height: 50%; 
     border-radius: 12px; 
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-    border: 2px solid rgba(255,255,255,0.2);
 }
 
+/* 2. 카카오톡 QR 전용 클래스 - 화면에 꽉 차도록 엄청 크게 설정 */
+#image-overlay img.is-qr { 
+    width: 80vw;            /* 모바일 화면 가로폭의 90% 꽉 채우기 */
+    max-width: 600px;       /* 태블릿/PC에서 무한정 커지는 것 방지 */
+    height: 100vw;           /* 가로와 동일한 수치로 완벽한 정사각형 유지 */
+    max-height: 600px;      
+    object-fit: contain; 
+    background: white; 
+    
+}
 #install-banner { position:fixed; bottom:-100px; left:15px; right:15px; background:#222; padding:15px; border-radius:15px; z-index:9999; transition:bottom 0.4s ease; border:1px solid #444; display:flex; justify-content:space-between; align-items:center; box-shadow:0 -5px 20px rgba(0,0,0,0.5); }
 </style>  
 </head>  
@@ -188,11 +195,18 @@ function toggleFavorite(e, moveName) {
     }
 }
 
-// 라이트박스 함수
-function openImage(e, src) {
-    e.stopPropagation(); // 아코디언이 닫히지 않게 방지
+// 라이트박스 함수: isQr 인자를 통해 스타일 분기 처리
+function openImage(e, src, isQr = false) {
+    e.stopPropagation();
     const overlay = document.getElementById('image-overlay');
     const overlayImg = document.getElementById('overlay-img');
+    
+    if (isQr) {
+        overlayImg.classList.add('is-qr');
+    } else {
+        overlayImg.classList.remove('is-qr');
+    }
+    
     overlayImg.src = src;
     overlay.style.display = 'flex';
 }
@@ -202,7 +216,7 @@ function closeImage() {
 }
 
 const exerciseMaster = {
-    '벤치프레스': { type: '프리웨이트', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/3JMcxvxR/benchipeuleseu.jpg', description: `1. 누웠을 때 팔을 뻗어서 여유가 되는 높이에 바벨 거치대 설정 후 눕기\n2. 뒤꿈치로 바닥 밟고, 둔근 수축, 가슴 내밀고 바벨 어깨보다 살짝 넓게 잡아주기\n3. 손에 힘 빼고 가슴 내밀면서 이완 후 이두와 가슴이 붙는다는 느낌으로 밀어주기`, youtube: 'https://www.youtube.com/shorts/p4v1E_o_YCc', insta: '' },
+    '벤치프레스': { type: '프리웨이트', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/3JMcxvxR/benchipeuleseu.jpg', description: `1. 누웠을 때 팔을 뻗어서 여유가 되는 높이에 바벨 거치대 설정 후 눕기\n2. 뒤꿈치로 바닥 밟고, 둔근 수축, 가슴 내밀고 바벨 어깨보다 살짝 넓게 잡아주기\n3. 손에 힘 빼고 가슴 내밀면서 이완 후 이두와 가슴이 붙다는 느낌으로 밀어주기`, youtube: 'https://www.youtube.com/shorts/p4v1E_o_YCc', insta: '' },
     '덤벨프레스': { type: '프리웨이트', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/BQDRTCVH/deombelpeuleseu.jpg', description: `1. 덤벨 중앙 잡고, 덤벨 오버그립으로 만들어서 하늘보고 눕기\n2. 뒤꿈치로 바닥 밟고, 둔근 수축, 가슴 내밀어 어깨 내려주기\n3. 턱 당기고 가슴 내밀면서 이완 후 이두와 가슴이 붙게 밀어주기`, youtube: '', insta: '' },
     '덤벨플라이': { type: '프리웨이트', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/k4BpBNSM/deombelpeullai.jpg', description: `1. 덤벨 중앙 잡고, 덤벨 뉴트럴그립으로 만들어서 하늘보고 눕기\n2. 어깨에 부담 없는 선에서 옆으로 나란히 하다가 팔꿈치 살짝 구부리면서 가슴 이완시켜주기\n3. 앞으로 밀듯 가슴 내밀면서 원위치 만들어주기`, youtube: '', insta: '' },
     '푸쉬업': { type: '프리웨이트', part: '가슴', target: '대흉근', imageUrl: 'https://i.postimg.cc/x165MJn3/puswieob.jpg', description: `1. 손은 45º 정도 틀어서 어깨 넓이로 바닥 짚어주기\n2. 손과 팔꿈치가 수직 위치에 있게 팔꿈치 벌리지 않고, 등 접으면서 내려가주기\n3. 뒤꿈치, 엉덩이, 뒤통수가 정렬이 되게 자세 유지하면서 가슴과 팔 붙이면서 바닥 밀어주기`, youtube: '', insta: '' },
@@ -344,9 +358,8 @@ function renderMoves(searchTerm = '') {
         </div>
         <img class="accordion-icon" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>">`;
     
-    // 이미지 박스와 확대 클릭 기능 적용
     const imageHtml = data.imageUrl 
-        ? `<div class="grid-left-visual-with-box"><img src="${data.imageUrl}" class="move-image" onclick="openImage(event, '${data.imageUrl}')"></div>` 
+        ? `<div class="grid-left-visual-with-box"><img src="${data.imageUrl}" class="move-image" onclick="openImage(event, '${data.imageUrl}', false)"></div>` 
         : `<div class="grid-left-visual-with-box" style="background:#444; display:flex; justify-content:center; align-items:center; font-size:0.8rem; color:#aaa;">이미지 준비중</div>`;
 
     const contentBody = document.createElement('div'); contentBody.className = 'accordion-content';
@@ -374,19 +387,20 @@ document.getElementById('tab-info').onclick=()=>{ document.querySelectorAll('.ta
 function renderInfoContent(){  
   const info=[ 
     { text:'박준호선생님 블로그', url:'https://www.jungho-park.com/', icon:'https://i.postimg.cc/hj2NGBJ9/Screenshot-20251116-221434-Samsung-Internet.jpg', type:'web' }, 
-    { text:'박준호선생님 카카오톡', url:'http://pf.kakao.com/_xomZzn', icon:'https://upload.wikimedia.org/wikipedia/commons/e/e3/KakaoTalk_logo.svg', type:'web' }, 
+    { text:'박준호선생님 카카오톡', url:'https://i.postimg.cc/1zhC9MYr/1773327286101.png', icon:'https://upload.wikimedia.org/wikipedia/commons/e/e3/KakaoTalk_logo.svg', type:'kakao' }, 
     { text:'박준호선생님 유튜브채널', url:'https://youtube.com/channel/UCLQI9kOHxRCMwEHcx8M3nOA?si=3n61bFLvA1ACk1aE', icon:'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg', type:'youtube' }, 
     { text:'박준호선생님 인스타그램', url:'https://www.instagram.com/jun_ho910', icon:'https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg', type:'insta' },
     { text:'홈화면 운동강의 바로가기 추가', url:'#', icon:'home', type:'install' } 
   ];    
   
-content.innerHTML = ''; 
+  content.innerHTML = ''; 
   info.forEach(item => { 
     const card = document.createElement('div'); 
     card.className = 'info-card'; 
     card.onclick = () => {
         if(item.type === 'web') window.open(item.url, '_blank');
         else if(item.type === 'install') triggerInstall(); 
+        else if(item.type === 'kakao') openImage(event, item.url, true); // 카카오톡은 true 전달(QR모드)
         else openApp(item.url, item.type);
     };
 
