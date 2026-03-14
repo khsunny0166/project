@@ -58,12 +58,14 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 .accordion-header { background: rgba(128, 128, 128, 0.5); padding: 8px 15px; font-weight: 700; min-height: 42px; display: flex; align-items: center; justify-content: space-between; cursor: pointer; border-radius: 10px 10px 0 0; }
 .accordion-content { background: var(--bg-dark2); color: var(--text); padding: 0 15px; max-height: 0; overflow: hidden; transition: max-height 0.1s ease-in-out, padding 0.1s ease-in-out; border-radius: 0 0 10px 10px; border-top: 1px solid var(--bg-dark3); }
 .accordion-content.open { max-height: 800px; padding-top: 15px; padding-bottom: 15px; }
-.vertical-move-details { display: grid; grid-template-columns: 35% 65%; gap: 10px; align-items: start; }
+.vertical-move-details { display: grid; grid-template-columns: 35% 1fr; gap: 10px; align-items: start; width: 100%; }
 
 .grid-left-visual-with-box { width: 100%; aspect-ratio: 1/1; overflow: hidden; border-radius: 6px; background: #222; }
 .grid-left-visual-with-box img.move-image { width: 100%; height: 100%; object-fit: cover; cursor: zoom-in; }
 
-.move-description { font-size: 0.9rem; line-height: 1.4; white-space: pre-wrap; margin: 0; }
+.grid-right-info { min-width: 0; }
+.move-description { font-size: 0.9rem; line-height: 1.4; margin: 0; word-break: keep-all; overflow-wrap: break-word; }
+.step-item { padding-left: 1.2em; text-indent: -1.2em; margin-bottom: 4px; }
 .target-muscle-box { background: rgba(128, 128, 128, 0.5); padding: 6px; border-radius: 6px; margin-bottom: 8px; text-align: center; }
 .target-muscle-box .target-label { font-weight: 700; color: #fff; font-size: 0.85rem; display: block; }
 .target-muscle-box .target-value { color: #ffd700; font-size: 0.95rem; font-weight: 800; display: block; }
@@ -361,7 +363,12 @@ function renderMoves(searchTerm = '') {
         ? `<div class="grid-left-visual-with-box"><img src="${data.imageUrl}" class="move-image" onclick="openImage(event, '${data.imageUrl}', false)"></div>` 
         : `<div class="grid-left-visual-with-box" style="background:#444; display:flex; justify-content:center; align-items:center; font-size:0.8rem; color:#aaa;">이미지 준비중</div>`;
 
-        const contentBody = document.createElement('div'); contentBody.className = 'accordion-content';
+    const formattedDesc = (data.description || '정보가 없습니다.')
+        .split('\n')
+        .map(line => `<div class="step-item">${line}</div>`)
+        .join('');
+
+    const contentBody = document.createElement('div'); contentBody.className = 'accordion-content';
     contentBody.innerHTML = `
         <div class="target-muscle-box">
             <span class="target-label">주요 타겟 근육</span>
@@ -370,7 +377,7 @@ function renderMoves(searchTerm = '') {
         <div class="vertical-move-details">
             ${imageHtml}
             <div class="grid-right-info">
-                <div class="move-description">${data.description || '정보가 없습니다.'}</div>
+                <div class="move-description">${formattedDesc}</div>
             </div>
         </div>`;
 
