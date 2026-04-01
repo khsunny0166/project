@@ -76,7 +76,16 @@ header h1{ font-size:1.6rem; margin:0; text-shadow:2px 2px 6px rgba(0,0,0,.6); }
 .fade{ transition:opacity .18s; }  
 
 #image-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.9); display: none; justify-content: center; align-items: center; z-index: 10000; cursor: zoom-out; }
-#image-overlay img.is-qr { width: 90vw; height: 90vw; max-width: 500px; max-height: 500px; object-fit: cover; border-radius: 20px; background: white; border: 5px solid white; }
+#image-overlay img.is-qr { 
+    width: auto;          /* 너비 자동 */
+    height: auto;         /* 높이 자동 */
+    max-width: 90vw;      /* 화면 너비의 최대 90% */
+    max-height: 80vh;     /* 화면 높리의 최대 80% (세로가 기니까 중요) */
+    object-fit: contain;  /* 이미지가 잘리지 않고 전체가 다 보이게 함 */
+    border-radius: 20px; 
+    background: white; 
+    border: 5px solid white; 
+}
 #install-banner { position:fixed; bottom:-120px; left:15px; right:15px; background:#222; padding:15px; border-radius:15px; z-index:9999; transition:bottom 0.4s ease; border:1px solid #444; display:flex; justify-content:space-between; align-items:center; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
 </style>  
 </head>  
