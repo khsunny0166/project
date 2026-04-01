@@ -1,4 +1,4 @@
-const CACHE_NAME = 'junho-gym-v1';
+const CACHE_NAME = 'junho-gym-v2';
 const urlsToCache = [
   '/project/',         // 루트 대신 폴더명 포함
   '/project/index.html' // index.html도 폴더명 포함
